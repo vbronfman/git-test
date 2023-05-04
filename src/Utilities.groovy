@@ -17,7 +17,7 @@ class Utilities
             ]
         }
         return ctx.checkout([
-            $class: 'scmGit',
+            $class: 'GitSCM',
             branches: [[name: opt.branch]],
             extensions: extensions,
             userRemoteConfigs: [[
