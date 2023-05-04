@@ -8,7 +8,7 @@ class Utilities
             extensions << [$class: 'RelativeTargetDirectory', relativeTargetDir: opt.dstPath]
         if (opt.srcDirs)
         {
-            sparseCheckoutPaths = []
+            def sparseCheckoutPaths = []
             for (path in opt.srcDirs)
                 sparseCheckoutPaths << [$class: 'SparseCheckoutPath', path: path]
             extensions << [
