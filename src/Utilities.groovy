@@ -1,6 +1,15 @@
 class Utilities
 {
+    // get global constant
+    static def getConstant(name)
+    {
+        constants = [
+            defaultArtifactoryUrl: "https://jfrog.gilat.com/artifactory",
+        ]
+        return constants.get(name)
+    }
 
+    // shortcut for scm checkout step
     static def gitClone(ctx, opt)
     {
         def extensions = []
