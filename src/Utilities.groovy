@@ -3,7 +3,7 @@ class Utilities
     // get global constant
     static def getConstant(name)
     {
-        constants = [
+        def constants = [
             defaultArtifactoryUrl: "https://jfrog.gilat.com/artifactory",
         ]
         return constants.get(name)
