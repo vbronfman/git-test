@@ -15,7 +15,7 @@ class Utilities
             ]
         ]
         constants << [defaultArtifactoryUrl: "${constants.defaultArtifactorySchema}://${constants.defaultArtifactoryDomainName}/artifactory"]
-        constants.IL = [
+        constants["IL"] = [
             domain: constants.defaultArtifactoryDomainName, 
             schema: constants.defaultArtifactorySchema,
         ]
