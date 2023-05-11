@@ -5,9 +5,20 @@ class Utilities
     {
         def constants = [
             defaultArtifactoryDomainName: "jfrog.gilat.com",
-            defaultArtifactoryScheme: "https",
+            defaultArtifactorySchema: "https",
+            artifactory: [
+                CLOUD1: [
+                    domain: "jfrog.rnd.gilat.com",
+                    schema: "https",
+                ],
+                IL: []
+            ]
         ]
-        constants << [defaultArtifactoryUrl: "${constants.defaultArtifactoryScheme}://${constants.defaultArtifactoryDomainName}/artifactory"]
+        constants << [defaultArtifactoryUrl: "${constants.defaultArtifactorySchema}://${constants.defaultArtifactoryDomainName}/artifactory"]
+        constants.IL << [
+            domain: constants.defaultArtifactoryDomainName, 
+            schema: constants.defaultArtifactorySchema,
+        ]
         return constants.get(name)
     }
 
