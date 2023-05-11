@@ -4,7 +4,7 @@ class Utilities
     static def getConstant(name)
     {
         def artifactory = [
-                CLOUD1: [
+                AWS: [
                     domain: "jfrog.rnd.gilat.com",
                     schema: "https",
                 ],
