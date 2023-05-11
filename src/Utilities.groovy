@@ -4,8 +4,10 @@ class Utilities
     static def getConstant(name)
     {
         def constants = [
-            defaultArtifactoryUrl: "https://jfrog.gilat.com/artifactory",
+            defaultArtifactoryDomainName: "jfrog.gilat.com",
+            defaultArtifactoryScheme: "https",
         ]
+        constants << [defaultArtifactoryUrl: "${constants.defaultArtifactoryScheme}://${constants.defaultArtifactoryDomainName}/artifactory"]
         return constants.get(name)
     }
 
