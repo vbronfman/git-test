@@ -3,22 +3,22 @@ class Utilities
     // get global constant
     static def getConstant(name)
     {
-        def constants = [
-            defaultArtifactoryDomainName: "jfrog.gilat.com",
-            defaultArtifactorySchema: "https",
-            artifactory: [
+        def artifactory = [
                 CLOUD1: [
                     domain: "jfrog.rnd.gilat.com",
                     schema: "https",
                 ],
-                IL: [:]
-            ]
+                IL: [
+                    domain: "jfrog.gilat.com",
+                    schema: "https",
+                ]
+        ]
+        def constants = [
+            artifactory: artifactory
+            defaultArtifactoryDomainName: artifactory.IL.domain,
+            defaultArtifactorySchema: artifactory.IL.schema,
         ]
         constants << [defaultArtifactoryUrl: "${constants.defaultArtifactorySchema}://${constants.defaultArtifactoryDomainName}/artifactory"]
-        constants["IL"] = [
-            domain: constants.defaultArtifactoryDomainName, 
-            schema: constants.defaultArtifactorySchema,
-        ]
         return constants.get(name)
     }
 
