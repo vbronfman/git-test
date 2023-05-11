@@ -15,6 +15,10 @@ class Utilities
             ]
         ]
         constants << [defaultArtifactoryUrl: "${constants.defaultArtifactorySchema}://${constants.defaultArtifactoryDomainName}/artifactory"]
+        constants.IL = [
+            domain: constants.defaultArtifactoryDomainName, 
+            schema: constants.defaultArtifactorySchema,
+        ]
         return constants.get(name)
     }
 
