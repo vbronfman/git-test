@@ -14,7 +14,7 @@ class Utilities
                 ]
         ]
         def constants = [
-            artifactory: artifactory
+            artifactory: artifactory,
             defaultArtifactoryDomainName: artifactory.IL.domain,
             defaultArtifactorySchema: artifactory.IL.schema,
         ]
