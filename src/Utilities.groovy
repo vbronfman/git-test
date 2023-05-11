@@ -11,7 +11,7 @@ class Utilities
                     domain: "jfrog.rnd.gilat.com",
                     schema: "https",
                 ],
-                IL: []
+                IL: [:]
             ]
         ]
         constants << [defaultArtifactoryUrl: "${constants.defaultArtifactorySchema}://${constants.defaultArtifactoryDomainName}/artifactory"]
