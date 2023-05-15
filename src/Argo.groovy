@@ -47,10 +47,11 @@ class Argo
     {
         def t = this.connect()
         def verbose = this.opt.debug
-        return this.ctx.httpRequest consoleLogResponseBody: verbose,
+        def response = this.ctx.httpRequest consoleLogResponseBody: verbose,
             httpMode: 'GET', ignoreSslErrors: true, responseHandle: 'NONE',
             wrapAsMultipart: false, url: "${this.url}/${path}",
             customHeaders: [[maskValue: false, name: 'Authorization', value: "Bearer $t"]]
+        return response
     }
     def getApplication(name)
     {
