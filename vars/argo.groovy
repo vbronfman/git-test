@@ -1,5 +1,2 @@
-def run(){ return get([:]) }
-def (opt)
-{
-    return obj = new Argo(this, opt)
-}
+def run(){ return new Argo(this, [:]) }
+def run(opt){ return new Argo(this, opt) }
