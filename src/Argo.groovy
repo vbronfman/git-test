@@ -30,7 +30,7 @@ class Argo
                 {"username":"${this.ctx.username}", "password":"${this.ctx.password}"}
             """
             def response = this.ctx.httpRequest requestBody: body,
-                consoleLogResponseBody: (!!this.opt.debug), httpMode: 'POST',
+                consoleLogResponseBody: this.opt.debug, httpMode: 'POST',
                 ignoreSslErrors: true, responseHandle: 'NONE', wrapAsMultipart: false,
                 url: "$url/api/v1/session"
             this.debug("Status: "+response.status)
@@ -42,7 +42,7 @@ class Argo
     }
     def getApplication(name){
         def response = this.ctx.httpRequest 
-            consoleLogResponseBody: (!!this.opt.debug), httpMode: 'GET',
+            consoleLogResponseBody: this.opt.debug, httpMode: 'GET',
             ignoreSslErrors: true, responseHandle: 'NONE', wrapAsMultipart: false,
             url: "$url/api/v1/applications/${name}"
         return (new JsonSlurperClassic()).parseText(response.content)
