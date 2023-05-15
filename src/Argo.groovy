@@ -10,10 +10,10 @@ class Argo
         this.ctx = ctx
         this.opt = opt ?: [:]
     }
-    def connect(ctx, opt)
+    def connect()
     {
-        def url = opt.url ?: 'https://argocd-rnd.gilat.com/'
-        def creds = opt.creds ?: '8357b9f8-f851-415f-85c5-e77332d0848a'
+        def url = this.opt.url ?: 'https://argocd-rnd.gilat.com/'
+        def creds = this.opt.creds ?: '8357b9f8-f851-415f-85c5-e77332d0848a'
         this.debug("url = $url")
         this.debug("creds id = $creds")
         if (this.token)
@@ -21,13 +21,15 @@ class Argo
             this.debug("connect: using cached token")
             return this.token
         }
-        ctx.withCredentials([ctx.usernamePassword(
+        this.ctx.withCredentials([this.ctx.usernamePassword(
             credentialsId: '8357b9f8-f851-415f-85c5-e77332d0848a',
             passwordVariable: 'password',
             usernameVariable: 'username',
         )]) {
-            def body = """{"username":"${ctx.username}", "password":"${ctx.password}"}"""
-            def response = ctx.httpRequest requestBody: body,
+            def body = """
+                {"username":"${this.ctx.username}", "password":"${this.ctx.password}"}
+            """
+            def response = this.ctx.httpRequest requestBody: body,
                 consoleLogResponseBody: true, httpMode: 'POST', ignoreSslErrors: true, 
                 responseHandle: 'NONE', wrapAsMultipart: false,
                 url: "$url/api/v1/session"
