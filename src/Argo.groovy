@@ -36,7 +36,7 @@ class Argo
             this.debug("Status: "+response.status)
             this.debug("Content: "+response.content)
             def res = (new JsonSlurperClassic()).parseText(response.content)
-            this.debug("DEBUG: token: "+res.token)
+            this.debug("token: "+res.token)
             return this.token = res.token
         }
     }
