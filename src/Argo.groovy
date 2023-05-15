@@ -55,8 +55,7 @@ class Argo
     }
     def getApplication(name)
     {
-        return ( new JsonSlurperClassic() ).parseText(
-            this.get("api/v1/applications/${name}")
-        )
+        def content = this.get("api/v1/applications/${name}")
+        return (new JsonSlurperClassic()).parseText(content)
     }
 }
