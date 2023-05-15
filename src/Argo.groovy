@@ -7,9 +7,9 @@ class Argo
     {
         def url = opt.url ?: 'https://argocd-rnd.gilat.com/'
         if (opt.debug)
-            println("DEBUG: url = $url")
+            ctx.println("DEBUG: url = $url")
         else
-            println("Not a debug mode. DEBUG: url = $url")
+            ctx.println("Not a debug mode. DEBUG: url = $url")
         def creds = opt.creds ?: '8357b9f8-f851-415f-85c5-e77332d0848a'
         if (this.connections[url])
             return this.connections[url]
@@ -25,12 +25,12 @@ class Argo
                 url: "$url/api/v1/session"
             if (opt.debug)
             {
-                println("DEBUG: Status: "+response.status)
-                println("DEBUG: Content: "+response.content)
+                ctx.println("DEBUG: Status: "+response.status)
+                ctx.println("DEBUG: Content: "+response.content)
             }
             def res = (new JsonSlurperClassic()).parseText(response.content)
             if (opt.debug)
-                println("DEBUG: token: "+res.token)
+                ctx.println("DEBUG: token: "+res.token)
             return this.connections[url] = res.token
         }
     }
