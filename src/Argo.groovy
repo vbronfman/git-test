@@ -1,3 +1,4 @@
+import groovy.json.JsonBuilder
 import groovy.json.JsonSlurperClassic
 
 class Argo
@@ -57,10 +58,9 @@ class Argo
     {
         return this.req(path, 'GET', '')
     }
-
     private def post(path, body)
     {
-    
+        return this.req(path, 'POST', body)
     }
     def getApplication(name)
     {
@@ -69,6 +69,6 @@ class Argo
     }
     def syncApplication(name, obj)
     {
-
+        def res = this.post("api/v1/applications/${name}/sync", (new JsonBuilder(cp).toString()))
     }
 }
