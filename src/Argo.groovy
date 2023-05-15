@@ -9,7 +9,6 @@ class Argo
     Argo(ctx, opt){
         this.ctx = ctx
         this.opt = opt ?: [:]
-        this.debug("Object created")    
     }
     def connect(ctx, opt)
     {
