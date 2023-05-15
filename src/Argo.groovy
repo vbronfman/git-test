@@ -8,7 +8,7 @@ class Argo
     private def debug(message){ if (this.opt.debug) this.ctx.println("DEBUG: ${message}") }
     Argo(ctx, opt){
         this.ctx = ctx
-        this.opt = opt
+        this.opt = opt ?: [:]
         this.debug("Object created")    
     }
     def connect(ctx, opt)
