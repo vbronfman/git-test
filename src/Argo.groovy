@@ -51,7 +51,7 @@ class Argo
             httpMode: 'GET', ignoreSslErrors: true, responseHandle: 'NONE',
             wrapAsMultipart: false, url: "${this.url}/${path}",
             customHeaders: [[maskValue: false, name: 'Authorization', value: "Bearer $t"]]
-        return response
+        return response.content
     }
     def getApplication(name)
     {
