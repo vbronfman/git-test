@@ -9,13 +9,13 @@ class Argo
         def creds = opt.creds ?: '8357b9f8-f851-415f-85c5-e77332d0848a'
         if (this.connections[url])
             return this.connections[url]
-        withCredentials([usernamePassword(
+        ctx.withCredentials([ctx.usernamePassword(
             credentialsId: '8357b9f8-f851-415f-85c5-e77332d0848a',
             passwordVariable: 'password',
             usernameVariable: 'username',
         )]) {
-            def rb = """{"username":"$username", "password":"$password\"}"""
-            def response = httpRequest requestBody: rb,
+            def rb = """{"username":"${ctx.username}", "password":"${ctx.password}\"}"""
+            def response = ctx.httpRequest requestBody: rb,
                 consoleLogResponseBody: true, httpMode: 'POST', ignoreSslErrors: true, 
                 responseHandle: 'NONE', wrapAsMultipart: false
                 url: "$url/api/v1/session"
