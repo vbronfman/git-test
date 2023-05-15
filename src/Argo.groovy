@@ -8,6 +8,8 @@ class Argo
         def url = opt.url ?: 'https://argocd-rnd.gilat.com/'
         if (opt.debug)
             println("DEBUG: url = $url")
+        else
+            println("Not a debug mode. DEBUG: url = $url")
         def creds = opt.creds ?: '8357b9f8-f851-415f-85c5-e77332d0848a'
         if (this.connections[url])
             return this.connections[url]
