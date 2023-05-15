@@ -43,19 +43,32 @@ class Argo
             return this.token = res.token
         }
     }
-    private def get(path)
+    private def req(path, mode, body)
     {
         def t = this.connect()
         def verbose = this.opt.debug
         def response = this.ctx.httpRequest consoleLogResponseBody: verbose,
-            httpMode: 'GET', ignoreSslErrors: true, responseHandle: 'NONE',
-            wrapAsMultipart: false, url: "${this.url}/${path}",
+            httpMode: mode, ignoreSslErrors: true, responseHandle: 'NONE',
+            wrapAsMultipart: false, url: "${this.url}/${path}", requestBody: body,
             customHeaders: [[maskValue: false, name: 'Authorization', value: "Bearer $t"]]
         return response.content
+    }
+    private def get(path)
+    {
+        return this.req(path, 'GET', '')
+    }
+
+    private def post(path, body)
+    {
+    
     }
     def getApplication(name)
     {
         def content = this.get("api/v1/applications/${name}")
         return (new JsonSlurperClassic()).parseText(content)
+    }
+    def syncApplication(name, obj)
+    {
+
     }
 }
