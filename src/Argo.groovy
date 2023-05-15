@@ -9,6 +9,7 @@ class Argo
     Argo(ctx, opt){
         this.ctx = ctx
         this.opt = opt ?: [:]
+        this.opt.debug = !!this.opt.debug
     }
     def connect()
     {
