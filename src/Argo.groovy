@@ -2,7 +2,7 @@ import groovy.json.JsonSlurperClassic
 
 class Argo
 {
-    def connections = [:]
+    static def connections = [:]
     static def connect(ctx, opt)
     {
         def url = opt.url ?: 'https://argocd-rnd.gilat.com/'
