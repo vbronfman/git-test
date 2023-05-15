@@ -69,6 +69,6 @@ class Argo
     }
     def syncApplication(name, obj)
     {
-        def res = this.post("api/v1/applications/${name}/sync", (new JsonBuilder(cp).toString()))
+        def res = this.post("api/v1/applications/${name}/sync", (new JsonBuilder(obj).toString()))
     }
 }
