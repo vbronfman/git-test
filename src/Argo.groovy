@@ -62,6 +62,10 @@ class Argo
     {
         return this.req(path, 'POST', body)
     }
+    private def put(path, body)
+    {
+        return this.req(path, 'PUT', body)
+    }
     def getApplication(name)
     {
         def content = this.get("api/v1/applications/${name}")
@@ -70,5 +74,9 @@ class Argo
     def syncApplication(name, obj)
     {
         def res = this.post("api/v1/applications/${name}/sync", (new JsonBuilder(obj).toString()))
+    }
+    def updateApplication(name, obj)
+    {
+        def res = this.put("api/v1/applications/${name}/spec", (new JsonBuilder(obj).toString()))
     }
 }
