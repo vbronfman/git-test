@@ -43,8 +43,9 @@ class Argo
         }
     }
     def getApplication(name){
+        def verbose = this.opt.debug
         def response = this.ctx.httpRequest 
-            consoleLogResponseBody: this.opt.debug, httpMode: 'GET',
+            consoleLogResponseBody: verbose, httpMode: 'GET',
             ignoreSslErrors: true, responseHandle: 'NONE', wrapAsMultipart: false,
             url: "$url/api/v1/applications/${name}"
         return (new JsonSlurperClassic()).parseText(response.content)
