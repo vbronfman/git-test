@@ -47,14 +47,15 @@ class Argo
     {
         def t = this.connect()
         def verbose = this.opt.debug
-        return response = this.ctx.httpRequest consoleLogResponseBody: verbose,
+        return this.ctx.httpRequest consoleLogResponseBody: verbose,
             httpMode: 'GET', ignoreSslErrors: true, responseHandle: 'NONE',
             wrapAsMultipart: false, url: "${this.url}/${path}",
             customHeaders: [[maskValue: false, name: 'Authorization', value: "Bearer $t"]]
     }
     def getApplication(name)
     {
-        def response = this.get("api/v1/applications/${name}")
-        return (new JsonSlurperClassic()).parseText(response.content)
+        return ( new JsonSlurperClassic() ).parseText(
+            this.get("api/v1/applications/${name}")
+        )
     }
 }
