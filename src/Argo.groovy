@@ -30,8 +30,9 @@ class Argo
             def body = """
                 {"username":"${this.ctx.username}", "password":"${this.ctx.password}"}
             """
+            def verbose = this.opt.debug
             def response = this.ctx.httpRequest requestBody: body,
-                consoleLogResponseBody: this.opt.debug, httpMode: 'POST',
+                consoleLogResponseBody: verbose, httpMode: 'POST',
                 ignoreSslErrors: true, responseHandle: 'NONE', wrapAsMultipart: false,
                 url: "$url/api/v1/session"
             this.debug("Status: "+response.status)
