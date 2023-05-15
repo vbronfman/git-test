@@ -21,7 +21,7 @@ class Argo
             def rb = """{"username":"${ctx.username}", "password":"${ctx.password}\"}"""
             def response = ctx.httpRequest requestBody: rb,
                 consoleLogResponseBody: true, httpMode: 'POST', ignoreSslErrors: true, 
-                responseHandle: 'NONE', wrapAsMultipart: false
+                responseHandle: 'NONE', wrapAsMultipart: false,
                 url: "$url/api/v1/session"
             if (opt.debug)
             {
