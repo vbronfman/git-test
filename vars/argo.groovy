@@ -1,2 +1,5 @@
-def connect(){ return connect([:]) }
-def connect(opt){ return Argo.connect(this, opt) }
+def run(){ return get([:]) }
+def (opt)
+{
+    return obj = new Argo(this, opt)
+}
