@@ -1,15 +1,14 @@
 import groovy.json.JsonSlurperClassic
 
-def connections = [:]
-
-class ArgoCD
+class Argo
 {
+    def connections = [:]
     static def connect(ctx, opt)
     {
         def url = opt.url ?: 'https://argocd-rnd.gilat.com/'
         def creds = opt.creds ?: '8357b9f8-f851-415f-85c5-e77332d0848a'
-        if (connections[url])
-            return connections[url]
+        if (this.connections[url])
+            return this.connections[url]
         withCredentials([usernamePassword(
             credentialsId: '8357b9f8-f851-415f-85c5-e77332d0848a',
             passwordVariable: 'password',
@@ -28,7 +27,7 @@ class ArgoCD
             def res = (new JsonSlurperClassic()).parseText(response.content)
             if (opt.debug)
                 println("DEBUG: token: "+res.token)
-            return res.token
+            return this.connections[url] = res.token
         }
     }
 

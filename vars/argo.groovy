@@ -1,1 +1,1 @@
-def connect(opt){ return ArgoCD.connect(this, opt) }
+def connect(opt){ return Argo.connect(this, opt) }
