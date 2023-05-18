@@ -43,7 +43,7 @@ class Utilities
             branches: [[name: opt.branch]],
             extensions: extensions,
             userRemoteConfigs: [[
-                credentialsId: 'af7ca964-7371-4a18-aaf4-66e791da3650',
+                credentialsId: '47aa787b-0e1b-44bb-9fd7-04857bbc58f4',
                 url: "https://GilatDevOps@dev.azure.com/GilatDevOps/${opt.repo}"
             ]]
         ])
