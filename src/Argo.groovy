@@ -7,7 +7,6 @@ class Argo
     private HashMap opt
     private def debug(message){ if (this.opt.debug) this.ctx.println("DEBUG: ${message}") }
     private String url
-    private String token
     Argo(ctx, opt){
         this.ctx = ctx
         this.opt = opt ?: [:]
