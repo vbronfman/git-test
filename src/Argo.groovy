@@ -25,7 +25,7 @@ class Argo
             this.ctx.retry(10){
                 this.debug("Fetching $path, try #${i++}")
                 def response = this.ctx.httpRequest(consoleLogResponseBody: true,
-                    httpMode: mode, ignoreSslErrors: true, responseHandle: 'NONE', quiet: quiet 
+                    httpMode: mode, ignoreSslErrors: true, responseHandle: 'NONE', quiet: quiet,
                     wrapAsMultipart: false, url: "${this.url}/${path}", requestBody: body,
                     customHeaders: [[maskValue: false, name: 'Authorization', value: bearer]])
                 return (new JsonSlurperClassic()).parseText(response.content)
