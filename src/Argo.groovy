@@ -15,7 +15,6 @@ class Argo
     }
     private def req(path, mode, body)
     {
-        def quiet = !this.opt.debug
         this.ctx.withCredentials([this.ctx.string(
             credentialsId: 'e5c5b02b-13e2-4fe3-85c3-09d780b9e3cd',
             variable: 'token'
@@ -25,7 +24,7 @@ class Argo
             this.ctx.retry(10){
                 this.debug("Fetching $path, try #${i++}")
                 def response = this.ctx.httpRequest(consoleLogResponseBody: true,
-                    httpMode: mode, ignoreSslErrors: true, responseHandle: 'NONE', quiet: quiet,
+                    httpMode: mode, ignoreSslErrors: true, responseHandle: 'NONE',
                     wrapAsMultipart: false, url: "${this.url}/${path}", requestBody: body,
                     customHeaders: [[maskValue: false, name: 'Authorization', value: bearer]])
                 return (new JsonSlurperClassic()).parseText(response.content)
