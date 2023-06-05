@@ -2,6 +2,10 @@
 *  Wrapper for jFrog Artifactory REST APIs
 *  https://jfrog.com/help/r/jfrog-rest-apis/artifactory-rest-apis
 */
+
+import groovy.json.JsonBuilder
+import groovy.json.JsonSlurperClassic
+
 class Jfrog
 {
 
