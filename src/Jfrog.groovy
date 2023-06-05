@@ -11,11 +11,14 @@ class Jfrog
 
     private def ctx
 
-    Jfrog(ctx, name){ this.ctx = ctx }
+    Jfrog(ctx, name){
+        this.ctx = ctx
+        this.name = name
+    }
     
     def getUrl()
     {
-        def instance = Utilities.getConstant('artifactory')[name]
+        def instance = Utilities.getConstant('artifactory')[this.name]
         return "${instance.schema}://${instance.domain}"
     }
 
