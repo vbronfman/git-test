@@ -13,11 +13,14 @@ class Jfrog
     private def instance
     private def url
 
-    Jfrog(ctx, name)
+    Jfrog(ctx, name){ this.ctx = ctx }
+    
+    def getUrl()
     {
-        this.ctx = ctx
-        this.instance = (Utilities.getConstant('artifactory')[name])
-        this.url = "${this.instance.schema}://${this.instance.domain}"
+        if (this.url)
+            return this.url
+        def instance = Utilities.getConstant('artifactory')[name]
+        return this.url = "${this.instance.schema}://${this.instance.domain}"
     }
 
     def promote(buildName, buildNumber, sourceRepo, targetRepo,
@@ -42,7 +45,7 @@ class Jfrog
             ]).toString())
             def response = this.ctx.httpRequest(consoleLogResponseBody: true,
                 httpMode: 'POST', ignoreSslErrors: true, responseHandle: 'NONE',
-                wrapAsMultipart: false, url: "${this.url}/${path}", requestBody: body,
+                wrapAsMultipart: false, url: "${this.getUrl()}/${path}", requestBody: body,
                 customHeaders: [[maskValue: false, name: 'Authorization', value: bearer]])
             return (new JsonSlurperClassic()).parseText(response.content)
         }
