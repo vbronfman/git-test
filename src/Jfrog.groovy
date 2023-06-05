@@ -26,29 +26,25 @@ class Jfrog
     def promote(buildName, buildNumber, sourceRepo, targetRepo,
         status="promoted", comment='', properties=[:], ciUser='', dry=false)
     {
-        this.ctx.withCredentials([this.ctx.string(
-            credentialsId: 'aws-artifactory1-publisher',
-            variable: 'token'
-        )]) {
-            def bearer = "Bearer " + this.ctx.token
-            def path = "/api/build/promote/${buildName}/${buildNumber}"
-            def body = (new JsonBuilder([
-                status: status,
-                comment: comment,
-                ciUser: ciUser,
-                sourceRepo : sourceRepo, 
-                targetRepo : targetRepo,
-                artifacts : true, 
-                properties: properties,
-                failFast: true,
-                dryRun: dry,
-            ]).toString())
-            def response = this.ctx.httpRequest(consoleLogResponseBody: true,
-                httpMode: 'POST', ignoreSslErrors: true, responseHandle: 'NONE',
-                wrapAsMultipart: false, url: "${this.getUrl()}/${path}", requestBody: body,
-                customHeaders: [[maskValue: false, name: 'Authorization', value: bearer]])
-            return (new JsonSlurperClassic()).parseText(response.content)
-        }
+        def bearer = "Bearer " + this.ctx.token
+        def path = "/api/build/promote/${buildName}/${buildNumber}"
+        def body = (new JsonBuilder([
+            status: status,
+            comment: comment,
+            ciUser: ciUser,
+            sourceRepo : sourceRepo, 
+            targetRepo : targetRepo,
+            artifacts : true, 
+            properties: properties,
+            failFast: true,
+            dryRun: dry,
+        ]).toString())
+        def response = this.ctx.httpRequest(consoleLogResponseBody: true,
+            httpMode: 'POST', ignoreSslErrors: true, responseHandle: 'NONE',
+            wrapAsMultipart: false, url: "${this.getUrl()}/${path}", requestBody: body,
+            customHeaders: [[maskValue: false, name: 'Authorization', value: bearer]],
+            authentication: 'aws-artifactory1-publisher')
+        return (new JsonSlurperClassic()).parseText(response.content)
     }
 
 }
