@@ -10,6 +10,7 @@ class Jfrog
 {
 
     private def ctx
+    private def name
 
     Jfrog(ctx, name){
         this.ctx = ctx
