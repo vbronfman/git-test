@@ -40,7 +40,7 @@ class Jfrog
     def promoteBuild(buildName, buildNumber, sourceRepo, targetRepo,
         status="promoted", comment='', properties=[:], ciUser='', dry=false)
     {
-        def path = "artifactory/api/build/promote/${URLEncoder.encode(buildName, 'UTF-8')}/${buildNumber}"
+        def path = "artifactory/api/build/promote/${UriUtils.encodePath(buildName, 'UTF-8')}/${buildNumber}"
         def body = (new JsonBuilder([
             status: status,
             comment: comment,
