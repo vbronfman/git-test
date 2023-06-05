@@ -28,7 +28,7 @@ class Jfrog
     def promote(buildName, buildNumber, sourceRepo, targetRepo,
         status="promoted", comment='', properties=[:], ciUser='', dry=false)
     {
-        def path = URLEncoder.encode("/api/build/promote/${buildName}/${buildNumber}")
+        def path = "/api/build/promote/${URLEncoder.encode(buildName)}/${buildNumber}"
         def body = (new JsonBuilder([
             status: status,
             comment: comment,
