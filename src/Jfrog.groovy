@@ -25,6 +25,18 @@ class Jfrog
         return "${instance.schema}://${instance.domain}"
     }
 
+    def getAllBuilds()
+    {
+        def path = "artifactory/api/build/"
+        def response = this.ctx.httpRequest(consoleLogResponseBody: true,
+            httpMode: 'GET', ignoreSslErrors: true, responseHandle: 'NONE',
+            wrapAsMultipart: false, url: "${this.getUrl()}/${path}",
+            customHeaders: [[maskValue: false, name: 'Content-type', value: "application/json"]],
+            authentication: 'aws-artifactory1-publisher')
+        return (new JsonSlurperClassic()).parseText(response.content)
+
+    }
+
     def promote(buildName, buildNumber, sourceRepo, targetRepo,
         status="promoted", comment='', properties=[:], ciUser='', dry=false)
     {
