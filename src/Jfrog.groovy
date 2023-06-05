@@ -40,6 +40,7 @@ class Jfrog
             failFast: true,
             dryRun: dry,
         ]).toString())
+        this.ctx.echo body
         def response = this.ctx.httpRequest(consoleLogResponseBody: true,
             httpMode: 'POST', ignoreSslErrors: true, responseHandle: 'NONE',
             wrapAsMultipart: false, url: "${this.getUrl()}/${path}", requestBody: body,
