@@ -16,7 +16,7 @@ class Jfrog
     Jfrog(ctx, name)
     {
         this.ctx = ctx
-        this.instance = ctx.utils.getConstant('artifactory')[name]
+        this.instance = (Utilities.getConstant('artifactory'))[name]
         this.url = "${this.instance.schema}://${this.instance.domain}"
     }
 
