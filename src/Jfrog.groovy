@@ -10,17 +10,13 @@ class Jfrog
 {
 
     private def ctx
-    private def instance
-    private def url
 
     Jfrog(ctx, name){ this.ctx = ctx }
     
     def getUrl()
     {
-        if (this.url)
-            return this.url
         def instance = Utilities.getConstant('artifactory')[name]
-        return this.url = "${this.instance.schema}://${this.instance.domain}"
+        return "${instance.schema}://${instance.domain}"
     }
 
     def promote(buildName, buildNumber, sourceRepo, targetRepo,
