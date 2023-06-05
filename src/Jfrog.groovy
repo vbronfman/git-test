@@ -33,7 +33,6 @@ class Jfrog
             customHeaders: [[maskValue: false, name: 'Content-type', value: "application/json"]],
             authentication: 'aws-artifactory1-publisher')
         return (new JsonSlurperClassic()).parseText(response.content)
-
     }
 
     def promoteBuild(buildName, buildNumber, sourceRepo, targetRepo,
