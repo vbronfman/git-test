@@ -6,6 +6,10 @@
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurperClassic
 
+String.metaClass.encodeURL = {
+   java.net.URLEncoder.encode(delegate, "UTF-8")
+}
+
 class Jfrog
 {
 
@@ -26,7 +30,7 @@ class Jfrog
     def promote(buildName, buildNumber, sourceRepo, targetRepo,
         status="promoted", comment='', properties=[:], ciUser='', dry=false)
     {
-        def path = "/api/build/promote/${buildName}/${buildNumber}"
+        def path = "/api/build/promote/${buildName}/${buildNumber}".encodeURL()
         def body = (new JsonBuilder([
             status: status,
             comment: comment,
