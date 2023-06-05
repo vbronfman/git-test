@@ -28,7 +28,7 @@ class Jfrog
     def promote(buildName, buildNumber, sourceRepo, targetRepo,
         status="promoted", comment='', properties=[:], ciUser='', dry=false)
     {
-        def path = "/api/build/promote/${buildName}/${buildNumber}"
+        def path = "artifactory/api/build/promote/${buildName}/${buildNumber}"
         def body = (new JsonBuilder([
             status: status,
             comment: comment,
