@@ -26,7 +26,6 @@ class Jfrog
     def promote(buildName, buildNumber, sourceRepo, targetRepo,
         status="promoted", comment='', properties=[:], ciUser='', dry=false)
     {
-        def bearer = "Bearer " + this.ctx.token
         def path = "/api/build/promote/${buildName}/${buildNumber}"
         def body = (new JsonBuilder([
             status: status,
@@ -42,7 +41,6 @@ class Jfrog
         def response = this.ctx.httpRequest(consoleLogResponseBody: true,
             httpMode: 'POST', ignoreSslErrors: true, responseHandle: 'NONE',
             wrapAsMultipart: false, url: "${this.getUrl()}/${path}", requestBody: body,
-            customHeaders: [[maskValue: false, name: 'Authorization', value: bearer]],
             authentication: 'aws-artifactory1-publisher')
         return (new JsonSlurperClassic()).parseText(response.content)
     }
