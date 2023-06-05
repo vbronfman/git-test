@@ -48,6 +48,7 @@ class Jfrog
             sourceRepo : sourceRepo, 
             targetRepo : targetRepo,
             artifacts : true, 
+            properties: properties,
             failFast: true,
             dryRun: dry,
         ]).toString())
