@@ -6,7 +6,7 @@
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurperClassic
 import java.net.URLEncoder
-
+import org.springframework.web.util.UriUtils
 
 class Jfrog
 {
