@@ -37,7 +37,7 @@ class Jfrog
 
     }
 
-    def promote(buildName, buildNumber, sourceRepo, targetRepo,
+    def promoteBuild(buildName, buildNumber, sourceRepo, targetRepo,
         status="promoted", comment='', properties=[:], ciUser='', dry=false)
     {
         def path = "artifactory/api/build/promote/${URLEncoder.encode(buildName)}/${buildNumber}"
