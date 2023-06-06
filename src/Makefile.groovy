@@ -7,15 +7,15 @@ class Makefile
     }
 
     def buildCmakeDebug() {
-        ctx.sh '''make build BUILD_TYPE=Debug BUILD_FLAGS='--parallel 12''''
+        ctx.sh '''make build BUILD_TYPE=Debug BUILD_FLAGS='--parallel 12' '''
     }
 
     def buildCmakeRelease() {
-        ctx.sh '''make build BUILD_TYPE=Release BUILD_FLAGS='--parallel 12''''
+        ctx.sh '''make build BUILD_TYPE=Release BUILD_FLAGS='--parallel 12' '''
     }
 
     def formatClang() {
-        ctx.sh '''make format FORMAT_FLAGS='--Werror --dry-run''''
+        ctx.sh '''make format FORMAT_FLAGS='--Werror --dry-run' '''
     }
 
     def packit(branch, sharepoint) {
