@@ -67,11 +67,12 @@ class Jfrog
 
     private def request(path, mode, body=null)
     {
+        def cred = Utilities.getConstant('artifactory')[this.name].credId
         def response = this.ctx.httpRequest(consoleLogResponseBody: true,
             httpMode: mode, ignoreSslErrors: true, responseHandle: 'NONE',
             wrapAsMultipart: false, url: "${this.getUrl()}/${path}", requestBody: body,
             customHeaders: [[maskValue: false, name: 'Content-type', value: "application/json"]],
-            authentication: 'aws-artifactory1-publisher')
+            authentication: cred)
         return (new JsonSlurperClassic()).parseText(response.content)
     }
 
