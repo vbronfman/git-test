@@ -91,9 +91,11 @@ class Jfrog
             customHeaders: [[maskValue: false, name: 'Content-type', value: "application/json"]],
             authentication: cred)
         if (response.content)
+        {
             try{
                 return (new JsonSlurperClassic()).parseText(response.content)
-            } catch(e){ return [message: response.content]}
+            } catch(e){ return [message: response.content] }
+        }
     }
 
 }
