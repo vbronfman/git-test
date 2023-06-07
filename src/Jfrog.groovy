@@ -26,20 +26,13 @@ class Jfrog
 
     def getAllBuilds()
     {
-        def path = "artifactory/api/build/"
-        this.get(path)
+        this.get("artifactory/api/build/")
     }
 
     def getBuild(buildName, buildNumber)
     {
-        def path = "artifactory/api/build/"+
-            "${UriUtils.encodePath(buildName, 'UTF-8')}/${buildNumber}"
-        def response = this.ctx.httpRequest(consoleLogResponseBody: true,
-            httpMode: 'GET', ignoreSslErrors: true, responseHandle: 'NONE',
-            wrapAsMultipart: false, url: "${this.getUrl()}/${path}",
-            customHeaders: [[maskValue: false, name: 'Content-type', value: "application/json"]],
-            authentication: 'aws-artifactory1-publisher')
-        return (new JsonSlurperClassic()).parseText(response.content)
+        this.get("artifactory/api/build/"+
+            "${UriUtils.encodePath(buildName, 'UTF-8')}/${buildNumber}")
     }
 
     def promoteBuild(buildName, buildNumber, sourceRepo, targetRepo,
