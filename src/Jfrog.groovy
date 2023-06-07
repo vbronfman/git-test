@@ -59,13 +59,7 @@ class Jfrog
             dryRun: opt.dry,
         ]).toString())
         this.ctx.echo body
-        return false
-        def response = this.ctx.httpRequest(consoleLogResponseBody: true,
-            httpMode: 'POST', ignoreSslErrors: true, responseHandle: 'NONE',
-            wrapAsMultipart: false, url: "${this.getUrl()}/${path}", requestBody: body,
-            customHeaders: [[maskValue: false, name: 'Content-type', value: "application/json"]],
-            authentication: 'aws-artifactory1-publisher')
-        return (new JsonSlurperClassic()).parseText(response.content)
+        this.post(path, body)
     }
     
     private def get(path){ this.request(path, 'GET') }
