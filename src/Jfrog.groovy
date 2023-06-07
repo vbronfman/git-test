@@ -64,7 +64,7 @@ class Jfrog
     
     def uploadBuild(build)
     {
-        this.ctx.echo(new JsonBuilder(build).toString())
+        // if you use buld obtained with getBuild(), pass into this method only buildInfo field
         this.put("artifactory/api/build", ( new JsonBuilder(build).toString() ))
     }
 
