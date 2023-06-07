@@ -24,6 +24,18 @@ class Jfrog
         return "${instance.schema}://${instance.domain}"
     }
 
+    def getAllBuilds(buildName, buildNumber)
+    {
+        def path = "artifactory/api/build/"+
+            "${UriUtils.encodePath(buildName, 'UTF-8')}/${buildNumber}"
+        def response = this.ctx.httpRequest(consoleLogResponseBody: true,
+            httpMode: 'GET', ignoreSslErrors: true, responseHandle: 'NONE',
+            wrapAsMultipart: false, url: "${this.getUrl()}/${path}",
+            customHeaders: [[maskValue: false, name: 'Content-type', value: "application/json"]],
+            authentication: 'aws-artifactory1-publisher')
+        return (new JsonSlurperClassic()).parseText(response.content)
+    }
+
     def getAllBuilds()
     {
         def path = "artifactory/api/build/"
@@ -58,6 +70,18 @@ class Jfrog
             customHeaders: [[maskValue: false, name: 'Content-type', value: "application/json"]],
             authentication: 'aws-artifactory1-publisher')
         return (new JsonSlurperClassic()).parseText(response.content)
+    }
+    
+    private def get(path){ this.request(path, 'GET') }
+    private def post(path, body){ this.request(path, 'POST', body) }
+
+    private def request(path, mode, body=null)
+    {
+        this.ctx.httpRequest(consoleLogResponseBody: true,
+            httpMode: mode, ignoreSslErrors: true, responseHandle: 'NONE',
+            wrapAsMultipart: false, url: "${this.getUrl()}/${path}", requestBody: body,
+            customHeaders: [[maskValue: false, name: 'Content-type', value: "application/json"]],
+            authentication: 'aws-artifactory1-publisher')
     }
 
 }
