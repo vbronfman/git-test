@@ -35,21 +35,28 @@ class Jfrog
             "${UriUtils.encodePath(buildName, 'UTF-8')}/${buildNumber}")
     }
 
-    def promoteBuild(buildName, buildNumber, sourceRepo, targetRepo,
-        status="promoted", comment='', properties=[:], ciUser='', dry=false)
+    def promoteBuild(buildName, buildNumber, sourceRepo, targetRepo, opt=[:])
     {
         def path = "artifactory/api/build/promote/"+
             "${UriUtils.encodePath(buildName, 'UTF-8')}/${buildNumber}"
+        opt = [
+            status: "promoted",
+            comment: '',
+            properties: [:],
+            ciUser: '',
+            dry: false,
+            artifacts : true, 
+        ] << opt
         def body = (new JsonBuilder([
-            status: status,
-            comment: comment,
-            ciUser: ciUser,
+            status: opt.status,
+            comment: opt.comment,
+            ciUser: opt.ciUser,
             sourceRepo : sourceRepo, 
             targetRepo : targetRepo,
-            artifacts : true, 
-            properties: properties,
+            artifacts : opt.artifacts, 
+            properties: opt.properties,
             failFast: true,
-            dryRun: dry,
+            dryRun: opt.dry,
         ]).toString())
         this.ctx.echo body
         return false
