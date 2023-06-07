@@ -67,11 +67,12 @@ class Jfrog
 
     private def request(path, mode, body=null)
     {
-        this.ctx.httpRequest(consoleLogResponseBody: true,
+        def response this.ctx.httpRequest(consoleLogResponseBody: true,
             httpMode: mode, ignoreSslErrors: true, responseHandle: 'NONE',
             wrapAsMultipart: false, url: "${this.getUrl()}/${path}", requestBody: body,
             customHeaders: [[maskValue: false, name: 'Content-type', value: "application/json"]],
             authentication: 'aws-artifactory1-publisher')
+        return (new JsonSlurperClassic()).parseText(response.content)
     }
 
 }
