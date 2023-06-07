@@ -62,6 +62,11 @@ class Jfrog
         this.post(path, body)
     }
     
+    def uploadBuild(build)
+    {
+        this.put("/api/build", build)
+    }
+
     private def get(path){ this.request(path, 'GET') }
     private def post(path, body){ this.request(path, 'POST', body) }
     private def put(path, body){ this.request(path, 'PUT', body) }
