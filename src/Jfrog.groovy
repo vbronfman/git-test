@@ -64,6 +64,7 @@ class Jfrog
     
     private def get(path){ this.request(path, 'GET') }
     private def post(path, body){ this.request(path, 'POST', body) }
+    private def put(path, body){ this.request(path, 'PUT', body) }
 
     private def request(path, mode, body=null)
     {
