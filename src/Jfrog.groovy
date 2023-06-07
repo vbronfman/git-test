@@ -26,14 +26,14 @@ class Jfrog
 
     def getAllBuilds()
     {
-        def path = "artifactory/api/build/"+
-            "${UriUtils.encodePath(buildName, 'UTF-8')}/${buildNumber}"
+        def path = "artifactory/api/build/"
         this.get(path)
     }
 
     def getBuild(buildName, buildNumber)
     {
-        def path = "artifactory/api/build/"
+        def path = "artifactory/api/build/"+
+            "${UriUtils.encodePath(buildName, 'UTF-8')}/${buildNumber}"
         def response = this.ctx.httpRequest(consoleLogResponseBody: true,
             httpMode: 'GET', ignoreSslErrors: true, responseHandle: 'NONE',
             wrapAsMultipart: false, url: "${this.getUrl()}/${path}",
