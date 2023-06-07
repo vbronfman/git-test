@@ -68,6 +68,16 @@ class Jfrog
         this.put("artifactory/api/build", ( new JsonBuilder(build).toString() ))
     }
 
+    def deleteBuild(buildName, buildNumber)
+    {
+        this.post("artifactory/api/build/delete", ( new JsonBuilder([
+            buildName: buildName,
+            buildNumbers: [buildNumber],
+            deleteArtifacts: true,
+            deleteAll: false,
+        ]).toString() ))
+    }
+
     private def get(path){ this.request(path, 'GET') }
     private def post(path, body){ this.request(path, 'POST', body) }
     private def put(path, body){ this.request(path, 'PUT', body) }
