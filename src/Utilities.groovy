@@ -7,10 +7,12 @@ class Utilities
                 AWS: [
                     domain: "jfrog.rnd.gilat.com",
                     schema: "https",
+                    credId:  "aws-artifactory1-publisher",
                 ],
                 IL: [
                     domain: "jfrog.gilat.com",
                     schema: "https",
+                    credId: "il-artifactory1-publisher",
                 ]
         ]
         def constants = [
