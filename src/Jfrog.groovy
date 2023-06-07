@@ -64,8 +64,7 @@ class Jfrog
     
     def uploadBuild(build)
     {
-        this.ctx.echo build.toString()
-        this.put("artifactory/api/build", build.toString())
+        this.put("artifactory/api/build", ( new JsonBuilder(build).toString() ))
     }
 
     private def get(path){ this.request(path, 'GET') }
