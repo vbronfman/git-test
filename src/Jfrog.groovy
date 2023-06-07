@@ -67,7 +67,7 @@ class Jfrog
 
     private def request(path, mode, body=null)
     {
-        def response this.ctx.httpRequest(consoleLogResponseBody: true,
+        def response = this.ctx.httpRequest(consoleLogResponseBody: true,
             httpMode: mode, ignoreSslErrors: true, responseHandle: 'NONE',
             wrapAsMultipart: false, url: "${this.getUrl()}/${path}", requestBody: body,
             customHeaders: [[maskValue: false, name: 'Content-type', value: "application/json"]],
