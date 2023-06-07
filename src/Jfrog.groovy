@@ -64,7 +64,7 @@ class Jfrog
     
     def uploadBuild(build)
     {
-        this.put("/api/build", build)
+        this.put("/api/build", build.toString())
     }
 
     private def get(path){ this.request(path, 'GET') }
