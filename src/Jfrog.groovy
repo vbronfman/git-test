@@ -64,6 +64,7 @@ class Jfrog
     
     def uploadBuild(build)
     {
+        this.ctx.echo build.toString()
         this.put("artifactory/api/build", build.toString())
     }
 
