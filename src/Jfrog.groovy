@@ -80,7 +80,8 @@ class Jfrog
             wrapAsMultipart: false, url: "${this.getUrl()}/${path}", requestBody: body,
             customHeaders: [[maskValue: false, name: 'Content-type', value: "application/json"]],
             authentication: cred)
-        return (new JsonSlurperClassic()).parseText(response.content)
+        if (response.content)
+            return (new JsonSlurperClassic()).parseText(response.content)
     }
 
 }
