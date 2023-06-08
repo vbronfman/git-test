@@ -1,1 +1,23 @@
-def init() { return new Makefile(this) }
+def call(Map config) {
+    def mk = new Makefile(this)
+
+    switch (config.type) {
+        case 'buildCmakeDebug':
+            mk.buildCmakeDebug()
+            break
+        case 'buildCmakeRelease':
+            mk.buildCmakeRelease()
+            break
+        case 'formatClang':
+            mk.formatClang()
+            break
+        case 'packit':
+            mk.packit(config.branch, config.sharepoint)
+            break
+        case 'sast':
+            mk.sast()
+            break
+        default:
+            throw new Exception("Unrecognized type <${config.type}>.")
+    }
+}
