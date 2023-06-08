@@ -41,7 +41,7 @@ class Utilities
             ]
         }
         if (opt.submodules) {
-            extensions << [submodule(parentCredentials: true, reference: '')]
+            extensions << [ctx.submodule(parentCredentials: true, reference: '')]
         }
 
         return ctx.checkout([
