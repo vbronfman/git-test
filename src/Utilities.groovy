@@ -40,6 +40,10 @@ class Utilities
                 sparseCheckoutPaths: sparseCheckoutPaths
             ]
         }
+        if (opt.submodules) {
+            extensions << [submodule(parentCredentials: true, reference: '')]
+        }
+
         return ctx.checkout([
             $class: 'GitSCM',
             branches: [[name: opt.branch]],
