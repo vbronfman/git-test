@@ -21,7 +21,7 @@ class Makefile implements Serializable {
         def dbAddr = 'postgresql://g-versions-db.gilat.com:5432/se.4-versions-production'
 
         steps.withCredentials([steps.usernamePassword(credentialsId: 'postgres-user-for-production', usernameVariable: 'dbUser', passwordVariable: 'dbPass')]) {
-            steps.sh """make packit VERSION_DB='${dbAddr}?user=\$dbUser\\&password=\$dbPass' BRANCH='${branch}' SHAREPOINT=${sharepoint ? 'sharepoint' : 'nosharepoint'}"""
+            steps.sh """make packit VERSION_DB=\\"${dbAddr}?user=\$dbUser&password=\$dbPass\\" BRANCH=\\'${branch}\\' SHAREPOINT=${sharepoint ? 'sharepoint' : 'nosharepoint'}"""
         }
     }
 
