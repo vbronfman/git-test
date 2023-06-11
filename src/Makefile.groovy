@@ -18,10 +18,19 @@ class Makefile implements Serializable {
     }
 
     def packit(branch, sharepoint) {
-        def dbAddr = 'postgresql://g-versions-db.gilat.com:5432/se.4-versions-production'
+        def dbAddr = Utilities.getConstant('versionGeneratorUrl')
 
         steps.withCredentials([steps.usernamePassword(credentialsId: 'postgres-user-for-production', usernameVariable: 'dbUser', passwordVariable: 'dbPass')]) {
             steps.sh """make packit VERSION_DB=\\"${dbAddr}?user=\$dbUser\\&password=\$dbPass\\" BRANCH=\\'${branch}\\' SHAREPOINT=${sharepoint ? 'sharepoint' : 'nosharepoint'}"""
+        }
+    }
+
+    def publish(repo, branch) {
+        def artifactory = Utilities.getConstant('artifactory').AWS
+        def url = "${artifactory.schema}://${artifactory.domain}/artifactory"
+
+        steps.withCredentials([steps.usernamePassword(credentialsId: 'aws-artifactory1-publisher', usernameVariable: 'artUser', passwordVariable: 'artPass')]) {
+            steps.sh """make publish REPO=\\'${url}/${repo}\\' TOKEN=\$artPass"""
         }
     }
 

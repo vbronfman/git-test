@@ -14,6 +14,9 @@ def call(Map config) {
         case 'packit':
             mk.packit(config.branch, config.sharepoint)
             break
+        case 'publish':
+            mk.publish(config.repo, config.branch)
+            break
         case 'sast':
             mk.sast()
             break

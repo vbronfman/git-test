@@ -21,6 +21,7 @@ class Utilities
             defaultArtifactorySchema: artifactory.IL.schema,
         ]
         constants << [defaultArtifactoryUrl: "${constants.defaultArtifactorySchema}://${constants.defaultArtifactoryDomainName}/artifactory"]
+        constants << [versionGeneratorUrl: 'postgresql://g-versions-db.gilat.com:5432/se.4-versions-production']
         return constants.get(name)
     }
 
