@@ -6,11 +6,11 @@ class Makefile implements Serializable {
     }
 
     def buildCmakeDebug() {
-        steps.sh '''make build BUILD_TYPE=Debug BUILD_FLAGS=\\'--parallel 12 --clean-first\\' '''
+        steps.sh '''make build BUILD_TYPE=Debug BUILD_FLAGS=\\'--parallel 12\\' '''
     }
 
     def buildCmakeRelease() {
-        steps.sh '''make build BUILD_TYPE=Release BUILD_FLAGS=\\'--parallel 12 --clean-first\\' '''
+        steps.sh '''make build BUILD_TYPE=Release BUILD_FLAGS=\\'--parallel 12\\' '''
     }
 
     def formatClang() {
