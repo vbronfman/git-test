@@ -28,7 +28,7 @@ class Makefile implements Serializable {
         def dbAddr = Utilities.getConstant('versionGeneratorUrl')
 
         steps.withCredentials([steps.usernamePassword(credentialsId: 'postgres-user-for-production', usernameVariable: 'dbUser', passwordVariable: 'dbPass')]) {
-            steps.sh """make packit VERSION_DB=\\"${dbAddr}?user=\$dbUser\\&password=\$dbPass\\" BRANCH=\\'${branch}\\' SHAREPOINT=${sharepoint ? 'sharepoint' : 'nosharepoint'} """
+            steps.sh """make packit VERSION_DB=\\"${dbAddr}?user=\$dbUser\\&password=\$dbPass\\" BRANCH=${branch} SHAREPOINT=${sharepoint ? 'sharepoint' : 'nosharepoint'} """
         }
     }
 
@@ -37,7 +37,7 @@ class Makefile implements Serializable {
         def url = "${artifactory.schema}://${artifactory.domain}/artifactory"
 
         steps.withCredentials([steps.string(credentialsId: 'aws-artifactory1-auth', variable: 'TOKEN')]) {
-            steps.sh """make publish REPO=\\'${url}/${repo}\\' TOKEN=\$TOKEN """
+            steps.sh """make publish REPO='${url}/${repo}' TOKEN=\$TOKEN BRANCH=${branch} """
         }
     }
 
