@@ -5,12 +5,19 @@ class Makefile implements Serializable {
         this.steps = steps
     }
 
-    def buildCmakeDebug() {
-        steps.sh '''make build BUILD_TYPE=Debug BUILD_FLAGS=\\'--parallel 12\\' '''
-    }
+    def buildCmake(buildType, dir, clean) {
+        def extraMakeFlags = ""
+        def extraBuildFlags = ""
 
-    def buildCmakeRelease() {
-        steps.sh '''make build BUILD_TYPE=Release BUILD_FLAGS=\\'--parallel 12\\' '''
+        if (buildDir) {
+            extraMakeFlags += "BUILD_DIR=${dir}"
+        }
+
+        if (clean) {
+            extraBuildFlags += "--clean-first"
+        }
+
+        steps.sh """make build BUILD_TYPE=${buildType} BUILD_FLAGS=\\'--parallel 12 ${extraBuildFlags}\\' ${extraMakeFlags} """
     }
 
     def formatClang() {

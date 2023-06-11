@@ -2,11 +2,8 @@ def call(Map config) {
     def mk = new Makefile(this)
 
     switch (config.type) {
-        case 'buildCmakeDebug':
-            mk.buildCmakeDebug()
-            break
-        case 'buildCmakeRelease':
-            mk.buildCmakeRelease()
+        case 'buildCmake':
+            mk.buildCmake(config.buildType, config.dir, config.clean)
             break
         case 'formatClang':
             mk.formatClang()
