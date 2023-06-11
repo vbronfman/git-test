@@ -6,15 +6,15 @@ class Makefile implements Serializable {
     }
 
     def buildCmakeDebug() {
-        steps.sh '''make build BUILD_TYPE=Debug BUILD_FLAGS='--parallel 12' '''
+        steps.sh '''make build BUILD_TYPE=Debug BUILD_FLAGS=\\'--parallel 12 --clean-first\\' '''
     }
 
     def buildCmakeRelease() {
-        steps.sh '''make build BUILD_TYPE=Release BUILD_FLAGS='--parallel 12' '''
+        steps.sh '''make build BUILD_TYPE=Release BUILD_FLAGS=\\'--parallel 12 --clean-first\\' '''
     }
 
     def formatClang() {
-        steps.sh '''make format FORMAT_FLAGS='--Werror --dry-run' '''
+        steps.sh '''make format FORMAT_FLAGS=\\'--Werror --dry-run\\' '''
     }
 
     def packit(branch, sharepoint) {
