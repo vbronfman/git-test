@@ -9,7 +9,7 @@ class Makefile implements Serializable {
         def extraMakeFlags = ""
         def extraBuildFlags = ""
 
-        if (buildDir) {
+        if (dir) {
             extraMakeFlags += "BUILD_DIR=${dir}"
         }
 
