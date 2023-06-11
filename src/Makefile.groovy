@@ -6,22 +6,22 @@ class Makefile implements Serializable {
     }
 
     def buildCmake(buildType, dir, clean) {
-//        def extraMakeFlags = ""
-//        def extraBuildFlags = ""
-//
-//        if (buildDir) {
-//            extraMakeFlags += "BUILD_DIR=${dir}"
-//        }
-//
-//        if (clean) {
-//            extraBuildFlags += "--clean-first"
-//        }
-//
-//        steps.sh """make build BUILD_TYPE=${buildType} BUILD_FLAGS='--parallel 12 ${extraBuildFlags}' ${extraMakeFlags} """
+        def extraMakeFlags = ""
+        def extraBuildFlags = ""
+
+        if (buildDir) {
+            extraMakeFlags += "BUILD_DIR=${dir}"
+        }
+
+        if (clean) {
+            extraBuildFlags += "--clean-first"
+        }
+
+        steps.sh """make build BUILD_TYPE=${buildType} BUILD_FLAGS='--parallel 12 ${extraBuildFlags}' ${extraMakeFlags} """
     }
 
     def formatClang() {
-        steps.sh 'FORMAT_FLAGS="--Werror --dry-run" make format'
+        steps.sh '''make format FORMAT_FLAGS='--Werror --dry-run' '''
     }
 
     def packit(branch, sharepoint) {
