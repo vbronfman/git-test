@@ -17,11 +17,11 @@ class Makefile implements Serializable {
             extraBuildFlags += "--clean-first"
         }
 
-        steps.sh """make build BUILD_TYPE=${buildType} BUILD_FLAGS=\\'--parallel 12 ${extraBuildFlags}\\' ${extraMakeFlags} """
+        steps.sh """make build BUILD_TYPE=${buildType} BUILD_FLAGS='--parallel 12 ${extraBuildFlags}' ${extraMakeFlags} """
     }
 
     def formatClang() {
-        steps.sh '''make format FORMAT_FLAGS=\\'--Werror --dry-run\\' '''
+        steps.sh '''make format FORMAT_FLAGS='--Werror --dry-run' '''
     }
 
     def packit(branch, sharepoint) {
