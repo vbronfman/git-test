@@ -44,7 +44,7 @@ class Makefile implements Serializable {
         }
 
         if (notify) {
-            emailext(
+            steps.emailext(
                 subject: "SUCCESSFUL: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]'",
                 body: """<p>SUCCESSFUL: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]':</p>
                     <p>Package is available at &QUOT;<a href='${pretty}'>${pretty}</a>&QUOT;</p>
