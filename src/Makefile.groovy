@@ -48,6 +48,7 @@ class Makefile implements Serializable {
                 subject: "SUCCESSFUL: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]'",
                 body: """<p>SUCCESSFUL: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]':</p>
                     <p>Package is available at &QUOT;<a href='${pretty}'>${pretty}</a>&QUOT;</p>
+                    <p>${pretty}</p>
                     <p>Check console output at &QUOT;<a href='${steps.env.BUILD_URL}'>${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]</a>&QUOT;</p>""",
                 to: notify,
                 mimeType: 'text/html')
