@@ -40,7 +40,7 @@ class Makefile implements Serializable {
         steps.withCredentials([steps.string(credentialsId: 'aws-artifactory1-auth', variable: 'TOKEN')]) {
             pretty = steps.sh(
                 returnStdout: true,
-                script: """make publish REPO='${url}/${repo}' TOKEN=\$TOKEN BRANCH=${branch} """).trim().tokenize().last())
+                script: """make publish REPO='${url}/${repo}' TOKEN=\$TOKEN BRANCH=${branch} """).trim().tokenize().last()
         }
 
         if (notify) {
