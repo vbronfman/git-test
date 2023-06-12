@@ -39,8 +39,8 @@ class Makefile implements Serializable {
 
         steps.withCredentials([steps.string(credentialsId: 'aws-artifactory1-auth', variable: 'TOKEN')]) {
             pretty = steps.sh(
-                returnStdout: true
-                script: """make publish REPO='${url}/${repo}' TOKEN=\$TOKEN BRANCH=${branch} """).trim().tokenize().last()
+                returnStdout: true,
+                script: """make publish REPO='${url}/${repo}' TOKEN=\$TOKEN BRANCH=${branch} """).trim().tokenize().last())
         }
 
         if (notify) {
@@ -49,8 +49,8 @@ class Makefile implements Serializable {
                 body: """<p>SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
                     <p>Package is available at &QUOT;<a href='${pretty}'>${pretty}</a>&QUOT;</p>
                     <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
-                to: notify
-                mimeType: 'text/html'
+                to: notify,
+                mimeType: 'text/html')
         }
     }
 
