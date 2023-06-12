@@ -32,12 +32,25 @@ class Makefile implements Serializable {
         }
     }
 
-    def publish(repo, branch) {
+    def publish(repo, branch, notify) {
         def artifactory = Utilities.getConstant('artifactory').AWS
         def url = "${artifactory.schema}://${artifactory.domain}/artifactory"
+        def pretty = ''
 
         steps.withCredentials([steps.string(credentialsId: 'aws-artifactory1-auth', variable: 'TOKEN')]) {
-            steps.sh """make publish REPO='${url}/${repo}' TOKEN=\$TOKEN BRANCH=${branch} """
+            pretty = steps.sh(
+                returnStdout: true
+                script: """make publish REPO='${url}/${repo}' TOKEN=\$TOKEN BRANCH=${branch} """).trim().tokenize().last()
+        }
+
+        if (notify) {
+            emailext(
+                subject: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                body: """<p>SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+                    <p>Package is available at &QUOT;<a href='${pretty}'>${pretty}</a>&QUOT;</p>
+                    <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+                to: notify
+                mimeType: 'text/html'
         }
     }
 
