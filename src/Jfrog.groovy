@@ -39,6 +39,7 @@ class Jfrog
             buildInfo.retention maxBuilds: opt.keepLast, deleteBuildArtifacts: true, async: !!opt.sync
         }
         art.publishBuildInfo buildInfo
+        return buildInfo
     }
 
     def getUrl()
