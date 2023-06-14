@@ -1,6 +1,7 @@
 /*
-*  Wrapper for jFrog Artifactory REST APIs
-*  https://jfrog.com/help/r/jfrog-rest-apis/artifactory-rest-apis
+*  Wrapper for:
+*  - jFrog Artifactory REST APIs: https://jfrog.com/help/r/jfrog-rest-apis/artifactory-rest-apis
+*  - jFrog Artifactory plugin: XXX link to plugin documentation
 */
 
 import groovy.json.JsonBuilder
@@ -18,6 +19,28 @@ class Jfrog
         this.name = name
     }
     
+    def publishArtifacts(files, opt=[:])
+    {
+        def art = this.ctx.Artifactory.server this.name
+        def props = opt.props ?: [:]
+        if (!props.BUILD_USER)
+            props << [BUILD_USER: this.ctx.env.BUILD_USER ?: 'unknown']
+        def publish_files = []
+        for (file in files) {
+            def file_props = file.props ?: [:]
+            file_props << props
+            file.props = file_props.inject(""){list, k, v -> "${k}=${v};${list}"}
+            publish_files << file
+        }
+        def uploadSpec = ( new JsonBuilder(files: publish_files).toString() )
+        def buildInfo = art.upload uploadSpec
+        if (opt.keepLast)
+        {
+            buildInfo.retention maxBuilds: opt.keepLast, deleteBuildArtifacts: true, async: !!opt.sync
+        }
+        art.publishBuildInfo buildInfo
+    }
+
     def getUrl()
     {
         def instance = Utilities.getConstant('artifactory')[this.name]
