@@ -1,7 +1,7 @@
 /*
 *  Wrapper for:
 *  - jFrog Artifactory REST APIs: https://jfrog.com/help/r/jfrog-rest-apis/artifactory-rest-apis
-*  - jFrog Artifactory plugin: XXX link to plugin documentation
+*  - jFrog Artifactory plugin: https://jfrog.com/help/r/jfrog-integrations-documentation/scripted-pipeline-syntax
 */
 
 import groovy.json.JsonBuilder
