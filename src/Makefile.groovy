@@ -40,8 +40,8 @@ class Makefile implements Serializable {
             def folder = (v =~ /\d+.\d+/)[0]
             def target = "${repo}/${folder}/${v}"
             steps.jfrog("AWS").publishArtifacts(
-                files: [[pattern: '*', target: target]],
-                opt: [
+                files = [[pattern: '*', target: target]],
+                opt = [
                     sync: true
                 ])
             steps.env.ARTIFACT_URL = steps.jfrog("IL").targetToURL(target)
