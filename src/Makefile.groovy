@@ -32,25 +32,20 @@ class Makefile implements Serializable {
         }
     }
 
-    def publish(repo, branch, notify) {
-        def artifactory = Utilities.getConstant('artifactory').AWS
-        def url = "${artifactory.schema}://${artifactory.domain}/artifactory"
-        def pretty = ''
-
-        steps.withCredentials([steps.string(credentialsId: 'aws-artifactory1-auth', variable: 'TOKEN')]) {
-            pretty = steps.sh(
-                returnStdout: true,
-                script: """make publish REPO='${url}/${repo}' TOKEN=\$TOKEN BRANCH=${branch} """).trim().tokenize().last()
-        }
-
-        if (notify) {
-            steps.emailext(
-                subject: "SUCCESSFUL: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]'",
-                body: """<p>SUCCESSFUL: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]':</p>
-                    <p>Package is available at &QUOT;<a href='${pretty}'>${pretty}</a>&QUOT;</p>
-                    <p>Check console output at &QUOT;<a href='${steps.env.BUILD_URL}'>${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]</a>&QUOT;</p>""",
-                to: notify,
-                mimeType: 'text/html')
+    def publish(repo) {
+        steps.dir('work/packit') {
+            def v = steps.sh (
+                returnStdout:  true,
+                script: '''gawk 'match($0, /GdfxVersion="([0-9.]*)"/, a) { print a[1] }' ./config.gdfx''')
+            def folder = (v =~ /\d+.\d+/)[0]
+            def target = "${repo}/${folder}/${v}"
+            steps.jfrog("AWS").publishArtifacts(
+                files: [[pattern: '*', target: target]],
+                opt: [
+                    sync: true
+                ])
+            steps.env.ARTIFACT_URL = steps.jfrog("IL").targetToURL(target)
+	    steps.env.ARTIFACT_VERSION = v
         }
     }
 

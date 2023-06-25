@@ -48,6 +48,11 @@ class Jfrog
         return "${instance.schema}://${instance.domain}"
     }
 
+    def targetToURL(target)
+    {
+        return "${this.getUrl()}/artifactory/${target}"
+    }
+
     def getAllBuilds()
     {
         this.get("artifactory/api/build/")
