@@ -34,14 +34,16 @@ class Makefile implements Serializable {
 
     def publish(repo) {
         steps.dir('work/packit') {
-            def v = steps.sh (
+            def v = steps.sh(
                 returnStdout:  true,
-                script: '''gawk 'match($0, /GdfxVersion="([0-9.]*)"/, a) { print a[1] }' ./config.gdfx''')
+                script: '''gawk 'match($0, /GdfxVersion="([0-9.]*)"/, a) { print a[1] }' ./config.gdfx''').strip()
             def folder = (v =~ /\d+.\d+/)[0]
             def target = "${repo}/${folder}/${v}"
             steps.jfrog("AWS").publishArtifacts(
-                 [[pattern: '*.zip', target: target], [pattern: 'config.gdfx', target: target]],
-                 [
+                [
+                   [pattern: '*', target: target]
+                ],
+                [
                     sync: true
                 ])
             steps.env.ARTIFACT_URL = steps.jfrog("IL").targetToURL(target)
