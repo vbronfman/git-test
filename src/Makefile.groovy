@@ -38,7 +38,7 @@ class Makefile implements Serializable {
                 returnStdout:  true,
                 script: '''gawk 'match($0, /GdfxVersion="([0-9.]*)"/, a) { print a[1] }' ./config.gdfx''').strip()
             def folder = (v =~ /\d+.\d+/)[0]
-            def target = "${repo}/${folder}/${v}"
+            def target = "${repo}/${folder}/${v}/"
             steps.jfrog("AWS").publishArtifacts(
                 [
                    [pattern: '*', target: target]
