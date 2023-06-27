@@ -35,8 +35,8 @@ class Jfrog
         def uploadSpec = ( new JsonBuilder(files: publish_files).toString() )
         if (opt.name)
         {
-            def buildInfo = art.upload uploadSpec
-            buildInfo.name = opt.name, module: opt.name
+            def buildInfo = art.upload uploadSpec, module: opt.name
+            buildInfo.name = opt.name
         }
         else
             def buildInfo = art.upload uploadSpec
