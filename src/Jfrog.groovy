@@ -34,10 +34,10 @@ class Jfrog
         }
         def uploadSpec = ( new JsonBuilder(files: publish_files).toString() )
         def buildInfo = art.upload uploadSpec
+        if (opt.name)
+            buildInfo.name = opt.name
         if (opt.keepLast)
-        {
             buildInfo.retention maxBuilds: opt.keepLast, deleteBuildArtifacts: true, async: !!opt.sync
-        }
         art.publishBuildInfo buildInfo
         return buildInfo
     }
