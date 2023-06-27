@@ -44,8 +44,10 @@ class Makefile implements Serializable {
                    [pattern: '*', target: target]
                 ],
                 [
-                    sync: true
-                ])
+                    sync: true,
+                    name: repo
+                ]
+            )
             steps.env.ARTIFACT_URL = steps.jfrog("IL").targetToURL(target)
 	    steps.env.ARTIFACT_VERSION = v
         }
