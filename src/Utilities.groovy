@@ -1,3 +1,5 @@
+import groovy.json.JsonBuilder
+import groovy.json.JsonSlurperClassic
 class Utilities
 {
     // get global constant
@@ -54,6 +56,46 @@ class Utilities
                 url: "https://GilatDevOps@dev.azure.com/GilatDevOps/${opt.repo}"
             ]]
         ])
+    }
+
+    static def request(ctx, mode, url, body='', cred='')
+    {
+        def b = body
+        def result = [:]
+        def response
+        def error = false
+        try
+        {
+            if (!(b instanceof String))
+                b = (new JsonBuilder(b).toString())
+            response = ctx.httpRequest(
+                consoleLogResponseBody: true,
+                httpMode: mode,
+                validResponseCodes: "100:599",
+                responseHandle: 'NONE',
+                ignoreSslErrors: true,
+                wrapAsMultipart: false,
+                url: "${url}",
+                requestBody: b,
+                customHeaders: [[
+                    maskValue: false,
+                    name: 'Content-type',
+                    value: "application/json"
+                ]],
+                authentication: cred
+            )
+            if (response.content)
+            {
+                error = !(response.status>=100 && response.status<=399)
+                try{
+                    result = (new JsonSlurperClassic()).parseText(response.content)
+                } catch(e){ result = [message: response.content] }
+            }
+        } catch(e){
+            result = [message: "$e", response: response]
+            error = true
+        }
+        return [result, error]
     }
 
 }

@@ -8,3 +8,6 @@ def gitClone(repo, branch, srcDirs, dstPath){
         dstPath: dstPath
     ])
 }
+def request(url, mode, body='', creds=''){
+    return Utilities.request(this, url, mode, body, creds)
+}
