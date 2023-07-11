@@ -35,6 +35,7 @@ class Jfrog
         def uploadSpec = ( new JsonBuilder(files: publish_files).toString() )
         def buildInfo = art.upload uploadSpec
 /*
+XXX: When build is renamed the artifacts are get lost. Have to find a way to keep artifacts or remove this commented block.
         if (opt.name)
         {
             buildInfo = art.upload spec: uploadSpec, module: opt.name
