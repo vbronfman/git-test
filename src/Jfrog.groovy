@@ -19,6 +19,17 @@ class Jfrog
         this.name = name
     }
     
+    def getArtifact(path) 
+    {
+        def res
+        try {
+            res = this.get("artifactory/api/storage/" + path)
+        } catch(e) { 
+            res = false
+        }
+        return res
+    }
+
     def publishArtifacts(files, opt=[:])
     {
         def art = this.ctx.Artifactory.server this.name
