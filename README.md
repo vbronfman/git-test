@@ -31,7 +31,7 @@ node('linux')
         Output: returns buildInfo object or throws an error
         */
         jfrog("AWS").publishArtifacts(
-            files=[[pattern: "file-*.txt", target: "vtselm-test"]],
+            files=[[pattern: "file-*.txt", target: "target-repository"]],
             opt=[
                 props: [
                     BUILD_USER: 'Overridden user name',
