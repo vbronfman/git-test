@@ -20,7 +20,14 @@ class Vision
         return this
     }
 
-    def publish(component, artifact)
+    def getComponent(component)
+    {
+        def path = "api/project/${this.project}/component/$component"
+        def url = "${this.server_url}/${path}"
+        Utilities.request(this.ctx, "GET", url)
+    }
+
+    def publish(component, build_name, artifacts)
     {
         def path = "api/project/${this.project}/component/$component/version"
         def url = "${this.server_url}/${path}"
@@ -28,12 +35,36 @@ class Vision
         def sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
         def body = [
             ci_url: this.ctx.env.BUILD_URL,
-            artifact_url: artifact,
+            artifacts: artifacts,
             version: this.ctx.BUILD_NUMBER,
             comment: sdf.format(date),
-            ci_build_name: "get the name"
+            ci_build_name: build_name
         ]
         Utilities.request(this.ctx, "POST", url, body)
+    }
+
+    def publishArtifacts(component, files, opt=[:])
+    {
+        def (c, err) = this.getComponent(component)
+        if (err)
+            return [ [message: "Cannot fetch component $component", ret: c], err ]
+        // We publish only to AWS instance yet. If this changes,
+        // have to get attr from component
+        def a = new Jfrog(this.ctx, 'AWS') 
+        def maturity = opt.maturity ?: "dev"
+        def target_repo = "${c.artifactory_repo}-${maturity}"
+        files = files.collect{[
+            pattern: it.pattern,
+            target: "$target_repo/${it.path?:''}"
+        ]}
+
+        def build = a.publishArtifacts(files, opt)
+
+        this.publish(
+            component,
+            build.getName(),
+            build.getArtifacts().collect{[path: it.remotePath]}
+        )
     }
 
 }
