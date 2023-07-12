@@ -30,7 +30,8 @@ class Vision
             ci_url: this.ctx.env.BUILD_URL,
             artifact_url: artifact,
             version: this.ctx.BUILD_NUMBER,
-            comment: sdf.format(date)
+            comment: sdf.format(date),
+            ci_build_name: "get the name"
         ]
         Utilities.request(this.ctx, "POST", url, body)
     }
