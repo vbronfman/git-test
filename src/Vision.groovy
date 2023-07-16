@@ -31,7 +31,7 @@ class Vision
     {
         def path = "api/project/${this.project}/component/$component/version"
         if (opt.parent_name && opt.parent_version)
-            def path = "api/project/${this.project}/component/${opt.parent_name}/version/${opt.parent_version}"
+            path = "api/project/${this.project}/component/${opt.parent_name}/version/${opt.parent_version}"
         def url = "${this.server_url}/${path}"
         def date = new Date()
         def sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
