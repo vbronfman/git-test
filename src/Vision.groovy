@@ -27,9 +27,11 @@ class Vision
         Utilities.request(this.ctx, "GET", url)
     }
 
-    def publish(component, build_name, artifacts)
+    def publish(component, build_name, artifacts, opt=[:])
     {
         def path = "api/project/${this.project}/component/$component/version"
+        if (opt.parent_name && opt.parent_version)
+            def path = "api/project/${this.project}/component/${opt.parent_name}/version/${opt.parent_version}"
         def url = "${this.server_url}/${path}"
         def date = new Date()
         def sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
@@ -38,8 +40,11 @@ class Vision
             artifacts: artifacts,
             version: this.ctx.BUILD_NUMBER,
             comment: sdf.format(date),
-            ci_build_name: build_name
+            ci_build_name: build_name,
+            spec: component
         ]
+        if (opt.children)
+            body << [children: opt.children]
         Utilities.request(this.ctx, "POST", url, body)
     }
 
@@ -63,7 +68,8 @@ class Vision
         this.publish(
             component,
             build.getName(),
-            build.getArtifacts().collect{[path: it.remotePath]}
+            build.getArtifacts().collect{[path: it.remotePath]},
+            opt
         )
     }
 
