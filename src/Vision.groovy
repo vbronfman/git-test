@@ -50,31 +50,37 @@ class Vision
 
     def publishArtifacts(component, files, opt=[:])
     {
+        def buildName, buildArtifacts
         def (c, err) = this.getComponent(component)
         if (err)
             return [ [message: "Cannot fetch component $component", ret: c], err ]
-        // We publish only to AWS instance yet. If this changes,
-        // have to get attr from component
-        def a = new Jfrog(this.ctx, 'AWS') 
         def maturity = opt.maturity ?: "dev"
         def target_repo = "${c.artifactory_repo}-${maturity}"
         if (opt.debug)
         {
             this.ctx.echo "Component: $component"
             this.ctx.echo "Component Spec: $c"
-            this.ctx.echo "Publishing to Artifactory repo $target_repo"
+            this.ctx.echo "Artifactory target_repo = $target_repo"
         }
-        files = files.collect{[
-            pattern: it.pattern,
-            target: "$target_repo/${it.path?:''}"
-        ]}
+        if (files.size)
+        {
+            // We publish only to AWS instance yet. If this changes,
+            // have to get attr from component
+            def a = new Jfrog(this.ctx, 'AWS') 
+            files = files.collect{[
+                pattern: it.pattern,
+                target: "$target_repo/${it.path?:''}"
+            ]}
 
-        def build = a.publishArtifacts(files, opt)
+            def build = a.publishArtifacts(files, opt)
+            buildName = build.getName()
+            buildArtifacts = build.getArtifacts().collect{[path: it.remotePath]}
+        }
 
         this.publish(
             component,
-            build.getName(),
-            build.getArtifacts().collect{[path: it.remotePath]},
+            buildName,
+            buildArtifacts,
             opt
         )
     }
