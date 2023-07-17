@@ -58,6 +58,8 @@ class Vision
         def a = new Jfrog(this.ctx, 'AWS') 
         def maturity = opt.maturity ?: "dev"
         def target_repo = "${c.artifactory_repo}-${maturity}"
+        if (opt.debug)
+            this.ctx.echo "Publishing to Artifactory repo $target_repo"
         files = files.collect{[
             pattern: it.pattern,
             target: "$target_repo/${it.path?:''}"
