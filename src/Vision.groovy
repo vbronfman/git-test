@@ -50,7 +50,8 @@ class Vision
 
     def publishArtifacts(component, files, opt=[:])
     {
-        def buildName, buildArtifacts
+        def buildName = this.ctx.env.JOB_NAME
+        def buildArtifacts = ''
         def (c, err) = this.getComponent(component)
         if (err)
             return [ [message: "Cannot fetch component $component", ret: c], err ]
