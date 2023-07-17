@@ -59,7 +59,11 @@ class Vision
         def maturity = opt.maturity ?: "dev"
         def target_repo = "${c.artifactory_repo}-${maturity}"
         if (opt.debug)
+        {
+            this.ctx.echo "Component: $component"
+            this.ctx.echo "Component Spec: $c"
             this.ctx.echo "Publishing to Artifactory repo $target_repo"
+        }
         files = files.collect{[
             pattern: it.pattern,
             target: "$target_repo/${it.path?:''}"
