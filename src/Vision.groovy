@@ -45,6 +45,8 @@ class Vision
         ]
         if (opt.children)
             body << [children: opt.children]
+        if (opt.debug)
+            this.ctx.echo "opt = $opt"
         Utilities.request(this.ctx, "POST", url, body)
     }
 
