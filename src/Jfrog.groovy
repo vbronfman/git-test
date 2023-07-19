@@ -32,33 +32,28 @@ class Jfrog
 
     def publishArtifacts(files, opt=[:])
     {
-        def art = this.ctx.Artifactory.server this.name
-        def props = opt.props ?: [:]
-        if (!props.BUILD_USER)
-            props << [BUILD_USER: this.ctx.env.BUILD_USER ?: 'unknown']
-        def publish_files = []
-        for (file in files) {
-            def file_props = file.props ?: [:]
-            file_props << props
-            file.props = file_props.inject(""){list, k, v -> "${k}=${v};${list}"}
-            publish_files << file
+        try{
+            def art = this.ctx.Artifactory.server this.name
+            def props = opt.props ?: [:]
+            if (!props.BUILD_USER)
+                props << [BUILD_USER: this.ctx.env.BUILD_USER ?: 'unknown']
+            def publish_files = []
+            for (file in files) {
+                def file_props = file.props ?: [:]
+                file_props << props
+                file.props = file_props.inject(""){list, k, v -> "${k}=${v};${list}"}
+                publish_files << file
+            }
+            def uploadSpec = ( new JsonBuilder(files: publish_files).toString() )
+            def buildInfo = art.upload uploadSpec
+            if (opt.keepLast)
+                buildInfo.retention maxBuilds: opt.keepLast, deleteBuildArtifacts: true, async: !!opt.sync
+            art.publishBuildInfo buildInfo
+            return buildInfo
+        }catch(e){
+            this.ctx.echo("ERROR: $e")
+            throw e
         }
-        def uploadSpec = ( new JsonBuilder(files: publish_files).toString() )
-        def buildInfo = art.upload uploadSpec
-/*
-XXX: When build is renamed the artifacts are get lost. Have to find a way to keep artifacts or remove this commented block.
-        if (opt.name)
-        {
-            buildInfo = art.upload spec: uploadSpec, module: opt.name
-            buildInfo.name = opt.name
-        }
-        else
-            buildInfo = art.upload uploadSpec
-*/
-        if (opt.keepLast)
-            buildInfo.retention maxBuilds: opt.keepLast, deleteBuildArtifacts: true, async: !!opt.sync
-        art.publishBuildInfo buildInfo
-        return buildInfo
     }
 
     def getUrl()
