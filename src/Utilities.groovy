@@ -12,7 +12,7 @@ class Utilities
                     credId:  "aws-artifactory1-publisher",
                 ],
                 IL: [
-                    domain: "jfrog.gilat.com",
+                    domain: "jfrog.gilat.tech",
                     schema: "https",
                     credId: "il-artifactory1-publisher",
                 ]
