@@ -7,7 +7,7 @@ class Utilities
     {
         def artifactory = [
                 AWS: [
-                    domain: "jfrog.rnd.gilat.com",
+                    domain: "jfrog.rnd.gilat.tech",
                     schema: "https",
                     credId:  "aws-artifactory1-publisher",
                 ],
