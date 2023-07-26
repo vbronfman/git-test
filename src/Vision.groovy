@@ -41,7 +41,8 @@ class Vision
             version: this.ctx.BUILD_NUMBER,
             comment: sdf.format(date),
             ci_build_name: build_name,
-            spec: component
+            spec: component,
+            azure_hash: opt.hash
         ]
         if (opt.children)
             body << [children: opt.children]
