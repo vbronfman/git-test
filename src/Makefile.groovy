@@ -20,6 +20,10 @@ class Makefile implements Serializable {
         steps.sh """make build BUILD_TYPE=${buildType} BUILD_FLAGS='--parallel 12 ${extraBuildFlags}' ${extraMakeFlags} """
     }
 
+    def buildGeneric(buildType) {
+        steps.sh """make build BUILD_TYPE=${buildType} """
+    }
+
     def formatClang() {
         steps.sh '''make format FORMAT_FLAGS='--Werror --dry-run' '''
     }
