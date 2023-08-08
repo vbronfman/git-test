@@ -22,12 +22,17 @@ class Makefile implements Serializable {
 
     def buildGeneric(buildType, part) {
         def buildCmd = 'build'
+        def typeFlag = ''
+
+        if (buildType) {
+            typeFlag = "BUILD_TYPE=${buildType}"
+        }
 
         if (part) {
             buildCmd = "build-${part}"
         }
 
-        steps.sh """make ${buildCmd} BUILD_TYPE=${buildType} """
+        steps.sh """make ${buildCmd} ${typeFlag} """
     }
 
     def formatClang() {

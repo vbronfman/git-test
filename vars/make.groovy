@@ -6,7 +6,7 @@ def call(Map config) {
             mk.buildCmake(config.buildType, config.dir, config.clean)
             break
         case 'buildGeneric':
-            mk.buildGeneric(config.buildType)
+            mk.buildGeneric(config.buildType, config.part)
             break
         case 'formatClang':
             mk.formatClang()
