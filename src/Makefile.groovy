@@ -6,22 +6,28 @@ class Makefile implements Serializable {
     }
 
     def buildCmake(buildType, dir, clean) {
-        def extraMakeFlags = ""
-        def extraBuildFlags = ""
+        def extraMakeFlags = ''
+        def extraBuildFlags = ''
 
         if (dir) {
             extraMakeFlags += "BUILD_DIR=${dir}"
         }
 
         if (clean) {
-            extraBuildFlags += "--clean-first"
+            extraBuildFlags += '--clean-first'
         }
 
         steps.sh """make build BUILD_TYPE=${buildType} BUILD_FLAGS='--parallel 12 ${extraBuildFlags}' ${extraMakeFlags} """
     }
 
-    def buildGeneric(buildType) {
-        steps.sh """make build BUILD_TYPE=${buildType} """
+    def buildGeneric(buildType, part) {
+        def buildCmd = 'build'
+
+        if (part) {
+            buildCmd = "build-${part}"
+        }
+
+        steps.sh """make ${buildCmd} BUILD_TYPE=${buildType} """
     }
 
     def formatClang() {
