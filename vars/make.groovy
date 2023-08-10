@@ -8,6 +8,9 @@ def call(Map config) {
         case 'buildGeneric':
             mk.buildGeneric(config.buildType, config.part)
             break
+        case 'clean':
+            mk.clean(config.part)
+            break
         case 'formatClang':
             mk.formatClang()
             break

@@ -35,6 +35,16 @@ class Makefile implements Serializable {
         steps.sh """make ${buildCmd} ${typeFlag} """
     }
 
+    def clean(part) {
+        def cmd = 'clean'
+
+        if (part) {
+            cmd = "clean-${part}"
+        }
+
+        steps.sh """make ${cmd} """
+    }
+
     def formatClang() {
         steps.sh '''make format FORMAT_FLAGS='--Werror --dry-run' '''
     }
