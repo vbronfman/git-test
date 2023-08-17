@@ -81,14 +81,4 @@ class Makefile implements Serializable {
     def sast() {
         steps.sh 'make sast'
     }
-
-    def git_tag(project, repo, tag) {
-        steps.withCredentials([steps.usernamePassword(credentialsId: '86f6f69f-e3b1-40fb-b463-8b563e0dd888', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_TOKEN')]) {
-            def gitUsernameEncoded = GIT_USERNAME.replaceAll('@', '%40')
-            steps.sh """
-                        git tag ${tag}
-                        git push https://${gitUsernameEncoded}:${GIT_TOKEN}@dev.azure.com/GilatDevOps/${project}/_git/${repo} ${tag}
-                     """
-        }
-    }
 }

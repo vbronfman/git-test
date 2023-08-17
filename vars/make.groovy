@@ -23,9 +23,6 @@ def call(Map config) {
         case 'sast':
             mk.sast()
             break
-        case 'git_tag':
-            mk.git_tag(config.project, config.repo, config.tag)
-            break
         default:
             throw new Exception("Unrecognized type <${config.type}>.")
     }
