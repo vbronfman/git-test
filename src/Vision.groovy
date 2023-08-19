@@ -5,11 +5,13 @@ class Vision
     private def ctx
     private def server_url
     private def project
+    private def credentials
 
     Vision(ctx, server_url)
     {
         this.ctx = ctx
         this.server_url = server_url
+        this.credentials = "jenkins_at_vision"
         if (!this.server_url)
             this.server_url = 'http://vision.gilat.com'
     }
@@ -17,6 +19,12 @@ class Vision
     def setProject(project)
     {
         this.project = project
+        return this
+    }
+
+    def setCredentials(c)
+    {
+        this.credentials = c 
         return this
     }
 
@@ -48,7 +56,7 @@ class Vision
             body << [children: opt.children]
         if (opt.debug)
             this.ctx.echo "opt = $opt"
-        Utilities.request(this.ctx, "POST", url, body)
+        Utilities.request(this.ctx, "POST", url, body, this.credentials)
     }
 
     def publishArtifacts(component, files, opt=[:])
