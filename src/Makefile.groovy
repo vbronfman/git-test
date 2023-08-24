@@ -46,7 +46,7 @@ class Makefile implements Serializable {
     }
 
     def formatClang() {
-        steps.sh '''make format FORMAT_FLAGS='--Werror --dry-run' '''
+        steps.sh '''make format FORMAT_FLAGS='--Werror --dry-run --ferror-limit=50' '''
     }
 
     def packit(branch, sharepoint) {
