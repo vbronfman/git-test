@@ -11,7 +11,7 @@ class Argo
         this.ctx = ctx
         this.opt = opt ?: [:]
         this.opt.debug = !!this.opt.debug
-        this.url = this.opt.url ?: 'https://argocd-rnd.gilat.com/'
+        this.url = this.opt.url ?: 'https://argocd-rnd.gilat.tech/'
     }
     private def req(path, mode, body)
     {
