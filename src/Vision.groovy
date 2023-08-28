@@ -13,7 +13,7 @@ class Vision
         this.server_url = server_url
         this.credentials = "jenkins_at_vision"
         if (!this.server_url)
-            this.server_url = 'http://vision.gilat.com'
+            this.server_url = 'https://vision.gilat.com'
     }
 
     def setProject(project)
