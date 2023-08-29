@@ -46,7 +46,7 @@ class Vision
         def body = [
             ci_url: this.ctx.env.BUILD_URL,
             artifacts: artifacts,
-            version: this.ctx.BUILD_NUMBER,
+            version: opt.version ?: this.ctx.BUILD_NUMBER,
             comment: sdf.format(date),
             ci_build_name: build_name,
             spec: component,
