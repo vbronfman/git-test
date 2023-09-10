@@ -15,7 +15,7 @@ def call(Map config) {
             mk.formatClang()
             break
         case 'packit':
-            mk.packit(config.branch, config.sharepoint)
+            mk.packit(config.branch, config.sharepoint, config.v)
             break
         case 'publish':
             mk.publish(config.repo)

@@ -49,11 +49,17 @@ class Makefile implements Serializable {
         steps.sh '''make format FORMAT_FLAGS='--Werror --dry-run --ferror-limit=1' '''
     }
 
-    def packit(branch, sharepoint) {
-        def dbAddr = Utilities.getConstant('versionGeneratorUrl')
+    def packit(branch, sharepoint, v) {
+        if (!v) {
+            def dbAddr = Utilities.getConstant('versionGeneratorUrl')
 
-        steps.withCredentials([steps.usernamePassword(credentialsId: 'postgres-user-for-production', usernameVariable: 'dbUser', passwordVariable: 'dbPass')]) {
-            steps.sh """make packit VERSION_DB=\\"${dbAddr}?user=\$dbUser\\&password=\$dbPass\\" BRANCH=${branch} SHAREPOINT=${sharepoint ? 'sharepoint' : 'nosharepoint'} """
+            steps.withCredentials([steps.usernamePassword(credentialsId: 'postgres-user-for-production', usernameVariable: 'dbUser', passwordVariable: 'dbPass')]) {
+                steps.sh """make packit VERSION_DB=\\"${dbAddr}?user=\$dbUser\\&password=\$dbPass\\" BRANCH=${branch} SHAREPOINT=${sharepoint ? 'sharepoint' : 'nosharepoint'} """
+            }
+        } else {
+            steps.withCredentials([steps.string(credentialsId: 'postgres-creds-base64-production', variable: 'dbCreds')]) {
+                steps.sh """make packit VERSION_DB=\$dbCreds BRANCH=${branch} SHAREPOINT=${sharepoint ? 'sharepoint' : 'nosharepoint'} """
+            }
         }
     }
 
