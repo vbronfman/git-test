@@ -65,7 +65,7 @@ class Makefile implements Serializable {
 
     def publish(repo, gdf) {
         steps.dir('work/packit') {
-            def gdf1 = ${gdf ? gdf : 'config.gdfx'}
+            def gdf1 = "${gdf ? gdf : 'config.gdfx'}"
             def v = steps.sh(
                 returnStdout:  true,
                 script: """gawk 'match(\$0, /GdfxVersion="([0-9.]*)"/, a) { print a[1] }' "${gdf1}" """).strip()
