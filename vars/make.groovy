@@ -18,7 +18,7 @@ def call(Map config) {
             mk.packit(config.branch, config.sharepoint, config.v)
             break
         case 'publish':
-            mk.publish(config.repo)
+            mk.publish(config.repo, config.gdf)
             break
         case 'sast':
             mk.sast()
