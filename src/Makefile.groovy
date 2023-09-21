@@ -63,25 +63,36 @@ class Makefile implements Serializable {
         }
     }
 
-    def publish(repo, gdf) {
+    def publish(repo, gdf, component, project) {
         steps.dir('work/packit') {
-            def gdf1 = "${gdf ? gdf : 'config.gdfx'}"
+            def res, err
+            project = project ?: "se-iv"
+            gdf = gdf ?: "config.gdfx"
             def v = steps.sh(
                 returnStdout:  true,
-                script: """gawk 'match(\$0, /GdfxVersion="([0-9.]*)"/, a) { print a[1] }' "${gdf1}" """).strip()
+                script: """gawk 'match(\$0, /GdfxVersion="([0-9.]*)"/, a) { print a[1] }' "${gdf}" """).strip()
             def folder = (v =~ /\d+.\d+/)[0]
             def target = "${repo}/${folder}/${v}/"
-            steps.jfrog("AWS").publishArtifacts(
-                [
-                   [pattern: '*', target: target]
-                ],
-                [
-                    sync: true,
-                    name: repo
-                ]
-            )
+
+            try {
+                (res, err) = steps.vision().setProject(project).publishArtifacts(
+                    component,
+                    [ [pattern: '*', path: "${folder}/${v}/"] ],
+                    [ sync: true, version: v ]
+                )
+                if (err)
+                    throw new Exception(res.message)
+            } catch(e){
+                steps.echo "Error piblishing to vision: $e"
+                steps.currentBuild.result = "UNSTABLE"
+                steps.echo "Failed to publish via Vision. Retry using jfrog plugin"
+                steps.jfrog("AWS").publishArtifacts(
+                    [ [pattern: '*', target: target] ],
+                    [ sync: true, name: repo ]
+                )
+            }
             steps.env.ARTIFACT_URL = steps.jfrog("IL").targetToURL(target)
-	    steps.env.ARTIFACT_VERSION = v
+            steps.env.ARTIFACT_VERSION = v
         }
     }
 
