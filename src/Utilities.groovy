@@ -21,6 +21,7 @@ class Utilities
             artifactory: artifactory,
             defaultArtifactoryDomainName: artifactory.IL.domain,
             defaultArtifactorySchema: artifactory.IL.schema,
+            gitCredsSE4SSH: 'azure-worker-ssh-msharay'
         ]
         constants << [defaultArtifactoryUrl: "${constants.defaultArtifactorySchema}://${constants.defaultArtifactoryDomainName}/artifactory"]
         constants << [versionGeneratorUrl: 'postgresql://g-versions-db.gilat.com:5432/se.4-versions-production']
