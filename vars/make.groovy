@@ -3,10 +3,10 @@ def call(Map config) {
 
     switch (config.type) {
         case 'buildCmake':
-            mk.buildCmake(config.buildType, config.dir, config.clean)
+            mk.buildCmake(config)
             break
         case 'buildGeneric':
-            mk.buildGeneric(config.buildType, config.part)
+            mk.buildGeneric(config)
             break
         case 'clean':
             mk.clean(config.part)

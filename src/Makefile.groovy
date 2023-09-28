@@ -5,34 +5,38 @@ class Makefile implements Serializable {
         this.steps = steps
     }
 
-    def buildCmake(buildType, dir, clean) {
-        def extraMakeFlags = ''
-        def extraBuildFlags = ''
-
-        if (dir) {
-            extraMakeFlags += "BUILD_DIR=${dir}"
-        }
-
-        if (clean) {
-            extraBuildFlags += '--clean-first'
-        }
-
-        steps.sh """make build BUILD_TYPE=${buildType} BUILD_FLAGS='--parallel 12 ${extraBuildFlags}' ${extraMakeFlags} """
-    }
-
-    def buildGeneric(buildType, part) {
+    def buildGeneric(config) {
         def buildCmd = 'build'
         def typeFlag = ''
+        def extraMakeFlags = ''
 
-        if (buildType) {
-            typeFlag = "BUILD_TYPE=${buildType}"
+        if (config.part) {
+            buildCmd = "build-${config.part}"
         }
 
-        if (part) {
-            buildCmd = "build-${part}"
+        if (config.buildType) {
+            typeFlag = "BUILD_TYPE=${config.buildType}"
         }
 
-        steps.sh """make ${buildCmd} ${typeFlag} """
+        if (config.dir) {
+            extraMakeFlags += "BUILD_DIR=${config.dir}"
+        }
+
+        config.extra="${config.extra ? config.extra : ''}"
+        
+        steps.sh """make ${buildCmd} ${typeFlag} ${config.extra} ${extraMakeFlags} """
+    }
+
+    def buildCmake(config) {
+        def extraBuildFlags = ''
+        def extra = ''
+
+        if (config.clean) {
+            extraBuildFlags += '--clean-first'
+        }
+        config.extra = """BUILD_FLAGS='--parallel 12 ${extraBuildFlags}' """
+
+        buildGeneric(config)
     }
 
     def clean(part) {
