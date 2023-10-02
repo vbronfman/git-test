@@ -22,7 +22,7 @@ class Utilities
             defaultArtifactoryDomainName: artifactory.IL.domain,
             defaultArtifactorySchema: artifactory.IL.schema,
             gitCredsSE4SSH: 'azure-worker-ssh-msharay',
-            artifactoryPackitURL: "${artifactory.AWS}/seiv-embedded-docker/packit"
+            artifactoryPackitURL: "${artifactory.AWS.domain}/seiv-embedded-docker/packit"
         ]
         constants << [defaultArtifactoryUrl: "${constants.defaultArtifactorySchema}://${constants.defaultArtifactoryDomainName}/artifactory"]
         constants << [versionGeneratorUrl: 'postgresql://g-versions-db.gilat.com:5432/se.4-versions-production']
