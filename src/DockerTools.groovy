@@ -6,7 +6,7 @@ class DockerTools implements Serializable {
     }
 
     def build(name) {
-        def date = steps.sh(script: 'date +%Y.%m.%d', returnStdout: true).trim()
+        def date = steps.sh(script: "date +%Y.%m.%d", returnStdout: true).trim()
         steps.env.VERSION = "${date}.${steps.currentBuild.number}"
         steps.env.ARTIFACTORY_URL = ${Utilities.getConstant('artifactoryPackitURL')}
         steps.currentBuild.displayName = "#${steps.env.VERSION}"
