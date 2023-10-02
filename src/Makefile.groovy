@@ -1,7 +1,7 @@
 class Makefile implements Serializable {
     private def steps
 
-    Makefile(steps){
+    Makefile(steps) {
         this.steps = steps
     }
 
@@ -86,7 +86,7 @@ class Makefile implements Serializable {
                 )
                 if (err)
                     throw new Exception(res.message)
-            } catch(e){
+            } catch(e) {
                 steps.echo "Error piblishing to vision: $e"
                 steps.currentBuild.result = "UNSTABLE"
                 steps.echo "Failed to publish via Vision. Retry using jfrog plugin"

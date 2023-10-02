@@ -1,12 +1,11 @@
 class DockerTools implements Serializable {
     private def steps
 
-    DockerTools(steps){
+    DockerTools(steps) {
         this.steps = steps
     }
 
-    def build(name)
-    {
+    def build(name) {
         def date = steps.sh(script: 'date +%Y.%m.%d', returnStdout: true).trim()
         env.VERSION = "${date}.${currentBuild.number}"
         env.ARTIFACTORY_URL = ${Utilities.getConstant('artifactoryPackitURL')}
@@ -14,8 +13,7 @@ class DockerTools implements Serializable {
         steps.sh "docker build --no-cache --force-rm -t ${Utilities.getConstant('artifactoryPackitURL')}/${name}:${env.VERSION} ."
     }
 
-    def publish(name)
-    {
+    def publish(name) {
         steps.sh """docker push ${Utilities.getConstant('artifactoryPackitURL')}/${name}:${env.VERSION} """
     }
 }
