@@ -6,22 +6,23 @@ class Utilities
     static def getConstant(name)
     {
         def artifactory = [
-                AWS: [
-                    domain: "jfrog.rnd.gilat.tech",
-                    schema: "https",
-                    credId:  "aws-artifactory1-publisher",
-                ],
-                IL: [
-                    domain: "jfrog.gilat.tech",
-                    schema: "https",
-                    credId: "il-artifactory1-publisher",
-                ]
+            AWS: [
+                domain: "jfrog.rnd.gilat.tech",
+                schema: "https",
+                credId:  "aws-artifactory1-publisher",
+            ],
+            IL: [
+                domain: "jfrog.gilat.tech",
+                schema: "https",
+                credId: "il-artifactory1-publisher",
+            ]
         ]
         def constants = [
             artifactory: artifactory,
             defaultArtifactoryDomainName: artifactory.IL.domain,
             defaultArtifactorySchema: artifactory.IL.schema,
-            gitCredsSE4SSH: 'azure-worker-ssh-msharay'
+            gitCredsSE4SSH: 'azure-worker-ssh-msharay',
+            artifactoryPackitURL: "${artifactory.AWS}/seiv-embedded-docker/packit"
         ]
         constants << [defaultArtifactoryUrl: "${constants.defaultArtifactorySchema}://${constants.defaultArtifactoryDomainName}/artifactory"]
         constants << [versionGeneratorUrl: 'postgresql://g-versions-db.gilat.com:5432/se.4-versions-production']
@@ -98,5 +99,4 @@ class Utilities
         }
         return [result, error]
     }
-
 }
