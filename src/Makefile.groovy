@@ -23,7 +23,6 @@ class Makefile implements Serializable {
         }
 
         config.extra="${config.extra ? config.extra : ''}"
-        
         steps.sh """make ${buildCmd} ${typeFlag} ${config.extra} ${extraMakeFlags} """
     }
 
@@ -39,48 +38,48 @@ class Makefile implements Serializable {
         buildGeneric(config)
     }
 
-    def clean(part) {
+    def clean(config) {
         def cmd = 'clean'
 
-        if (part) {
+        if (config.part) {
             cmd = "clean-${part}"
         }
 
         steps.sh """make ${cmd} """
     }
 
-    def formatClang() {
+    def formatClang(config) {
         steps.sh '''make format FORMAT_FLAGS='--Werror --dry-run --ferror-limit=1' '''
     }
 
-    def packit(branch, sharepoint, v) {
-        if (!v) {
+    def packit(config) {
+        if (!config.v) {
             def dbAddr = Utilities.getConstant('versionGeneratorUrl')
 
             steps.withCredentials([steps.usernamePassword(credentialsId: 'postgres-user-for-production', usernameVariable: 'dbUser', passwordVariable: 'dbPass')]) {
-                steps.sh """make packit VERSION_DB=\\"${dbAddr}?user=\$dbUser\\&password=\$dbPass\\" BRANCH=${branch} SHAREPOINT=${sharepoint ? 'sharepoint' : 'nosharepoint'} """
+                steps.sh """make packit VERSION_DB=\\"${dbAddr}?user=\$dbUser\\&password=\$dbPass\\" BRANCH=${config.branch} SHAREPOINT=${config.sharepoint ? 'sharepoint' : 'nosharepoint'} """
             }
         } else {
             steps.withCredentials([steps.string(credentialsId: 'postgres-creds-base64-production', variable: 'dbCreds')]) {
-                steps.sh """make packit VERSION_DB=\$dbCreds BRANCH=${branch} SHAREPOINT=${sharepoint ? 'sharepoint' : 'nosharepoint'} """
+                steps.sh """make packit VERSION_DB=\$dbCreds BRANCH=${config.branch} SHAREPOINT=${config.sharepoint ? 'sharepoint' : 'nosharepoint'} """
             }
         }
     }
 
-    def publish(repo, gdf, component, project) {
+    def publish(config) {
         steps.dir('work/packit') {
             def res, err
-            project = project ?: "se-iv"
-            gdf = gdf ?: "config.gdfx"
+            project = config.project ?: "se-iv"
+            gdf = config.gdf ?: "config.gdfx"
             def v = steps.sh(
                 returnStdout:  true,
                 script: """gawk 'match(\$0, /GdfxVersion="([0-9.]*)"/, a) { print a[1] }' "${gdf}" """).strip()
             def folder = (v =~ /\d+.\d+/)[0]
-            def target = "${repo}/${folder}/${v}/"
+            def target = "${config.repo}/${folder}/${v}/"
 
             try {
                 (res, err) = steps.vision().setProject(project).publishArtifacts(
-                    component,
+                    config.component,
                     [ [pattern: '*', path: "${folder}/${v}/"] ],
                     [ sync: true, version: v ]
                 )
@@ -92,7 +91,7 @@ class Makefile implements Serializable {
                 steps.echo "Failed to publish via Vision. Retry using jfrog plugin"
                 steps.jfrog("AWS").publishArtifacts(
                     [ [pattern: '*', target: target] ],
-                    [ sync: true, name: repo ]
+                    [ sync: true, name: config.repo ]
                 )
             }
             steps.env.ARTIFACT_URL = steps.jfrog("IL").targetToURL(target)
@@ -100,7 +99,7 @@ class Makefile implements Serializable {
         }
     }
 
-    def sast() {
+    def sast(config) {
         steps.sh 'make sast'
     }
 }
