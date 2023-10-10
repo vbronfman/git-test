@@ -69,8 +69,8 @@ class Makefile implements Serializable {
     def publish(config) {
         steps.dir('work/packit') {
             def res, err
-            project = config.project ?: "se-iv"
-            gdf = config.gdf ?: "config.gdfx"
+            def project = config.project ?: "se-iv"
+            def gdf = config.gdf ?: "config.gdfx"
             def v = steps.sh(
                 returnStdout:  true,
                 script: """gawk 'match(\$0, /GdfxVersion="([0-9.]*)"/, a) { print a[1] }' "${gdf}" """).strip()
