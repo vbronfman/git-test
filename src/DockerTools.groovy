@@ -5,15 +5,17 @@ class DockerTools implements Serializable {
         this.steps = steps
     }
 
-    def build(name) {
-        def date = steps.sh(script: "date +%Y.%m.%d", returnStdout: true).trim()
-        steps.env.VERSION = "${date}.${steps.currentBuild.number}"
-        steps.env.ARTIFACTORY_URL = Utilities.getConstant('artifactoryPackitURL')
-        steps.currentBuild.displayName = "#${steps.env.VERSION}"
-        steps.sh "docker build --no-cache --force-rm -t ${Utilities.getConstant('artifactoryPackitURL')}/${name}:${steps.env.VERSION} ."
-    }
-
-    def publish(name) {
-        steps.sh """docker push ${Utilities.getConstant('artifactoryPackitURL')}/${name}:${steps.env.VERSION} """
+    def createImage(config) {
+        if (!config.tag)
+        {
+            config.tag = "${steps.sh(script: "date +%Y.%m.%d", returnStdout: true).trim()}.${steps.currentBuild.number}"
+        }
+        def fqin = "${config.registry}/${config.name}:${config.tag}"
+        steps.currentBuild.displayName = "#${config.tag}"
+        steps.sh """
+            docker image build --no-cache --force-rm -t ${fqin} .
+            docker image push ${fqin}
+            ${ !config.noClean ? "docker image rm ${fqin}" : }
+        """
     }
 }
