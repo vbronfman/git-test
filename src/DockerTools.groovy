@@ -8,7 +8,7 @@ class DockerTools implements Serializable {
     def createImage(config) {
         if (!config.tag)
         {
-            config.tag = "${steps.sh(script: "date +%Y.%m.%d", returnStdout: true).trim()}.${steps.currentBuild.number}"
+            config.tag = "${steps.sh(script: "date +%Y%m%d", returnStdout: true).trim()}.${steps.currentBuild.number}"
         }
 
         steps.env.TAG = config.tag
