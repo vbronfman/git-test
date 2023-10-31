@@ -17,7 +17,7 @@ class DockerTools implements Serializable {
         steps.sh """
             docker image build --no-cache --force-rm -t ${fqin} .
             docker image push ${fqin}
-            ${ !config.noClean ? "docker image rm ${fqin}" : }
+            ${ !config.noClean ? "docker image rm ${fqin}" : '' }
         """
     }
 }
