@@ -1,7 +1,7 @@
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurperClassic
 
-class Argo
+class Argo implements Serializable
 {
     private def ctx
     private HashMap opt

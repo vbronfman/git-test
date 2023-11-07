@@ -73,9 +73,15 @@ class Makefile implements Serializable {
             def gdf = config.gdf ?: "config.gdfx"
             def v = steps.sh(
                 returnStdout:  true,
-                script: """gawk 'match(\$0, /GdfxVersion="([0-9.]*)"/, a) { print a[1] }' "${gdf}" """).strip()
+                script: """
+                    gawk 'match(\$0, /GdfxVersion="([0-9.]*)"/, a) { print a[1] }' "${gdf}"
+                """).strip()
             def folder = (v =~ /\d+.\d+/)[0]
             def target = "${config.repo}/${folder}/${v}/"
+
+            steps.sh '''
+                md5sum $(ls -t *.zip | head -n 1) | awk '{print "md5sum of built artifact: " $1}'
+            '''
 
             try {
                 (res, err) = steps.vision().setProject(project).publishArtifacts(
@@ -94,7 +100,10 @@ class Makefile implements Serializable {
                     [ sync: true, name: config.repo ]
                 )
             }
-            steps.env.ARTIFACT_URL = steps.jfrog("IL").targetToURL(target)
+
+            // strip maturity from target
+            def strippedTarget = target.replaceAll('-[A-Za-z0-9]+/', '/')
+            steps.env.ARTIFACT_URL = steps.jfrog("IL").targetToURL(strippedTarget)
             steps.env.ARTIFACT_VERSION = v
         }
     }

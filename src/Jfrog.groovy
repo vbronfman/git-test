@@ -8,7 +8,7 @@ import groovy.json.JsonBuilder
 import groovy.json.JsonSlurperClassic
 import org.springframework.web.util.UriUtils
 
-class Jfrog
+class Jfrog implements Serializable
 {
 
     private def ctx

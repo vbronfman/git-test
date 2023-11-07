@@ -1,6 +1,6 @@
 import java.text.SimpleDateFormat
 
-class Vision
+class Vision implements Serializable
 {
     private def ctx
     private def server_url

@@ -1,7 +1,14 @@
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurperClassic
-class Utilities
+
+class Utilities implements Serializable
 {
+    private def steps
+
+    Utilities(steps) {
+        this.steps = steps
+    }
+
     // get global constant
     static def getConstant(name)
     {
@@ -98,5 +105,52 @@ class Utilities
             error = true
         }
         return [result, error]
+    }
+
+    def gitTag(config)
+    {        
+        if (!config.credentialsId)
+        {
+            config.credentialsId = steps.scm.userRemoteConfigs[0].credentialsId
+        }
+        
+        if (!config.url)
+        {
+            config.url = steps.scm.userRemoteConfigs[0].url
+        }
+
+        steps.sshagent(credentials: [config.credentialsId]) {
+            steps.sh """
+                git tag ${config.tag}
+                git push ${config.url} ${config.tag}
+            """
+        }
+    }
+
+    def postBuildEmail(config)
+    {
+        if (!config.recipients) {
+            config.recipients = steps.env.BUILD_USER_EMAIL
+        }
+
+        switch (config.status) {
+            case 'success':
+                steps.emailext(
+                    subject: "SUCCESSFUL: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]'",
+                    body: """<p>SUCCESSFUL: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]':</p>
+                        <p>Package is available at &QUOT;<a href='${steps.env.ARTIFACT_URL}'>${steps.env.ARTIFACT_URL}</a>&QUOT;</p>
+                        <p>Check console output at &QUOT;<a href='${steps.env.BUILD_URL}'>${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+                    to: config.recipients,
+                    mimeType: 'text/html')
+                break
+            case 'failure':
+                steps.emailext(
+                    subject: "FAILED: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]'",
+                    body: """<p>FAILED: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]':</p>
+                        <p>Check console output at &QUOT;<a href='${steps.env.BUILD_URL}'>${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+                    to: config.recipients,
+                    mimeType: 'text/html')
+                break
+        }
     }
 }
