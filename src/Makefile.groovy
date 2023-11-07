@@ -53,6 +53,10 @@ class Makefile implements Serializable {
     }
 
     def packit(config) {
+        if (!config.branch) {
+            config.branch = steps.env.BRANCH_NAME
+        }
+
         if (!config.v) {
             def dbAddr = Utilities.getConstant('versionGeneratorUrl')
 
