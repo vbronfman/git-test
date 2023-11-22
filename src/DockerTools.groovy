@@ -1,8 +1,10 @@
 class DockerTools implements Serializable {
     private def steps
+    private def runtimeVars
 
     DockerTools(steps) {
         this.steps = steps
+        this.runtimeVars = new RuntimeVars(steps)
     }
 
     def createImage(config) {
@@ -11,7 +13,7 @@ class DockerTools implements Serializable {
             config.tag = "${steps.sh(script: "date +%Y%m%d", returnStdout: true).trim()}.${steps.currentBuild.number}"
         }
 
-        steps.env.TAG = config.tag
+        runtimeVars.send([TAG: config.tag])
         def fqin = "${config.registry}/${config.name}:${config.tag}"
         steps.currentBuild.displayName = "#${config.tag}"
         steps.sh """

@@ -4,9 +4,11 @@ import groovy.json.JsonSlurperClassic
 class Utilities implements Serializable
 {
     private def steps
+    private def runtimeVars
 
     Utilities(steps) {
         this.steps = steps
+        this.runtimeVars = new RuntimeVars(steps)
     }
 
     // get global constant
@@ -133,12 +135,14 @@ class Utilities implements Serializable
             config.recipients = steps.env.BUILD_USER_EMAIL
         }
 
+        def artifactUrl = runtimeVars.recv(['ARTIFACT_URL'])
+
         switch (config.status) {
             case 'success':
                 steps.emailext(
                     subject: "SUCCESSFUL: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]'",
                     body: """<p>SUCCESSFUL: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]':</p>
-                        <p>Package is available at &QUOT;<a href='${steps.env.ARTIFACT_URL}'>${steps.env.ARTIFACT_URL}</a>&QUOT;</p>
+                        <p>Package is available at &QUOT;<a href='${artifactUrl}'>${artifactUrl}</a>&QUOT;</p>
                         <p>Check console output at &QUOT;<a href='${steps.env.BUILD_URL}'>${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]</a>&QUOT;</p>""",
                     to: config.recipients,
                     mimeType: 'text/html')

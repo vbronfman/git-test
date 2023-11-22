@@ -1,8 +1,10 @@
 class Makefile implements Serializable {
     private def steps
+    private def runtimeVars
 
     Makefile(steps) {
         this.steps = steps
+        this.runtimeVars = new RuntimeVars(steps)
     }
 
     def buildGeneric(config) {
@@ -73,8 +75,8 @@ class Makefile implements Serializable {
     def publish(config) {
         steps.dir('work/packit') {
             def res, err
-            def project = config.project ?: "se-iv"
-            def gdf = config.gdf ?: "config.gdfx"
+            def project = config.project ?: 'se-iv'
+            def gdf = config.gdf ?: 'config.gdfx'
             def v = steps.sh(
                 returnStdout:  true,
                 script: """
@@ -97,9 +99,9 @@ class Makefile implements Serializable {
                     throw new Exception(res.message)
             } catch(e) {
                 steps.echo "Error piblishing to vision: $e"
-                steps.currentBuild.result = "UNSTABLE"
-                steps.echo "Failed to publish via Vision. Retry using jfrog plugin"
-                steps.jfrog("AWS").publishArtifacts(
+                steps.currentBuild.result = 'UNSTABLE'
+                steps.echo 'Failed to publish via Vision. Retry using jfrog plugin'
+                steps.jfrog('AWS').publishArtifacts(
                     [ [pattern: '*', target: target] ],
                     [ sync: true, name: config.repo ]
                 )
@@ -107,8 +109,10 @@ class Makefile implements Serializable {
 
             // strip maturity from target
             def strippedTarget = target.replaceAll('-[A-Za-z0-9]+/', '/')
-            steps.env.ARTIFACT_URL = steps.jfrog("IL").targetToURL(strippedTarget)
-            steps.env.ARTIFACT_VERSION = v
+            runtimeVars.send([
+                ARTIFACT_URL:     steps.jfrog('IL').targetToURL(strippedTarget),
+                ARTIFACT_VERSION: v
+            ])
         }
     }
 
