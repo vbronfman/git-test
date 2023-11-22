@@ -1,5 +1,3 @@
 def call(Map config) {
-    def dt = new DockerTools(this)
-
-    dt."${config.cmd}"(config)
+    (new DockerTools(this))."${config.cmd}"(config)
 }

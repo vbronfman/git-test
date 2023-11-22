@@ -1,5 +1,3 @@
 def call(Map config) {
-    def mk = new Makefile(this)
-
-    mk."${config.cmd}"(config)
+    (new Makefile(this))."${config.cmd}"(config)
 }

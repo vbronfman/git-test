@@ -1,5 +1,3 @@
 def call(Map config) {
-    def ut = new Utilities(this)
-
-    ut.postBuildEmail(config)
+    (new Utilities(this)).postBuildEmail(config)
 }
