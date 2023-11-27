@@ -30,6 +30,8 @@ class RuntimeVars implements Serializable {
  
         // NOTE: If _k_ already exists in _props1_, the value shall be overwritten.
         props1.putAll(props)
+        // Guarantees _props_ are useable from the workflow script as environment variables.
+        steps.env.putAll(props)
 
         steps.writeJSON(json: props1, file: getFileName(), pretty: 1)
         steps.stash(name: getStashName(), includes: getFileName())
