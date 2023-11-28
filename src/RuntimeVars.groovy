@@ -45,7 +45,12 @@ class RuntimeVars implements Serializable {
     }
 
     def archive() {
-        steps.unstash(name: getStashName())
+        // NOTE: Otherwise might prevent other post steps from running.
+        try {
+            steps.unstash(name: getStashName())
+        }
+        catch (e) {}
+
         steps.archiveArtifacts(artifacts: getFileName(), allowEmptyArchive: true)
     }
 }
