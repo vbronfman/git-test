@@ -5,6 +5,7 @@ class RuntimeVars implements Serializable {
         this.steps = steps
     }
 
+    @NonCPS
     static def getFileName() {
         return 'RuntimeVars.json'
     }
@@ -52,5 +53,19 @@ class RuntimeVars implements Serializable {
         catch (e) {}
 
         steps.archiveArtifacts(artifacts: getFileName(), allowEmptyArchive: true)
+    }
+
+    @NonCPS
+    static def queryJob1(jobName) {
+        def items = Jenkins.instance.getAllItems(Job.class, { x -> x.fullName == jobName})[0]
+        def build = items.getLastSuccessfulBuild()
+        def vars = build.getArtifactManager().root().child(getFileName()).open()
+        return vars.text
+    }
+
+    def queryJob(jobName) {
+        def vars = queryJob1(jobName)
+        def props = steps.readJSON(text: vars, returnPojo: true)
+        return props
     }
 }
