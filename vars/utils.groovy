@@ -11,3 +11,6 @@ def gitClone(repo, branch, srcDirs, dstPath){
 def request(url, mode, body='', creds=''){
     return Utilities.request(this, url, mode, body, creds)
 }
+def normalizeBranchName(name){
+    return Utilities.normalizeBranchName(name)
+}

@@ -157,4 +157,13 @@ class Utilities implements Serializable
                 break
         }
     }
+
+    def static normalizeBranchName(name)
+    {
+        "/ ".each { c ->
+            name = name.replace(c, '-')
+        }
+        return name.toLowerCase()
+    }
+
 }
