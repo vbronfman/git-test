@@ -51,15 +51,26 @@ class RuntimeVars implements Serializable {
     }
 
     @NonCPS
-    static def queryJob1(jobName) {
-        def items = Jenkins.instance.getAllItems(Job.class, { x -> x.fullName == jobName})[0]
-        def build = items.getLastSuccessfulBuild()
+    static def queryJob1(cfg) {
+        def currJob = Jenkins.instance.getAllItems(Job.class, { x -> x.fullName == cfg.name})[0]
+        def build
+
+        // If no build ID provided get last successful.
+        if (cfg.buildId) {
+            build = currJob.getBuild(cfg.buildId)
+        }
+        else {
+            build = currJob.getLastSuccessfulBuild()
+        }
+
         def vars = build.getArtifactManager().root().child(getFileName()).open()
-        return vars.text
+        def txt = vars.text
+        vars.close()
+        return txt
     }
 
-    def queryJob(jobName) {
-        def vars = queryJob1(jobName)
+    def queryJob(cfg) {
+        def vars = queryJob1(cfg)
         def props = steps.readJSON(text: vars, returnPojo: true)
         return props
     }

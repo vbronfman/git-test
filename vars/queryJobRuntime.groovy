@@ -1,4 +1,4 @@
-def call(k) {
+def call(Map config) {
     // _queryJob_ gets the runtime variables from a job
-    return (new RuntimeVars(this)).queryJob(k)
+    return (new RuntimeVars(this)).queryJob(config)
 }
