@@ -63,9 +63,11 @@ class RuntimeVars implements Serializable {
             build = currJob.getLastSuccessfulBuild()
         }
 
-        def vars = build.getArtifactManager().root().child(getFileName()).open()
-        def txt = vars.text
-        vars.close()
+        def txt
+        build.getArtifactManager().root().child(getFileName()).open().withCloseable { vars ->
+            txt = vars.text
+        }
+
         return txt
     }
 
