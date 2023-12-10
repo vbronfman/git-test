@@ -14,6 +14,7 @@ test(<BRANCH-NAME>, clean)
 ```
 
 The **BRANCH-NAME** parameter is the name of the shared library branch that is to be tested.
+
 Set **clean** parameter to `true` to remove the created jobs when test is finished
 
 ## How it works
@@ -31,6 +32,7 @@ Each file in this folder with **.groovy** externsion is a single test job
 Each created job is called with two parameters:
 * string `tested_branch` = name of the tester branch 
 * bool `run_in_lib_test` = true
+
 Feel free to add more if required
 
 ## Examples
