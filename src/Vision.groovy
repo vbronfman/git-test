@@ -49,6 +49,7 @@ class Vision implements Serializable
             version: opt.version ?: this.ctx.BUILD_NUMBER,
             comment: sdf.format(date),
             ci_build_name: build_name,
+            ci_version: this.ctx.BUILD_NUMBER,
             spec: component,
             azure_hash: opt.hash
         ]
