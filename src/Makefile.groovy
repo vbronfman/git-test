@@ -59,16 +59,8 @@ class Makefile implements Serializable {
             config.branch = steps.env.BRANCH_NAME
         }
 
-        if (!config.v) {
-            def dbAddr = Utilities.getConstant('versionGeneratorUrl')
-
-            steps.withCredentials([steps.usernamePassword(credentialsId: 'postgres-user-for-production', usernameVariable: 'dbUser', passwordVariable: 'dbPass')]) {
-                steps.sh """make packit VERSION_DB=\\"${dbAddr}?user=\$dbUser\\&password=\$dbPass\\" BRANCH=${config.branch} SHAREPOINT=${config.sharepoint ? 'sharepoint' : 'nosharepoint'} """
-            }
-        } else {
-            steps.withCredentials([steps.string(credentialsId: 'postgres-creds-base64-production', variable: 'dbCreds')]) {
-                steps.sh """make packit VERSION_DB=\$dbCreds BRANCH=${config.branch} SHAREPOINT=${config.sharepoint ? 'sharepoint' : 'nosharepoint'} """
-            }
+        steps.withCredentials([steps.string(credentialsId: 'postgres-creds-base64-production', variable: 'dbCreds')]) {
+            steps.sh """make packit VERSION_DB=\$dbCreds BRANCH=${config.branch} SHAREPOINT=${config.sharepoint ? 'sharepoint' : 'nosharepoint'} """
         }
     }
 
