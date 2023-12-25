@@ -74,6 +74,7 @@ class Vision implements Serializable
             this.ctx.echo "Component: $component"
             this.ctx.echo "Component Spec: $c"
             this.ctx.echo "Artifactory target_repo = $target_repo"
+            this.ctx.echo "opt = $opt"
         }
         if (files.size)
         {
