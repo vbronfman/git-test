@@ -135,7 +135,9 @@ class Utilities implements Serializable
             config.recipients = steps.env.BUILD_USER_EMAIL
         }
 
-        def artifactUrl = runtimeVars.recv(['ARTIFACT_URL'])
+        // _recv_ returns a map, only get _first_ (and only) of the 
+        // _values_ set.
+        def artifactUrl = runtimeVars.recv(['ARTIFACT_URL']).values().first()
 
         switch (config.status) {
             case 'success':
