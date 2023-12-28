@@ -81,23 +81,13 @@ class Makefile implements Serializable {
                 md5sum $(ls -t *.zip | head -n 1) | awk '{print "md5sum of built artifact: " $1}'
             '''
 
-            try {
-                (res, err) = steps.vision().setProject(project).publishArtifacts(
-                    config.component,
-                    [ [pattern: '*', path: "${folder}/${v}/"] ],
-                    [ sync: true, version: v ]
-                )
-                if (err)
-                    throw new Exception(res.message)
-            } catch(e) {
-                steps.echo "Error piblishing to vision: $e"
-                steps.currentBuild.result = 'UNSTABLE'
-                steps.echo 'Failed to publish via Vision. Retry using jfrog plugin'
-                steps.jfrog('AWS').publishArtifacts(
-                    [ [pattern: '*', target: target] ],
-                    [ sync: true, name: config.repo ]
-                )
-            }
+            (res, err) = steps.vision().setProject(project).publishArtifacts(
+                config.component,
+                [ [pattern: '*', path: "${folder}/${v}/"] ],
+                [ sync: true, version: v ]
+            )
+            if (err)
+                throw new Exception(res.message)
 
             // strip maturity from target
             def strippedTarget = target.replaceAll('-[A-Za-z0-9]+/', '/')
