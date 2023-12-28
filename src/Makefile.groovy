@@ -75,7 +75,6 @@ class Makefile implements Serializable {
                     gawk 'match(\$0, /GdfxVersion="([0-9.]*)"/, a) { print a[1] }' "${gdf}"
                 """).strip()
             def folder = (v =~ /\d+.\d+/)[0]
-            def target = "seiv-${config.component}-pack/${folder}/${v}/"
 
             steps.sh '''
                 md5sum $(ls -t *.zip | head -n 1) | awk '{print "md5sum of built artifact: " $1}'
@@ -89,6 +88,38 @@ class Makefile implements Serializable {
             if (err)
                 throw new Exception(res.message)
 
+            def repo = res['spec']['artifactory_repo']
+            def target = "${repo}/${folder}/${v}/"
+            runtimeVars.send([
+                ARTIFACT_URL:     steps.jfrog('IL').targetToURL(target),
+                ARTIFACT_VERSION: v
+            ])
+        }
+    }
+
+    def publish1(config) {
+        steps.dir('work/mbc') {
+            def res, err
+            def project = config.project ?: 'se-iv'
+            def uid = steps.sh(returnStdout:  true, script: ''' date +%s ''').strip()
+            def v = "${config.version}-${uid}"
+            def folder = config.version
+            steps.sh """ mv mbcImage.bin "MBC-${v}.bin" """
+
+            steps.sh '''
+                md5sum $(ls -t *.bin | head -n 1) | awk '{print "md5sum of built artifact: " $1}'
+            '''
+
+            (res, err) = steps.vision().setProject(project).publishArtifacts(
+                config.component,
+                [ [pattern: '*', path: "${folder}/"] ],
+                [ sync: true, version: v ]
+            )
+            if (err)
+                throw new Exception(res.message)
+
+            def repo = res['spec']['artifactory_repo']
+            def target = "${repo}/${folder}/"
             runtimeVars.send([
                 ARTIFACT_URL:     steps.jfrog('IL').targetToURL(target),
                 ARTIFACT_VERSION: v
