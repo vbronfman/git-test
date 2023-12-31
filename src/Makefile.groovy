@@ -75,7 +75,7 @@ class Makefile implements Serializable {
                     gawk 'match(\$0, /GdfxVersion="([0-9.]*)"/, a) { print a[1] }' "${gdf}"
                 """).strip()
             def folder = (v =~ /\d+.\d+/)[0]
-            def target = "${config.repo}/${folder}/${v}/"
+            def target = "seiv-${config.component}-pack/${folder}/${v}/"
 
             steps.sh '''
                 md5sum $(ls -t *.zip | head -n 1) | awk '{print "md5sum of built artifact: " $1}'
@@ -89,10 +89,8 @@ class Makefile implements Serializable {
             if (err)
                 throw new Exception(res.message)
 
-            // strip maturity from target
-            def strippedTarget = target.replaceAll('-[A-Za-z0-9]+/', '/')
             runtimeVars.send([
-                ARTIFACT_URL:     steps.jfrog('IL').targetToURL(strippedTarget),
+                ARTIFACT_URL:     steps.jfrog('IL').targetToURL(target),
                 ARTIFACT_VERSION: v
             ])
         }
