@@ -44,10 +44,9 @@ class RuntimeVars implements Serializable {
         // NOTE: Otherwise might prevent other post steps from running.
         try {
             steps.unstash(name: getStashName())
+            steps.archiveArtifacts(artifacts: getFileName(), allowEmptyArchive: true)
         }
         catch (e) {}
-
-        steps.archiveArtifacts(artifacts: getFileName(), allowEmptyArchive: true)
     }
 
     @NonCPS
