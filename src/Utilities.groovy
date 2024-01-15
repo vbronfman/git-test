@@ -4,11 +4,9 @@ import groovy.json.JsonSlurperClassic
 class Utilities implements Serializable
 {
     private def steps
-    private def runtimeVars
 
     Utilities(steps) {
         this.steps = steps
-        this.runtimeVars = new RuntimeVars(steps)
     }
 
     // get global constant
@@ -126,37 +124,6 @@ class Utilities implements Serializable
                 git tag ${config.tag}
                 git push ${config.url} ${config.tag}
             """
-        }
-    }
-
-    def postBuildEmail(config)
-    {
-        if (!config.recipients) {
-            config.recipients = steps.env.BUILD_USER_EMAIL
-        }
-
-        // _recv_ returns a map, only get _first_ (and only) of the 
-        // _values_ set.
-        def artifactUrl = runtimeVars.recv(['ARTIFACT_URL']).values().first()
-
-        switch (config.status) {
-            case 'success':
-                steps.emailext(
-                    subject: "SUCCESSFUL: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]'",
-                    body: """<p>SUCCESSFUL: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]':</p>
-                        <p>Package is available at &QUOT;<a href='${artifactUrl}'>${artifactUrl}</a>&QUOT;</p>
-                        <p>Check console output at &QUOT;<a href='${steps.env.BUILD_URL}'>${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]</a>&QUOT;</p>""",
-                    to: config.recipients,
-                    mimeType: 'text/html')
-                break
-            case 'failure':
-                steps.emailext(
-                    subject: "FAILED: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]'",
-                    body: """<p>FAILED: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]':</p>
-                        <p>Check console output at &QUOT;<a href='${steps.env.BUILD_URL}'>${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]</a>&QUOT;</p>""",
-                    to: config.recipients,
-                    mimeType: 'text/html')
-                break
         }
     }
 

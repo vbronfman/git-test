@@ -27,7 +27,7 @@ class RuntimeVars implements Serializable {
         try {
             props1 = this.recv1()
         }
-        catch (e) {}
+        catch(e) {}
  
         // NOTE: If _k_ already exists in _props1_, the value shall be overwritten.
         props1.putAll(props)
@@ -46,12 +46,12 @@ class RuntimeVars implements Serializable {
             steps.unstash(name: getStashName())
             steps.archiveArtifacts(artifacts: getFileName(), allowEmptyArchive: true)
         }
-        catch (e) {}
+        catch(e) {}
     }
 
     @NonCPS
     static def queryJob1(cfg) {
-        def currJob = Jenkins.instance.getAllItems(Job.class, { x -> x.fullName == cfg.name})[0]
+        def currJob = Jenkins.instance.getAllItems(Job.class, { x -> x.fullName == cfg.name}).first()
         def build
 
         // If no build ID provided get last successful.
