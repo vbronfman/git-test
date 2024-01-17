@@ -68,7 +68,7 @@ class Email implements Serializable
             ],
             (PipelineType.SyncCachePipeline): [
                 (TriggerType.UserTrigger): [
-                    (ResultType.AcceptableResult): (EmailTo.TriggerOwner), (ResultType.UnacceptableResult): (EmailTo.Listeners)
+                    (ResultType.AcceptableResult): (EmailTo.TriggerOwner), (ResultType.UnacceptableResult): (EmailTo.TriggerOwner)
                 ],
                 (TriggerType.ScriptTrigger): [
                     (ResultType.AcceptableResult): (EmailTo.NoOne), (ResultType.UnacceptableResult): (EmailTo.Listeners)
@@ -161,7 +161,13 @@ class Email implements Serializable
 
             switch (getResultType()) {
                 case ResultType.AcceptableResult:
-                    // NOTE: NOOP on sucess.
+                    steps.emailext(
+                        subject: "SYNC SUCCESSFUL: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]'",
+                        body: """<p>SYNC SUCCESSFUL: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]':</p>
+                            <p>Finished with result &QUOT;${steps.currentBuild.getResult()}&QUOT;</p>
+                            <p>Check console output at &QUOT;<a href='${steps.env.BUILD_URL}'>${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+                        to: recipients,
+                        mimeType: 'text/html')
                     break
                 case ResultType.UnacceptableResult:
                     steps.emailext(
