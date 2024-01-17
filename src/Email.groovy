@@ -120,15 +120,15 @@ class Email implements Serializable
                 recipients = getRecipients(PipelineType.BuildPipeline)
             }
 
-            // _recv_ returns a map, only get _first_ (and only) of the 
+            // _recv_ returns a map, only get _first_ (and only) of the
             // _values_ set.
             def artifactUrl = runtimeVars.recv(['ARTIFACT_URL']).values().first()
 
             switch (getResultType()) {
                 case ResultType.AcceptableResult:
                     steps.emailext(
-                        subject: "SUCCESSFUL: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]'",
-                        body: """<p>SUCCESSFUL: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]':</p>
+                        subject: "BUILD SUCCESSFUL: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]'",
+                        body: """<p>BUILD SUCCESSFUL: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]':</p>
                             <p>Finished with result &QUOT;${steps.currentBuild.getResult()}&QUOT;</p>
                             <p>Package is available at &QUOT;<a href='${artifactUrl}'>${artifactUrl}</a>&QUOT;</p>
                             <p>Check console output at &QUOT;<a href='${steps.env.BUILD_URL}'>${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]</a>&QUOT;</p>""",
@@ -137,8 +137,73 @@ class Email implements Serializable
                     break
                 case ResultType.UnacceptableResult:
                     steps.emailext(
-                        subject: "FAILED: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]'",
-                        body: """<p>FAILED: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]':</p>
+                        subject: "BUILD FAILED: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]'",
+                        body: """<p>BUILD FAILED: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]':</p>
+                            <p>Finished with result &QUOT;${steps.currentBuild.getResult()}&QUOT;</p>
+                            <p>Check console output at &QUOT;<a href='${steps.env.BUILD_URL}'>${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+                        to: recipients,
+                        mimeType: 'text/html')
+                    break
+             }
+        }
+        catch(e) {
+             steps.echo("${e}")
+        }
+    }
+
+    def postSyncCacheEmail(config) {
+        try {
+            def recipients = config?.recipients
+
+            if (!recipients) {
+                recipients = getRecipients(PipelineType.SyncCachePipeline)
+            }
+
+            switch (getResultType()) {
+                case ResultType.AcceptableResult:
+                    // NOTE: NOOP on sucess.
+                    break
+                case ResultType.UnacceptableResult:
+                    steps.emailext(
+                        subject: "SYNC FAILED: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]'",
+                        body: """<p>SYNC FAILED: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]':</p>
+                            <p>Finished with result &QUOT;${steps.currentBuild.getResult()}&QUOT;</p>
+                            <p>Check console output at &QUOT;<a href='${steps.env.BUILD_URL}'>${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+                        to: recipients,
+                        mimeType: 'text/html')
+                    break
+             }
+        }
+        catch(e) {
+             steps.echo("${e}")
+        }
+    }
+
+    def postDockerEmail(config) {
+        try {
+            def recipients = config?.recipients
+
+            if (!recipients) {
+                recipients = getRecipients(PipelineType.DockerPipeline)
+            }
+
+            def vars = runtimeVars.recv(['SHORT_NAME', 'FULL_NAME'])
+
+            switch (getResultType()) {
+                case ResultType.AcceptableResult:
+                    steps.emailext(
+                        subject: "DOCKER BUILD SUCCESSFUL: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]'",
+                        body: """<p>DOCKER BUILD SUCCESSFUL: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]':</p>
+                            <p>Finished with result &QUOT;${steps.currentBuild.getResult()}&QUOT;</p>
+                            <p>Image ${vars['SHORT_NAME']} is available at &QUOT;<a href='${vars['LONG_NAME']}'>${vars['LONG_NAME']}</a>&QUOT;</p>
+                            <p>Check console output at &QUOT;<a href='${steps.env.BUILD_URL}'>${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+                        to: recipients,
+                        mimeType: 'text/html')
+                    break
+                case ResultType.UnacceptableResult:
+                    steps.emailext(
+                        subject: "DOCKER BUILD FAILED: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]'",
+                        body: """<p>DOCKER BUILD FAILED: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]':</p>
                             <p>Finished with result &QUOT;${steps.currentBuild.getResult()}&QUOT;</p>
                             <p>Check console output at &QUOT;<a href='${steps.env.BUILD_URL}'>${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]</a>&QUOT;</p>""",
                         to: recipients,
