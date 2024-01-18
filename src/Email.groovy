@@ -93,7 +93,9 @@ class Email implements Serializable
 
         switch (emailRule(pipelineType)) {
             case EmailTo.CommitAuthor:
-                recipients = steps.sh('git log -1 --format=%ae').trim()
+                recipients = steps.sh(
+                    returnStdout:  true,
+                    script:'git log -1 --format=%ae').strip()
                 break
             case EmailTo.Listeners:
                 //TODO
