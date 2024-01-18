@@ -17,7 +17,7 @@ class Email implements Serializable
     }
 
     enum EmailTo {
-        CommitOwner,
+        CommitAuthor,
         Listeners,
         NoOne,
         TriggerOwner
@@ -63,7 +63,7 @@ class Email implements Serializable
                     (ResultType.AcceptableResult): (EmailTo.Listeners), (ResultType.UnacceptableResult): (EmailTo.TriggerOwner)
                 ],
                 (TriggerType.ScriptTrigger): [
-                    (ResultType.AcceptableResult): (EmailTo.Listeners), (ResultType.UnacceptableResult): (EmailTo.CommitOwner)
+                    (ResultType.AcceptableResult): (EmailTo.Listeners), (ResultType.UnacceptableResult): (EmailTo.CommitAuthor)
                 ]
             ],
             (PipelineType.SyncCachePipeline): [
@@ -92,8 +92,8 @@ class Email implements Serializable
         def recipients
 
         switch (emailRule(pipelineType)) {
-            case EmailTo.CommitOwner:
-                //TODO
+            case EmailTo.CommitAuthor:
+                recipients = steps.sh('git log -1 --format=%ae').trim()
                 break
             case EmailTo.Listeners:
                 //TODO
