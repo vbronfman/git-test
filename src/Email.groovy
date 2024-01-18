@@ -133,7 +133,7 @@ class Email implements Serializable
                         body: """<p>BUILD SUCCESSFUL: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]':</p>
                             <p>Finished with result &QUOT;${steps.currentBuild.getResult()}&QUOT;</p>
                             <p>Package is available at &QUOT;<a href='${artifactUrl}'>${artifactUrl}</a>&QUOT;</p>
-                            <p>Check console output at &QUOT;<a href='${steps.env.BUILD_URL}'>${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+                            <p>Check console output at &QUOT;<a href='${steps.env.BUILD_URL}flowGraphTable/'>${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]</a>&QUOT;</p>""",
                         to: recipients,
                         mimeType: 'text/html')
                     break
@@ -142,7 +142,7 @@ class Email implements Serializable
                         subject: "BUILD FAILED: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]'",
                         body: """<p>BUILD FAILED: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]':</p>
                             <p>Finished with result &QUOT;${steps.currentBuild.getResult()}&QUOT;</p>
-                            <p>Check console output at &QUOT;<a href='${steps.env.BUILD_URL}'>${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+                            <p>Check console output at &QUOT;<a href='${steps.env.BUILD_URL}flowGraphTable/'>${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]</a>&QUOT;</p>""",
                         to: recipients,
                         mimeType: 'text/html')
                     break
@@ -167,7 +167,7 @@ class Email implements Serializable
                         subject: "SYNC SUCCESSFUL: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]'",
                         body: """<p>SYNC SUCCESSFUL: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]':</p>
                             <p>Finished with result &QUOT;${steps.currentBuild.getResult()}&QUOT;</p>
-                            <p>Check console output at &QUOT;<a href='${steps.env.BUILD_URL}'>${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+                            <p>Check console output at &QUOT;<a href='${steps.env.BUILD_URL}flowGraphTable/'>${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]</a>&QUOT;</p>""",
                         to: recipients,
                         mimeType: 'text/html')
                     break
@@ -176,7 +176,7 @@ class Email implements Serializable
                         subject: "SYNC FAILED: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]'",
                         body: """<p>SYNC FAILED: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]':</p>
                             <p>Finished with result &QUOT;${steps.currentBuild.getResult()}&QUOT;</p>
-                            <p>Check console output at &QUOT;<a href='${steps.env.BUILD_URL}'>${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+                            <p>Check console output at &QUOT;<a href='${steps.env.BUILD_URL}flowGraphTable/'>${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]</a>&QUOT;</p>""",
                         to: recipients,
                         mimeType: 'text/html')
                     break
@@ -204,7 +204,7 @@ class Email implements Serializable
                         body: """<p>DOCKER BUILD SUCCESSFUL: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]':</p>
                             <p>Finished with result &QUOT;${steps.currentBuild.getResult()}&QUOT;</p>
                             <p>Image ${vars['SHORT_NAME']} is available at &QUOT;<a href='${vars['LONG_NAME']}'>${vars['LONG_NAME']}</a>&QUOT;</p>
-                            <p>Check console output at &QUOT;<a href='${steps.env.BUILD_URL}'>${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+                            <p>Check console output at &QUOT;<a href='${steps.env.BUILD_URL}flowGraphTable/'>${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]</a>&QUOT;</p>""",
                         to: recipients,
                         mimeType: 'text/html')
                     break
@@ -213,7 +213,7 @@ class Email implements Serializable
                         subject: "DOCKER BUILD FAILED: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]'",
                         body: """<p>DOCKER BUILD FAILED: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]':</p>
                             <p>Finished with result &QUOT;${steps.currentBuild.getResult()}&QUOT;</p>
-                            <p>Check console output at &QUOT;<a href='${steps.env.BUILD_URL}'>${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+                            <p>Check console output at &QUOT;<a href='${steps.env.BUILD_URL}flowGraphTable/'>${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]</a>&QUOT;</p>""",
                         to: recipients,
                         mimeType: 'text/html')
                     break
