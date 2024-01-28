@@ -203,7 +203,7 @@ class Email implements Serializable
                         subject: "DOCKER BUILD SUCCESSFUL: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]'",
                         body: """<p>DOCKER BUILD SUCCESSFUL: Job '${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]':</p>
                             <p>Finished with result &QUOT;${steps.currentBuild.getResult()}&QUOT;</p>
-                            <p>Image ${vars['SHORT_NAME']} is available at &QUOT;<a href='${vars['LONG_NAME']}'>${vars['LONG_NAME']}</a>&QUOT;</p>
+                            <p>Image ${vars['SHORT_NAME']} is available at &QUOT;<a href='${vars['FULL_NAME']}'>${vars['FULL_NAME']}</a>&QUOT;</p>
                             <p>Check console output at &QUOT;<a href='${steps.env.BUILD_URL}flowGraphTable/'>${steps.env.JOB_NAME} [${steps.env.BUILD_NUMBER}]</a>&QUOT;</p>""",
                         to: recipients,
                         mimeType: 'text/html')
