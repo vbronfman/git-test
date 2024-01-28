@@ -121,8 +121,8 @@ class Utilities implements Serializable
 
         steps.sshagent(credentials: [config.credentialsId]) {
             steps.sh """
-                git tag  ${ config.force : '--force' : '' } ${config.tag}
-                git push ${ config.force : '--force' : '' } ${config.url} ${config.tag}
+                git tag  ${ config.force ? '--force' : '' } ${config.tag}
+                git push ${ config.force ? '--force' : '' } ${config.url} ${config.tag}
             """
         }
     }
