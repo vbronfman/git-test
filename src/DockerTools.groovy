@@ -29,7 +29,7 @@ class DockerTools implements Serializable {
 
         runtimeVars.send([
             TAG:        config.tag,
-            UNIQUE:     uniqueת
+            UNIQUE:     unique,
             SHORT_NAME: "${config.name}:${config.tag}",
             FULL_NAME:  fqTag])
         steps.currentBuild.displayName = "#${unique}"
