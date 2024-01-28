@@ -7,22 +7,49 @@ class DockerTools implements Serializable {
         this.runtimeVars = new RuntimeVars(steps)
     }
 
+    def fqin(config, tag) {
+        return "${config.registry}/${config.name}:${tag}"
+    }
+
     def createImage(config) {
-        if (!config.tag)
-        {
-            config.tag = "${steps.sh(script: "date +%Y%m%d", returnStdout: true).trim()}.${steps.currentBuild.number}"
+        def unique
+        def createAlias = false
+
+        if (!config.tag) {
+            unique = "${steps.sh(script: "date +%Y%m%d", returnStdout: true).trim()}.${steps.currentBuild.number}"
+            config.tag = unique
+        }
+        else {
+            unique = "${config.tag}-${steps.sh(script: "date +%Y%m%d", returnStdout: true).trim()}.${steps.currentBuild.number}"
+            createAlias = true
         }
 
-        def fqin = "${config.registry}/${config.name}:${config.tag}"
+        def fqTag    = fqin(config, config.tag)
+        def fqUnique = fqin(config, unique)
+
         runtimeVars.send([
             TAG:        config.tag,
+            UNIQUE:     unique
             SHORT_NAME: "${config.name}:${config.tag}",
-            FULL_NAME:  fqin])
-        steps.currentBuild.displayName = "#${config.tag}"
+            FULL_NAME:  fqTag])
+        steps.currentBuild.displayName = "#${unique}"
         steps.sh """
-            docker image build --no-cache --force-rm -t ${fqin} .
-            docker image push ${fqin}
-            ${ !config.noClean ? "docker image rm ${fqin}" : '' }
+            docker image build --no-cache --force-rm -t ${fqUnique} .
+            docker image push ${fqUnique}
         """
+
+        if (createAlias) {
+            steps.sh """
+                docker image tag ${fqUnique} ${fqTag}
+                docker image push ${fqTag}
+            """
+        }
+
+        if (!config.noClean) {
+            steps.sh """
+                docker image rm ${fqUnique}
+                ${ createAlias ? "docker image rm ${fqTag}" : '' }
+            """
+        }
     }
 }
