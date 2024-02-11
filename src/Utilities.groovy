@@ -22,7 +22,12 @@ class Utilities implements Serializable
                 domain: "jfrog.gilat.tech",
                 schema: "https",
                 credId: "il-artifactory1-publisher",
-            ]
+            ],
+            MDC: [
+                domain: "jfrog-mdc.gilat.tech",
+                schema: "https",
+                credId: "mdc-artifactory1-publisher",
+            ],
         ]
         def constants = [
             artifactory: artifactory,
