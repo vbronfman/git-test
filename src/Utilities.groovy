@@ -26,7 +26,7 @@ class Utilities implements Serializable
             MDC: [
                 domain: "jfrog-mdc.gilat.tech",
                 schema: "https",
-                credId: "mdc-artifactory1-publisher",
+                credId: "mdc-artifactory-admin", // required to create/delete local repos
             ],
         ]
         def constants = [

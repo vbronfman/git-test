@@ -123,9 +123,31 @@ class Jfrog implements Serializable
         ]).toString() ))
     }
 
+    def deleteRepo(name)
+    {
+        this.del("artifactory/api/repositories/${name}")
+    }
+
+    def createRepo(name, config=[rclass: "local"])
+    {
+        config["packageType"] = config["packageType"] ?: "generic"
+        if (config["rclass"] == "local")
+            config["repoLayoutRef"] = config["repoLayoutRef"] ?: "maven-2-default" 
+        try{
+            this.put(
+                "artifactory/api/repositories/${name}",
+                ( new JsonBuilder(config).toString() )
+            )
+        } catch(e){
+            this.ctx.echo("${e}")
+        }
+        this.get("artifactory/api/repositories/${name}")
+    }
+
     private def get(path){ this.request(path, 'GET') }
     private def post(path, body){ this.request(path, 'POST', body) }
     private def put(path, body){ this.request(path, 'PUT', body) }
+    private def del(path){ this.request(path, 'DELETE') }
 
     private def request(path, mode, body=null)
     {
