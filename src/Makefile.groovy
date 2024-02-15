@@ -97,13 +97,17 @@ class Makefile implements Serializable {
         }
     }
 
-    def publish1(config) {
+    def publishMBC(config) {
         steps.dir('work/mbc') {
             def res, err
             def project = config.project ?: 'se-iv'
             def uid = steps.sh(returnStdout:  true, script: ''' date +%s ''').strip()
             def v = "${config.version}-${uid}"
             def folder = config.version
+            steps.sh """
+                mv mbcImage.bin  "mbc-${v}.bin"
+                mv bundle.tar.gz "mi-mbc-sideload-${v}.tar.gz"
+            """
 
             (res, err) = steps.vision().setProject(project).publishArtifacts(
                 config.component,
