@@ -104,15 +104,10 @@ class Makefile implements Serializable {
             def uid = steps.sh(returnStdout:  true, script: ''' date +%s ''').strip()
             def v = "${config.version}-${uid}"
             def folder = config.version
-            steps.sh """ mv mbcImage.bin "MBC-${v}.bin" """
-
-            steps.sh '''
-                md5sum $(ls -t *.bin | head -n 1) | awk '{print "md5sum of built artifact: " $1}'
-            '''
 
             (res, err) = steps.vision().setProject(project).publishArtifacts(
                 config.component,
-                [ [pattern: '*', path: "${folder}/"] ],
+                [ [pattern: '*', path: "${folder}/${v}/"] ],
                 [ sync: true, version: v ]
             )
             if (err)
