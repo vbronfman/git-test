@@ -34,6 +34,7 @@ class Utilities implements Serializable
             defaultArtifactoryDomainName: artifactory.IL.domain,
             defaultArtifactorySchema: artifactory.IL.schema,
             gitCredsSE4SSH: 'azure-worker-ssh-msharay',
+            releaseNotesJob: 'Developers/Release_notes',
             dockerRegSE4Embedded: "${artifactory.AWS.domain}/seiv-embedded-docker"
         ]
         constants << [defaultArtifactoryUrl: "${constants.defaultArtifactorySchema}://${constants.defaultArtifactoryDomainName}/artifactory"]
