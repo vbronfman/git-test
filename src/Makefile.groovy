@@ -129,4 +129,8 @@ class Makefile implements Serializable {
     def sast(config) {
         steps.sh 'make sast'
     }
+
+    def secrets(config) {
+        steps.sh 'make secrets'
+    }    
 }
