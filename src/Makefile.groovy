@@ -106,7 +106,7 @@ class Makefile implements Serializable {
             def folder = config.version
             steps.sh """
                 mv mbcImage.bin  "mbc-${v}.bin"
-                [ -f bundle.tar.gz ] && mv bundle.tar.gz "mi-mbc-sideload-${v}.tar.gz"
+                [ -f bundle.tar.gz ] && mv bundle.tar.gz "mi-mbc-sideload-${v}.tar.gz" || true
             """
 
             (res, err) = steps.vision().setProject(project).publishArtifacts(
