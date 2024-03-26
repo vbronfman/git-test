@@ -1,8 +1,8 @@
 class Schedule implements Serializable {
     private def jobName
 
-    Schedule(config) {
-        this.jobName = config.jobName
+    Schedule(jobName) {
+        this.jobName = jobName
     }
 
     static def maybeBuild()
