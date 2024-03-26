@@ -1,17 +1,17 @@
 class Schedule implements Serializable {
     private def jobName
 
-    Schedule(jobName) {
-        this.jobName = jobName
-    }
+    // Schedule(jobName) {
+    //     this.jobName = jobName
+    // }
 
-    static def maybeBuild()
+    static def maybeBuild(jobName)
     {
         // def gitName = "GilatDevOps/SE4/ipm"
-        def buildResult = getLastBuild()
+        def buildResult = getLastBuild(jobName)
     }
 
-    def getLastBuild()
+    def getLastBuild(jobName)
     {
         echo "Getting details on job $jobName"
         def jenkins = Jenkins.getInstance()
