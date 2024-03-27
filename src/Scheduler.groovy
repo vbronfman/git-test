@@ -1,4 +1,5 @@
 class Scheduler implements Serializable {
+    private def steps
     private def jobName
 
     Scheduler(steps, jobName) {
