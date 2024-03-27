@@ -14,7 +14,7 @@ class Scheduler implements Serializable {
         }
     }
 
-    def getLastBuild()
+    static def getLastBuild()
     {
         echo "Getting details on job $jobName"
         def jenkins = Jenkins.getInstance()
@@ -26,7 +26,7 @@ class Scheduler implements Serializable {
         return buildResult
     }
 
-    def jobBuild()
+    static def jobBuild()
     {
         echo "Building job $jobName"
         def jenkins = Jenkins.getInstance()
