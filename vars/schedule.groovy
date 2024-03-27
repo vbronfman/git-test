@@ -1,3 +1,3 @@
 def call(Map config) {
-    (new Schedule(config.jobName)).maybeBuild()
+    (new Schedule()).maybeBuild('Developers/ipm-build/releases/r300.0')
 }

@@ -1,20 +1,18 @@
 class Schedule implements Serializable {
-    private def jobName
+    // private def jobName
 
-    Schedule(jobName) {
-        this.jobName = jobName
-    }
+    Schedule() {}
 
-    static def maybeBuild()
+    static def maybeBuild(jobName)
     {
         def gitName = "GilatDevOps/SE4/ipm"
-        def buildResult = getLastBuild()
+        def buildResult = getLastBuild(jobName)
         if (!buildResult) {
-            jobBuild()
+            jobBuild(jobName)
         }
     }
 
-    def getLastBuild()
+    def getLastBuild(jobName)
     {
         echo "Getting details on job $jobName"
         def jenkins = Jenkins.getInstance()
@@ -26,7 +24,7 @@ class Schedule implements Serializable {
         return buildResult
     }
 
-    def jobBuild()
+    def jobBuild(jobName)
     {
         echo "Building job $jobName"
         def jenkins = Jenkins.getInstance()
