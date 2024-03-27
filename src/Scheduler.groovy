@@ -5,7 +5,7 @@ class Scheduler implements Serializable {
         this.jobName = jobName
     }
 
-    static def maybeBuild()
+    def maybeBuild()
     {
         def gitName = "GilatDevOps/SE4/ipm"
         def buildResult = getLastBuild()
@@ -14,9 +14,9 @@ class Scheduler implements Serializable {
         }
     }
 
-    static def getLastBuild()
+    def getLastBuild()
     {
-        echo "Getting details on job $jobName"
+        echo "Getting details on job ${jobName}"
         def jenkins = Jenkins.getInstance()
         def job = jenkins.getItem(jobName)
         def buildResult = job.getLastSuccessfulBuild()
@@ -26,12 +26,12 @@ class Scheduler implements Serializable {
         return buildResult
     }
 
-    static def jobBuild()
+    def jobBuild()
     {
-        echo "Building job $jobName"
+        echo "Building job ${jobName}"
         def jenkins = Jenkins.getInstance()
         def job = jenkins.getItem(jobName)
-        def results = build propagate: false, job: $jobName
+        def results = build propagate: false, job: "${jobName}"
         def buildResult = results.getResult()
         def jobUrl = results.getAbsoluteUrl()
         def buildVar = results.getBuildVariables()
