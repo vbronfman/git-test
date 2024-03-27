@@ -1,9 +1,10 @@
 class Schedule implements Serializable {
     private def jobName
 
-    // Schedule(jobName) {
-    //     this.jobName = jobName
-    // }
+    Schedule(jobName) {
+        this.jobName = jobName
+        maybeBuild(jobName)
+    }
 
     static def maybeBuild(jobName)
     {
