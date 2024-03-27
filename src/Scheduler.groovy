@@ -10,7 +10,7 @@ class Scheduler implements Serializable {
         def gitName = "GilatDevOps/SE4/ipm"
         def buildResult = getLastBuild()
         if (!buildResult) {
-            jobBuild(jobName)
+            jobBuild()
         }
     }
 
