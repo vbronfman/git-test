@@ -23,7 +23,7 @@ class Scheduler implements Serializable {
         def job = jenkins.getItemByFullName(jobName)
         def buildResult = job.getLastSuccessfulBuild().result
         def currCommit = Utilities.gitGetCommit()
-        def jobCommit = runtimeVars.recv([GIT_COMMIT_HASH])
+        def jobCommit = runtimeVars.recv(['GIT_COMMIT_HASH']).values().first()
         steps.echo "${buildResult} ${jobName} {jobCommit}"
         return currCommit == jobCommit
     }
