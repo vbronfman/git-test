@@ -4,7 +4,7 @@ class Scheduler implements Serializable {
 
     Scheduler(steps, jobName) {
         this.steps = steps
-        this.jobName = jobName
+        this.jobName = jobName[0]
     }
 
     def maybeBuild()
