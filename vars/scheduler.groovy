@@ -1,3 +1,3 @@
 def call(Map config) {
-    (new Scheduler(this, config.jobName)).maybeBuild()
+    (new Scheduler(this, config)).maybeBuild()
 }

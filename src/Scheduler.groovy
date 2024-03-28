@@ -3,10 +3,10 @@ class Scheduler implements Serializable {
     private def jobName
     private def branchName
 
-    Scheduler(steps, jobName, branchName) {
+    Scheduler(steps, config) {
         this.steps = steps
-        this.jobName = jobName
-        this.branchName = branchName
+        this.jobName = config.jobName
+        this.branchName = config.branchName
     }
 
     def maybeBuild()
