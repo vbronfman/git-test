@@ -24,11 +24,11 @@ class Scheduler implements Serializable {
         //     script: """
         //         git rev-parse HEAD
         //     """).strip()
-        steps.echo "GIT_COMMIT %GIT_COMMIT%"
-        steps.echo "GIT_BRANCH %GIT_BRANCH%"
-        steps.echo "GIT_LOCAL_BRANCH %GIT_LOCAL_BRANCH%"
-        steps.echo "GIT_PREVIOUS_COMMIT %GIT_PREVIOUS_COMMIT%"
-        steps.echo "GIT_PREVIOUS_SUCCESSFUL_COMMIT %GIT_PREVIOUS_SUCCESSFUL_COMMIT%"
+        steps.echo "GIT_COMMIT $GIT_COMMIT"
+        steps.echo "GIT_BRANCH $GIT_BRANCH"
+        steps.echo "GIT_LOCAL_BRANCH $GIT_LOCAL_BRANCH"
+        steps.echo "GIT_PREVIOUS_COMMIT $GIT_PREVIOUS_COMMIT"
+        steps.echo "GIT_PREVIOUS_SUCCESSFUL_COMMIT $GIT_PREVIOUS_SUCCESSFUL_COMMIT"
         def jenkins = Jenkins.getInstance()
         def job = jenkins.getItemByFullName(jobName)
         def buildResult = job.getLastSuccessfulBuild()
@@ -44,13 +44,13 @@ class Scheduler implements Serializable {
     def jobBuild()
     {
         steps.echo "Building job ${jobName}"
-        def jenkins = Jenkins.getInstance()
-        def job = jenkins.getItem(jobName)
-        def results = build propagate: false, job: "${jobName}"
-        def buildResult = results.getResult()
-        def jobUrl = results.getAbsoluteUrl()
-        def buildVar = results.getBuildVariables()
-        steps.echo "${buildResult} ${jobUrl} ${buildVar}"
-        return buildResult
+        // def jenkins = Jenkins.getInstance()
+        // def job = jenkins.getItem(jobName)
+        // def results = build propagate: false, job: "${jobName}"
+        // def buildResult = results.getResult()
+        // def jobUrl = results.getAbsoluteUrl()
+        // def buildVar = results.getBuildVariables()
+        // steps.echo "${buildResult} ${jobUrl} ${buildVar}"
+        // return buildResult
     }
 }
