@@ -12,14 +12,15 @@ class Scheduler implements Serializable {
     def maybeBuild()
     {
         def gitName = "GilatDevOps/SE4/ipm"
-        def commitCheck = getLastBuild()
-        if (!commitCheck) {
-            jobBuild()
-        }
+        // def commitCheck = getLastBuild()
+        // if (!commitCheck) {
+        //     jobBuild()
+        // }
     }
 
     def getLastBuild()
     {
+        steps.echo "Getting details on job ${jobName} ${currCommit}"
         def jenkins = Jenkins.getInstance()
         def job = jenkins.getItemByFullName(jobName)
         def buildResult = job.getLastSuccessfulBuild().result
