@@ -93,7 +93,7 @@ class Makefile implements Serializable {
             runtimeVars.send([
                 ARTIFACT_URL:     steps.jfrog('IL').targetToURL(target),
                 ARTIFACT_VERSION: v,
-                GIT_COMMIT_HASH:  Utilities.gitGetCommit()
+                GIT_COMMIT_HASH:  Utilities.gitGetCommit(steps)
             ])
         }
     }
@@ -123,7 +123,7 @@ class Makefile implements Serializable {
             runtimeVars.send([
                 ARTIFACT_URL:     steps.jfrog('IL').targetToURL(target),
                 ARTIFACT_VERSION: v
-                GIT_COMMIT_HASH:  Utilities.gitGetCommit()
+                GIT_COMMIT_HASH:  Utilities.gitGetCommit(steps)
             ])
         }
     }

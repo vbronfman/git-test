@@ -73,7 +73,7 @@ class Utilities implements Serializable
         ])
     }
 
-    static def gitGetCommit()
+    static def gitGetCommit(steps)
     {
         def hash = steps.sh(
             returnStdout:  true,
