@@ -10,10 +10,10 @@ class Scheduler implements Serializable {
     def maybeBuild()
     {
         def gitName = "GilatDevOps/SE4/ipm"
-        getLastBuild()
-        // if (!commitCheck) {
-        //     jobBuild()
-        // }
+        def commitCheck = getLastBuild()
+        if (!commitCheck) {
+            jobBuild()
+        }
     }
 
     def getLastBuild()
@@ -24,10 +24,8 @@ class Scheduler implements Serializable {
         def currCommit = (new Utilities(steps)).gitGetCommit()
         steps.echo "Getting details on job ${jobName} ${currCommit}"
         def jobCommit = getRuntimeVar('GIT_COMMIT_HASH')
-        // def jobCommit = (new Utilities(steps)).gitGetCommit()
-        // def jobCommit = runtimeVars.recv(['GIT_COMMIT_HASH']).values().first()
         steps.echo "${buildResult} ${jobName} {jobCommit}"
-        // return currCommit == jobCommit
+        return currCommit == jobCommit
     }
 
     def jobBuild()
