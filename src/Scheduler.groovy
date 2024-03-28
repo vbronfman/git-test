@@ -1,12 +1,10 @@
 class Scheduler implements Serializable {
     private def steps
     private def jobName
-    private def runtimeVars
 
     Scheduler(steps, jobName) {
         this.steps = steps
         this.jobName = jobName
-        this.runtimeVars = new RuntimeVars(steps)
     }
 
     def maybeBuild()
@@ -25,9 +23,10 @@ class Scheduler implements Serializable {
         def buildResult = job.getLastSuccessfulBuild().result
         def currCommit = (new Utilities(steps)).gitGetCommit()
         steps.echo "Getting details on job ${jobName} ${currCommit}"
+        def jobCommit = getRuntimeVar('GIT_COMMIT_HASH')
         // def jobCommit = (new Utilities(steps)).gitGetCommit()
         // def jobCommit = runtimeVars.recv(['GIT_COMMIT_HASH']).values().first()
-        // steps.echo "${buildResult} ${jobName} {jobCommit}"
+        steps.echo "${buildResult} ${jobName} {jobCommit}"
         // return currCommit == jobCommit
     }
 
