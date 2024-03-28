@@ -10,8 +10,8 @@ class Scheduler implements Serializable {
     def maybeBuild()
     {
         def gitName = "GilatDevOps/SE4/ipm"
-        def buildResult = getLastBuild()
-        if (!buildResult) {
+        def commitCheck = getLastBuild()
+        if (!commitCheck) {
             jobBuild()
         }
     }
@@ -19,26 +19,13 @@ class Scheduler implements Serializable {
     def getLastBuild()
     {
         steps.echo "Getting details on job ${jobName}"
-        // def revision = steps.sh(
-        //     returnStdout:  true,
-        //     script: """
-        //         git rev-parse HEAD
-        //     """).strip()
-        steps.echo "GIT_COMMIT $GIT_COMMIT"
-        steps.echo "GIT_BRANCH $GIT_BRANCH"
-        steps.echo "GIT_LOCAL_BRANCH $GIT_LOCAL_BRANCH"
-        steps.echo "GIT_PREVIOUS_COMMIT $GIT_PREVIOUS_COMMIT"
-        steps.echo "GIT_PREVIOUS_SUCCESSFUL_COMMIT $GIT_PREVIOUS_SUCCESSFUL_COMMIT"
         def jenkins = Jenkins.getInstance()
         def job = jenkins.getItemByFullName(jobName)
-        def buildResult = job.getLastSuccessfulBuild()
-
-
-
-        // def jobUrl = buildResult.getAbsoluteUrl()
-        // def buildVar = buildResult.getBuildVariables()
-        // steps.echo "${buildResult} ${jobUrl} ${buildVar}"
-        return buildResult
+        def buildResult = job.getLastSuccessfulBuild().result
+        def currCommit = Utilities.gitGetCommit()
+        def jobCommit = runtimeVars.recv([GIT_COMMIT_HASH])
+        steps.echo "${buildResult} ${jobName} {jobCommit}"
+        return currCommit == jobCommit
     }
 
     def jobBuild()

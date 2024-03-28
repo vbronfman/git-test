@@ -92,7 +92,8 @@ class Makefile implements Serializable {
             def target = "${repo}/${folder}/${v}/"
             runtimeVars.send([
                 ARTIFACT_URL:     steps.jfrog('IL').targetToURL(target),
-                ARTIFACT_VERSION: v
+                ARTIFACT_VERSION: v,
+                GIT_COMMIT_HASH:  Utilities.gitGetCommit()
             ])
         }
     }
@@ -122,6 +123,7 @@ class Makefile implements Serializable {
             runtimeVars.send([
                 ARTIFACT_URL:     steps.jfrog('IL').targetToURL(target),
                 ARTIFACT_VERSION: v
+                GIT_COMMIT_HASH:  Utilities.gitGetCommit()
             ])
         }
     }
