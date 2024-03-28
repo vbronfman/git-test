@@ -1,7 +1,7 @@
 class Scheduler implements Serializable {
     private def steps
     private def jobName
-    // private def runtimeVars
+    private def runtimeVars
 
     Scheduler(steps, jobName) {
         this.steps = steps
@@ -19,14 +19,14 @@ class Scheduler implements Serializable {
 
     def getLastBuild()
     {
-        // runtimeVars = new RuntimeVars(steps)
+        runtimeVars = new RuntimeVars(steps)
         def jenkins = Jenkins.getInstance()
         def job = jenkins.getItemByFullName(jobName)
         def buildResult = job.getLastSuccessfulBuild().result
-        // def currCommit = (new Utilities(steps)).gitGetCommit()
-        // steps.echo "Getting details on job ${jobName} ${currCommit}"
+        def currCommit = (new Utilities(steps)).gitGetCommit()
+        steps.echo "Getting details on job ${jobName} ${currCommit}"
         // def jobCommit = (new Utilities(steps)).gitGetCommit()
-        // // def jobCommit = runtimeVars.recv(['GIT_COMMIT_HASH']).values().first()
+        // def jobCommit = runtimeVars.recv(['GIT_COMMIT_HASH']).values().first()
         // steps.echo "${buildResult} ${jobName} {jobCommit}"
         // return currCommit == jobCommit
     }
