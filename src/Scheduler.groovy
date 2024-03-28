@@ -25,7 +25,8 @@ class Scheduler implements Serializable {
         def buildResult = job.getLastSuccessfulBuild().result
         def currCommit = (new Utilities(steps)).gitGetCommit()
         steps.echo "Getting details on job ${jobName} ${currCommit}"
-        def jobCommit = runtimeVars.recv(['GIT_COMMIT_HASH']).values().first()
+        def jobCommit = (new Utilities(steps)).gitGetCommit()
+        // def jobCommit = runtimeVars.recv(['GIT_COMMIT_HASH']).values().first()
         steps.echo "${buildResult} ${jobName} {jobCommit}"
         return currCommit == jobCommit
     }
