@@ -28,11 +28,11 @@ class Scheduler implements Serializable {
         def fullJobName = jobName + java.net.URLEncoder.encode(branchName, "UTF-8")
         steps.echo "Getting details on job ${fullJobName} ${lastCommit}"
         // def jobCommit = (new RuntimeVars(this)).queryJob(name: fullJobName).GIT_COMMIT_HASH
-        def a = Jenkins.instance.getAllItems(Job.class, {x -> x.fullName == "Developers/ipm-sanity/devops%2Fmaybe-build"}).first()
-        steps.echo("${a} $fullJobName")
-        def currJob = Jenkins.instance.getAllItems(Job.class, { x -> x.fullName == fullJobName})
-        steps.echo "${currJob}"
-        def jobCommit = steps.queryJobRuntime(name: fullJobName)
+        // def a = Jenkins.instance.getAllItems(Job.class, {x -> x.fullName == "Developers/ipm-sanity/devops%2Fmaybe-build"}).first()
+        // steps.echo("${a} $fullJobName")
+        // def currJob = Jenkins.instance.getAllItems(Job.class, { x -> x.fullName == fullJobName})
+        // steps.echo "${currJob}"
+        def jobCommit = steps.queryJobRuntime(name: fullJobName).GIT_COMMIT_HASH
         steps.echo "${fullJobName} {jobCommit}"
         return lastCommit == jobCommit
     }
