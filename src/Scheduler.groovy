@@ -1,19 +1,21 @@
 class Scheduler implements Serializable {
     private def steps
     private def jobName
+    private def branchName
 
-    Scheduler(steps, jobName) {
+    Scheduler(steps, jobName, branchName) {
         this.steps = steps
         this.jobName = jobName
+        this.branchName = branchName
     }
 
     def maybeBuild()
     {
         def gitName = "GilatDevOps/SE4/ipm"
         def commitCheck = getLastBuild()
-        // if (!commitCheck) {
-        //     jobBuild()
-        // }
+        if (!commitCheck) {
+            jobBuild()
+        }
     }
 
 
@@ -22,12 +24,12 @@ class Scheduler implements Serializable {
         // def jenkins = Jenkins.getInstance()
         // def job = jenkins.getItemByFullName(jobName)
         // def buildResult = job.getLastSuccessfulBuild().properties.result
-        // def currCommit = (new Utilities(steps)).gitGetCommit()
-        // steps.echo "Getting details on job ${jobName} ${currCommit}"
-        def jobCommit = (new RuntimeVars(this)).queryJob(name: jobName).GIT_COMMIT_HASH
-        // def jobCommit = queryJobRuntime(name: jobName).GIT_COMMIT_HASH
-        steps.echo "${buildResult} ${jobName} {jobCommit}"
-        return currCommit == jobCommit
+        def lastCommit = (new Utilities(steps)).gitGetCommit()
+        steps.echo "Getting details on job ${fullJobName} ${lastCommit}"
+        def fullJobName = jobName + java.net.URLEncoder.encode(branchName, "UTF-8")
+        def jobCommit = queryJobRuntime(name: fullJobName).GIT_COMMIT_HASH
+        steps.echo "${fullJobName} {jobCommit}"
+        return lastCommit == jobCommit
     }
 
     def jobBuild()
