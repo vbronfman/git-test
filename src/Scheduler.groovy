@@ -6,6 +6,7 @@ class Scheduler implements Serializable {
     Scheduler(steps, jobName) {
         this.steps = steps
         this.jobName = jobName
+        this.runtimeVars = new RuntimeVars(steps)
     }
 
     def maybeBuild()
@@ -19,7 +20,6 @@ class Scheduler implements Serializable {
 
     def getLastBuild()
     {
-        runtimeVars = new RuntimeVars(steps)
         def jenkins = Jenkins.getInstance()
         def job = jenkins.getItemByFullName(jobName)
         def buildResult = job.getLastSuccessfulBuild().result
