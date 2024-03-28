@@ -11,9 +11,9 @@ class Scheduler implements Serializable {
     {
         def gitName = "GilatDevOps/SE4/ipm"
         def commitCheck = getLastBuild()
-        if (!commitCheck) {
-            jobBuild()
-        }
+        // if (!commitCheck) {
+        //     jobBuild()
+        // }
     }
 
     def getLastBuild()
@@ -22,7 +22,7 @@ class Scheduler implements Serializable {
         def job = jenkins.getItemByFullName(jobName)
         def buildResult = job.getLastSuccessfulBuild().result
         def currCommit = (new Utilities(steps)).gitGetCommit()
-        steps.echo "Getting details on job ${jobName} ${currCommit}"
+        // steps.echo "Getting details on job ${jobName} ${currCommit}"
         // def jobCommit = getRuntimeVar('GIT_COMMIT_HASH')
         // steps.echo "${buildResult} ${jobName} {jobCommit}"
         // return currCommit == jobCommit
