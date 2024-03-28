@@ -122,7 +122,7 @@ class Makefile implements Serializable {
             def target = "${repo}/${folder}/"
             runtimeVars.send([
                 ARTIFACT_URL:     steps.jfrog('IL').targetToURL(target),
-                ARTIFACT_VERSION: v
+                ARTIFACT_VERSION: v,
                 GIT_COMMIT_HASH:  (new Utilities(steps)).gitGetCommit()
             ])
         }
