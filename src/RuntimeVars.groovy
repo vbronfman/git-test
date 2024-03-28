@@ -51,8 +51,10 @@ class RuntimeVars implements Serializable {
 
     @NonCPS
     static def queryJob1(cfg) {
+        println(cfg)
         def currJob = Jenkins.instance.getAllItems(Job.class, { x -> x.fullName == cfg.name}).first()
         def build
+        println(currJob)
 
         // If no build ID provided get last successful.
         if (cfg.buildId) {
