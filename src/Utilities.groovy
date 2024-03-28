@@ -73,9 +73,9 @@ class Utilities implements Serializable
         ])
     }
 
-    static def gitGetCommit(stp)
+    def gitGetCommit()
     {
-        return stp.sh(
+        return steps.sh(
             returnStdout:  true,
             script: """
                 git rev-parse HEAD
