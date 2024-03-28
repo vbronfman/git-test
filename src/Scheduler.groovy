@@ -1,12 +1,12 @@
 class Scheduler implements Serializable {
     private def steps
     private def jobName
-    // private def runtimeVars
+    private def runtimeVars
 
     Scheduler(steps, jobName) {
         this.steps = steps
         this.jobName = jobName
-        // this.runtimeVars = new RuntimeVars(steps)
+        this.runtimeVars = new RuntimeVars(steps)
     }
 
     def maybeBuild()
