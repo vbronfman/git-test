@@ -28,7 +28,7 @@ class Scheduler implements Serializable {
         def fullJobName = jobName + java.net.URLEncoder.encode(branchName, "UTF-8")
         steps.echo "Getting details on job ${fullJobName} ${lastCommit}"
         // def jobCommit = (new RuntimeVars(this)).queryJob(name: fullJobName).GIT_COMMIT_HASH
-        def jobCommit = steps.queryJobRuntime(name: fullJobName).GIT_COMMIT_HASH
+        def jobCommit = steps.queryJobRuntime(name: fullJobName)
         steps.echo "${fullJobName} {jobCommit}"
         return lastCommit == jobCommit
     }
