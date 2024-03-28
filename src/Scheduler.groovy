@@ -11,7 +11,7 @@ class Scheduler implements Serializable {
     def maybeBuild()
     {
         def gitName = "GilatDevOps/SE4/ipm"
-        def commitCheck = getLastBuild()
+        // def commitCheck = getLastBuild()
         // if (!commitCheck) {
         //     jobBuild()
         // }
