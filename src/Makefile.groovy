@@ -30,7 +30,7 @@ class Makefile implements Serializable {
             GIT_COMMIT_HASH:  (new Utilities(steps)).gitGetCommit()
         ])
         def vars = runtimeVars.recv(['GIT_COMMIT_HASH'])
-        steps.echo "here is vars {vars}"
+        steps.echo "here is vars ${vars}"
     }
 
     def buildCmake(config) {
