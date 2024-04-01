@@ -18,19 +18,22 @@ class Scheduler implements Serializable {
         }
     }
 
+    def checkSuccessfulJob()
+    {
+        def jenkins = Jenkins.getInstance()
+        def job = jenkins.getItemByFullName(jobName)
+        def successJob = job.getLastSuccessfulBuild()
+        if (!successJob) {
+            steps.echo "No successful jobs found"
+            exit 1
+        }
+        def buildResult = successJob.properties.result
+    }
 
     def getLastBuild()
     {
-        // def jenkins = Jenkins.getInstance()
-        // def job = jenkins.getItemByFullName(jobName)
-        // def successJob = job.getLastSuccessfulBuild()
-        // if (!successJob) {
-        //     steps.echo "No successful jobs found"
-        //     exit 1
-        // }
-        // def buildResult = successJob.properties.result
-        def lastCommit = (new Utilities(steps)).gitGetCommit()
         def fullJobName = jobName + java.net.URLEncoder.encode(branchName, "UTF-8")
+        def lastCommit = (new Utilities(steps)).gitGetCommit()
         steps.echo "Getting details on job ${fullJobName} ${lastCommit}"
         def jobVars = steps.queryJobRuntime(name: fullJobName)
         if (!jobVars) {
@@ -45,13 +48,13 @@ class Scheduler implements Serializable {
     def jobBuild()
     {
         steps.echo "Building job ${jobName}"
-        // def jenkins = Jenkins.getInstance()
-        // def job = jenkins.getItem(jobName)
-        // def results = build propagate: false, job: "${jobName}"
-        // def buildResult = results.getResult()
-        // def jobUrl = results.getAbsoluteUrl()
-        // def buildVar = results.getBuildVariables()
-        // steps.echo "${buildResult} ${jobUrl} ${buildVar}"
-        // return buildResult
+        def jenkins = Jenkins.getInstance()
+        def job = jenkins.getItem(jobName)
+        def results = build propagate: false, job: "${jobName}"
+        def buildResult = results.getResult()
+        def jobUrl = results.getAbsoluteUrl()
+        def buildVar = results.getBuildVariables()
+        steps.echo "${buildResult} ${jobUrl} ${buildVar}"
+        return buildResult
     }
 }
