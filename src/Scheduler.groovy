@@ -51,7 +51,7 @@ class Scheduler implements Serializable {
         steps.echo "Building job ${jobName}"
         def jenkins = Jenkins.getInstance()
         def job = jenkins.getItem(jobName)
-        def results = build propagate: false, job: "${jobName}"
+        def results = steps.build propagate: false, job: "${jobName}"
         def buildResult = results.getResult()
         def jobUrl = results.getAbsoluteUrl()
         def buildVar = results.getBuildVariables()
