@@ -26,6 +26,9 @@ class Makefile implements Serializable {
 
         config.extra="${config.extra ? config.extra : ''}"
         steps.sh """make ${buildCmd} ${typeFlag} ${config.extra} ${extraMakeFlags} """
+        runtimeVars.send([
+            GIT_COMMIT_HASH:  (new Utilities(steps)).gitGetCommit()
+        ])
     }
 
     def buildCmake(config) {
