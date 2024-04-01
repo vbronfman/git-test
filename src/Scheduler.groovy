@@ -21,14 +21,14 @@ class Scheduler implements Serializable {
 
     def getLastBuild()
     {
-        def jenkins = Jenkins.getInstance()
-        def job = jenkins.getItemByFullName(jobName)
-        def successJob = job.getLastSuccessfulBuild()
-        if (!successJob) {
-            steps.echo "No successful jobs found"
-            exit 1
-        }
-        def buildResult = successJob.properties.result
+        // def jenkins = Jenkins.getInstance()
+        // def job = jenkins.getItemByFullName(jobName)
+        // def successJob = job.getLastSuccessfulBuild()
+        // if (!successJob) {
+        //     steps.echo "No successful jobs found"
+        //     exit 1
+        // }
+        // def buildResult = successJob.properties.result
         def lastCommit = (new Utilities(steps)).gitGetCommit()
         def fullJobName = jobName + java.net.URLEncoder.encode(branchName, "UTF-8")
         steps.echo "Getting details on job ${fullJobName} ${lastCommit}"
