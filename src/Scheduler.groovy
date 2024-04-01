@@ -36,6 +36,7 @@ class Scheduler implements Serializable {
         def lastCommit = (new Utilities(steps)).gitGetCommit()
         steps.echo "Getting details on job ${fullJobName} ${lastCommit}"
         def jobVars = steps.queryJobRuntime(name: fullJobName)
+        steps.echo "Job Vars ${jobVars}"
         if (!jobVars) {
             steps.echo "Cannot get current job commit"
             exit 1
