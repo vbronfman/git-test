@@ -21,17 +21,20 @@ class Scheduler implements Serializable {
 
     def getLastBuild()
     {
-        // def jenkins = Jenkins.getInstance()
-        // def job = jenkins.getItemByFullName(jobName)
-        // def buildResult = job.getLastSuccessfulBuild().properties.result
+        def jenkins = Jenkins.getInstance()
+        def job = jenkins.getItemByFullName(jobName)
+        def successJob = job.getLastSuccessfulBuild()
+        if (!successJob) {
+            steps.echo "No successful jobs found"
+            exit 1
+        }
+        def buildResult = successJob.properties.result
         def lastCommit = (new Utilities(steps)).gitGetCommit()
         def fullJobName = jobName + java.net.URLEncoder.encode(branchName, "UTF-8")
         steps.echo "Getting details on job ${fullJobName} ${lastCommit}"
-        // def jobCommit = (new RuntimeVars(this)).queryJob(name: fullJobName).GIT_COMMIT_HASH
-        // def a = Jenkins.instance.getAllItems(Job.class, {x -> x.fullName == "Developers/ipm-sanity/devops%2Fmaybe-build"}).first()
-        // steps.echo("${a} $fullJobName")
-        // def currJob = Jenkins.instance.getAllItems(Job.class, { x -> x.fullName == fullJobName})
-        // steps.echo "${currJob}"
+        def jobCommit = (new RuntimeVars(this)).queryJob(name: fullJobName).GIT_COMMIT_HASH
+        def currJob = Jenkins.instance.getAllItems(Job.class, { x -> x.fullName == fullJobName})
+        steps.echo "${currJob}"
         def jobCommit = steps.queryJobRuntime(name: fullJobName).GIT_COMMIT_HASH
         steps.echo "${fullJobName} {jobCommit}"
         return lastCommit == jobCommit
