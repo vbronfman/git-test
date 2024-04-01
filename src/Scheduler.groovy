@@ -32,7 +32,12 @@ class Scheduler implements Serializable {
         def lastCommit = (new Utilities(steps)).gitGetCommit()
         def fullJobName = jobName + java.net.URLEncoder.encode(branchName, "UTF-8")
         steps.echo "Getting details on job ${fullJobName} ${lastCommit}"
-        def jobCommit = steps.queryJobRuntime(name: fullJobName).GIT_COMMIT_HASH
+        def jobVars = steps.queryJobRuntime(name: fullJobName)
+        if (!jobVars) {
+            steps.echo "Cannot get current job commit"
+            exit 1
+        }
+        def jobCommit = jobVars.GIT_COMMIT_HASH
         steps.echo "${fullJobName} {jobCommit}"
         return lastCommit == jobCommit
     }
