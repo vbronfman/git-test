@@ -46,7 +46,8 @@ class Scheduler implements Serializable {
         steps.echo "${fullJobName} {jobCommit}"
         return lastCommit == jobCommit
     }
-
+    
+    @NonCPS
     def jobBuild()
     {
         def fullJobName = jobName + java.net.URLEncoder.encode(branchName, "UTF-8")
