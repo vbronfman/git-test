@@ -20,8 +20,9 @@ class Scheduler implements Serializable {
 
     def checkSuccessfulJob()
     {
+        def fullJobName = jobName + java.net.URLEncoder.encode(branchName, "UTF-8")
         def jenkins = Jenkins.getInstance()
-        def job = jenkins.getItemByFullName(jobName)
+        def job = jenkins.getItemByFullName(fullJobName)
         def successJob = job.getLastSuccessfulBuild()
         if (!successJob) {
             steps.echo "No successful jobs found"
@@ -48,10 +49,11 @@ class Scheduler implements Serializable {
 
     def jobBuild()
     {
-        steps.echo "Building job ${jobName}"
+        def fullJobName = jobName + java.net.URLEncoder.encode(branchName, "UTF-8")
+        steps.echo "Building job ${fullJobName}"
         def jenkins = Jenkins.getInstance()
-        def job = jenkins.getItem(jobName)
-        def results = steps.build propagate: false, job: "${jobName}"
+        def job = jenkins.getItemByFullName(fullJobName)
+        def results = steps.build propagate: false, job: "${fullJobName}, wait: true"
         def buildResult = results.getResult()
         def jobUrl = results.getAbsoluteUrl()
         def buildVar = results.getBuildVariables()
