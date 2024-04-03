@@ -12,8 +12,8 @@ class Scheduler implements Serializable {
     def maybeBuild()
     {
         def gitName = "GilatDevOps/SE4/ipm"
-        def commitCheck = getLastBuild()
-        if (!commitCheck) {
+        def isCommitIdentical = getLastBuild()
+        if (!isCommitIdentical) {
             jobBuild()
         }
     }
@@ -34,8 +34,13 @@ class Scheduler implements Serializable {
     def getLastBuild()
     {
         def fullJobName = jobName + java.net.URLEncoder.encode(branchName, "UTF-8")
-        def lastCommit = (new Utilities(steps)).gitGetCommit()
-        steps.echo "Getting details on job ${fullJobName} ${lastCommit}"
+
+
+        
+        def lastestCommit = steps.sh("git clone --bare --filter=blob:none")
+
+
+        steps.echo "Getting details on job ${fullJobName}"
         def jobVars = steps.queryJobRuntime(name: fullJobName)
         steps.echo "Job Vars ${jobVars}"
         if (!jobVars) {
@@ -46,7 +51,7 @@ class Scheduler implements Serializable {
         steps.echo "${fullJobName} {jobCommit}"
         return lastCommit == jobCommit
     }
-    
+
     @NonCPS
     def jobBuild()
     {
