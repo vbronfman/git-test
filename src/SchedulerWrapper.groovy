@@ -13,8 +13,19 @@ class SchedulerWrapper implements Serializable {
 
     def getJobNames() {
         steps.echo "DEBUG getJobNames components: " + components
-        
-        return true
+
+        try {
+
+                Jenkins.instance.getAllItems(org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject).each { multibrjob ->
+                    if (multibrjob.fullName.contains('Developers') && arrJobs.any { multibrjob.fullName.contains(it+'-build') } )  {  // NOTE this -build!!!
+                    steps.echo multibrjob.fullName;
+                  }
+                }
+            return true
+        } catch(Exception err){
+    steps.echo "error caught"
+    steps.echo err.getMessage()
+}
     }
 
     def isLastBuild(){
