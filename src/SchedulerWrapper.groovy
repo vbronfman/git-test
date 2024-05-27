@@ -4,7 +4,7 @@ class SchedulerWrapper implements Serializable {
     // private def branchName
     private def components
 
-    Scheduler(steps, config) {
+    SchedulerWrapper(steps, config) {
         this.steps = steps
         //this.jobName = config.jobName
         //this.branchName = config.branchName
