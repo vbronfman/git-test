@@ -12,12 +12,12 @@ class SchedulerWrapper implements Serializable {
     }
 
     def getJobNames() {
-        println "DEBUG getJobNames arrJobs: " + arrJobs
+        println "DEBUG getJobNames components: " + components
         return true
     }
 
     def isLastBuild(){
-        println "DEBUG isLastBuild arrJobs: "
+        println "DEBUG isLastBuild  : "
 
     }
 
