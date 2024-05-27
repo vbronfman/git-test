@@ -21,7 +21,7 @@ class SchedulerWrapper implements Serializable {
                     if (multibrjob.fullName.contains('Developers') && components.any { multibrjob.fullName.contains(it+'-build') } )  {  // NOTE this -build!!!
                     steps.echo multibrjob.fullName;
 
-                    item = Jenkins.instance.getItemByFullName(multibrjob.fullName) //hudson.model.Hudson.instance
+                    def item = Jenkins.instance.getItemByFullName(multibrjob.fullName) //hudson.model.Hudson.instance
                     steps.println "DEBUG getItemByFullName : " + item
                     def repositoryUrl = multibrjob.SCMSources[0].remote
                     def refSpecs = multibrjob.SCMSources[0].refSpecs
