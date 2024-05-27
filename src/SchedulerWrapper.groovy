@@ -33,7 +33,7 @@ class SchedulerWrapper implements Serializable {
                     steps.println "DEBUG jobs: " + jobs
     
                     for(job in jobs){
-                        println "INFO job: " + job
+                        steps.println "INFO job: " + job
                         def last_success = job.getLastSuccessfulBuild()
                         if ( ! last_success  || ! (last_success.environment['BRANCH_NAME'] =~ /releases\// ) ) //    /releases\/\d+\./ ) //contains has to be refined!
                             continue
@@ -56,6 +56,25 @@ class SchedulerWrapper implements Serializable {
 
     def isLastBuild(){
         steps.echo "DEBUG isLastBuild  : "
+    }
+
+    def accounts() {
+          return components
+    }
+
+    def parallelJobs(){
+        steps.println "DEBUG parallelJobs:" 
+        def parallelJobs() {
+        jobs = [:]
+
+        for (component in components()) {
+            jobs[component] = { stage(component) {
+                steps.echo "Step for $component"
+            }
+            }
+        }
+        return jobs
+}
 
     }
 
