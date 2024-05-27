@@ -64,7 +64,6 @@ class SchedulerWrapper implements Serializable {
 
     def parallelJobs(){
         steps.println "DEBUG parallelJobs:" 
-        def parallelJobs() {
         jobs = [:]
 
         for (component in components()) {
@@ -74,7 +73,6 @@ class SchedulerWrapper implements Serializable {
             }
         }
         return jobs
-}
 
     }
 
