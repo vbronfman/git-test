@@ -34,7 +34,7 @@ class SchedulerWrapper implements Serializable {
     
                     for(job in jobs){
                         println "INFO job: " + job
-                        last_success = job.getLastSuccessfulBuild()
+                        def last_success = job.getLastSuccessfulBuild()
                         if ( ! last_success  || ! (last_success.environment['BRANCH_NAME'] =~ /releases\// ) ) //    /releases\/\d+\./ ) //contains has to be refined!
                             continue
             
