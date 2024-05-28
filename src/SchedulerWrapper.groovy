@@ -33,6 +33,7 @@ class SchedulerWrapper implements Serializable {
                     def jobs = item.getAllJobs();
     
                     steps.println "DEBUG jobs: " + jobs
+                    branches.put(multibrjob.fullName,[])
     
                     for(job in jobs){ // this step to collect release branch names if any
                         steps.println "INFO job: " + job
@@ -47,7 +48,8 @@ class SchedulerWrapper implements Serializable {
                     steps.println "INFO environment JOB_BASE_NAME" + last_success.environment['JOB_BASE_NAME']
                     steps.println "INFO environment BUILD_TAG " + last_success.environment['BUILD_TAG']
 
-                    branches[job]?.add = last_success.environment['BRANCH_NAME']
+                    
+                    branches[multibrjob.fullName]?.add = last_success.environment['BRANCH_NAME']
 
 
 
@@ -57,7 +59,7 @@ class SchedulerWrapper implements Serializable {
                   }
                 }
                 steps.println "DEBUG list of values to build " + branches
-                return branches // map component=>branch_list
+                return branches.findAll{ it.value!=null } // grabbed here https://stackoverflow.com/questions/55696504/groovy-remove-null-elements-from-a-map 
         } catch(Exception err){
                 steps.echo "error caught"
                 steps.echo err.getMessage()
