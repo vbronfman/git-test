@@ -49,7 +49,7 @@ class SchedulerWrapper implements Serializable {
                     steps.println "INFO environment BUILD_TAG " + last_success.environment['BUILD_TAG']
 
                     
-                    branches[multibrjob.fullName]?.add = last_success.environment['BRANCH_NAME']
+                    branches[multibrjob.fullName]?.add (last_success.environment['BRANCH_NAME'])
 
 
 
