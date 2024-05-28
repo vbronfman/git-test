@@ -11,6 +11,7 @@ class SchedulerWrapper implements Serializable {
         this.components = config.components
     }
 
+
     def getJobNames() {
         steps.echo "DEBUG getJobNames components: " + components
         def branches = [:]
@@ -30,9 +31,12 @@ class SchedulerWrapper implements Serializable {
                     steps.println "DEBUG  repositoryUrl:" + repositoryUrl
                     steps.println "DEBUG  refSpecs: " + refSpecs
 
+
+
                     def jobs = item.getAllJobs();
     
                     steps.println "DEBUG jobs: " + jobs
+                    branches.put(multibrjob.fullName,[])
     
                     for(job in jobs){ // this step to collect release branch names if any
                         steps.println "INFO job: " + job
@@ -45,52 +49,94 @@ class SchedulerWrapper implements Serializable {
                     steps.println "INFO environment BRANCH_NAME " + last_success.environment['BRANCH_NAME']
                     steps.println "INFO environment JOB_NAME" + last_success.environment['JOB_NAME']
                     steps.println "INFO environment JOB_BASE_NAME" + last_success.environment['JOB_BASE_NAME']
-                    steps.println "INFO environment BUILD_TAG " + last_success.environment['BUILD_TAG']
+                   // steps.println "INFO environment BUILD_TAG " + last_success.environment['BUILD_TAG']
+                    // !!!
+                   // steps.println "DEBUG getActions methods " + last_success.getActions(hudson.plugins.git.util.BuildData.class)[1].class?.methods?.collect { it.name }
+                    steps.println "DEBUG getActions: " + last_success.getActions(hudson.plugins.git.util.BuildData.class)[1].getLastBuiltRevision() //.getUserRemoteConfigs() //getBuildData(last_success)
+         last_success.getActions(hudson.plugins.git.util.BuildData.class).each { it -> 
+         steps.println "DEBUG getLastBuiltRevision.getBranch for each : " + it.getLastBuiltRevision().getBranches()
+           if( it.getLastBuiltRevision().containsBranchName('refs/remotes/origin/' + last_success.environment['BRANCH_NAME'])) {  //oh, for g-d sake...
+             def sha = it.getLastBuiltRevision().getSha1String()
+             def branch = last_success.environment['BRANCH_NAME']
+             def remote_url = last_success.getActions(hudson.plugins.git.util.BuildData.class)[1].getRemoteUrls()[0]
+             steps.println "DEBUG remote_url class: " + remote_url.getClass()
+                steps.println "DEBUG getLastBuiltRevision..getSha1String() " + sha  +  " URL : " + remote_url + " barch: " + branch
 
-                    branches[job].add = last_success.environment['BRANCH_NAME']
 
+           //  if (isLastCommit(sha, remote_url , branch ))
 
+           steps.println "DEBUG isLastBuild  : " + remote_url + " branch: " +  branch
+        // git ls-remote --heads ${remote_url} ${branch}
+            // steps.sshagent(["azure-worker-ssh-msharay"])             {
+                /*
+              def  git_commit = ["git", "ls-remote", "git@ssh.dev.azure.com:v3/GilatDevOps/SE4/mcr"].execute().with{
+    def output = new StringWriter()
+    def error = new StringWriter()
+    //wait for process ended and catch stderr and stdout.
+    it.waitForProcessOutput(output, error)
+    //check there is no error
+    steps.println "error=$error"
+    steps.println "output=$output"
+    steps.println "code=${it.exitValue()}"
+}
+*/
+def git_commit =  steps.isLastCommit(sha,remote_url, branch)
+           steps.println "INFO git_commit : "+ git_commit.split('\\s+')[0]
+           // } 
+            //return sha == git_commit? true : false
+            // adds to map 'Developers/ipm-build: branch' entries of last succesfull jobs  if any    
+            branches[multibrjob.fullName]?.add (last_success.environment['BRANCH_NAME']) // REVIEW!!! is it 
+           }
+            
+            }
+// !!!
+ 
 
                     }
-
 
                   }
                 }
                 steps.println "DEBUG list of values to build " + branches
-                return branches // map component=>branch_list
+                return branches.findAll{ it.value!=null } // grabbed here https://stackoverflow.com/questions/55696504/groovy-remove-null-elements-from-a-map 
         } catch(Exception err){
-                steps.echo "error caught"
-                steps.echo err.getMessage()
+                steps.println "ERROR error caught: " + err.getMessage()
+                 steps.println(err.toString());
+            steps.println(err.getStackTrace());
                 return null
             }
     }
 
-    def isLastBuild(){
-        steps.echo "DEBUG isLastBuild  : "
-    }
+//@NonCPS
+/*
+    def isLastCommit(String sha, String url, String branch){
+        println "DEBUG isLastBuild  : " + url + " branch: " +  branch
+        try {
+            
+             git_commit = steps.sh(
+            returnStdout:  true,
+            script: """
+                git ls-remote --heads ${url} ${branch}
+            """).strip()
+            
+            steps.println "INFO git_commit : "+ git_commit
+            //return sha == git_commit? true : false
+            return true
+        } catch (Exception err){
+            steps.println "ERROR isLastCommit error caught: " + err.getMessage()
+            steps.println(err.toString());
+            steps.println(err.getStackTrace());
 
-   def components() {
-       echo "DEBUG componentslist:" + componentslist
-          return componentslist
-    }
-
-    def parallelJobs(componentslist){
-        echo "DEBUG parallelJobs:" + componentslist
-        jobs = [:]
-
-   //     for (component in components()) {
-   for (component in componentslist ){ 
-       def var = component
-            jobs["$var"] = { 
-                stage("${var}") {
-                    echo "${var}"
-                  echo "Step for ${var}"
-                }
-            }
+            return null
         }
-        return jobs
-
+<<<<<<< HEAD
+  
+=======
+        git_commit =  steps.sh "git ls-remote --heads ${url} ${branch} " //or use steps.git? 
+        steps.println "INFO git_commit : "+ git_commit
+        return sha == git_commit? true : false
+>>>>>>> a197108 (fixed typo)
     }
+    */
 
 
 }

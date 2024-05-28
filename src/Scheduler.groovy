@@ -37,11 +37,11 @@ class Scheduler implements Serializable {
 
 
         
-        def lastestCommit = steps.sh("git clone --bare --filter=blob:none")
+        def lastestCommit = steps.sh("git clone --bare --filter=blob:none") //? actually returns error
 
 
         steps.echo "Getting details on job ${fullJobName}"
-        def jobVars = steps.queryJobRuntime(name: fullJobName)
+        def jobVars = steps.queryJobRuntime(name: fullJobName) 
         steps.echo "Job Vars ${jobVars}"
         if (!jobVars) {
             steps.echo "Cannot get current job commit"
