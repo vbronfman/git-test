@@ -71,29 +71,6 @@ class SchedulerWrapper implements Serializable {
         steps.echo "DEBUG isLastBuild  : "
     }
 
-   def components() {
-       echo "DEBUG componentslist:" + componentslist
-          return componentslist
-    }
-
-    def parallelJobs(componentslist){
-        echo "DEBUG parallelJobs:" + componentslist
-        jobs = [:]
-
-   //     for (component in components()) {
-   for (component in componentslist ){ 
-       def var = component
-            jobs["$var"] = { 
-                stage("${var}") {
-                    echo "${var}"
-                  echo "Step for ${var}"
-                }
-            }
-        }
-        return jobs
-
-    }
-
 
 }
 
