@@ -30,16 +30,7 @@ class SchedulerWrapper implements Serializable {
                     steps.println "DEBUG  repositoryUrl:" + repositoryUrl
                     steps.println "DEBUG  refSpecs: " + refSpecs
 
-// !!!
-                    steps.println "DEBUG getActions methods " + last_success.getActions(hudson.plugins.git.util.BuildData.class)[1].class?.methods?.collect { it.name }
-                    steps.println "DEBUG getActions: " + last_success.getActions(hudson.plugins.git.util.BuildData.class)[1].getLastBuiltRevision() //.getUserRemoteConfigs() //getBuildData(last_success)
-         last_success.getActions(hudson.plugins.git.util.BuildData.class).each { it ->
-         steps.println "DEBUG getLastBuiltRevision.getBranch for each : " + it.getLastBuiltRevision().getBranches()
-           steps.println it.getLastBuiltRevision().containsBranchName('refs/remotes/origin/' + last_success.environment['BRANCH_NAME'])   //oh, for g-d sake...
-           	steps.println "DEBUG getLastBuiltRevision..getSha1String() " + it.getLastBuiltRevision().getSha1String()
-            
-      }
-// !!!
+
 
                     def jobs = item.getAllJobs();
     
@@ -58,6 +49,16 @@ class SchedulerWrapper implements Serializable {
                     steps.println "INFO environment JOB_NAME" + last_success.environment['JOB_NAME']
                     steps.println "INFO environment JOB_BASE_NAME" + last_success.environment['JOB_BASE_NAME']
                     steps.println "INFO environment BUILD_TAG " + last_success.environment['BUILD_TAG']
+                    // !!!
+                    steps.println "DEBUG getActions methods " + last_success.getActions(hudson.plugins.git.util.BuildData.class)[1].class?.methods?.collect { it.name }
+                    steps.println "DEBUG getActions: " + last_success.getActions(hudson.plugins.git.util.BuildData.class)[1].getLastBuiltRevision() //.getUserRemoteConfigs() //getBuildData(last_success)
+         last_success.getActions(hudson.plugins.git.util.BuildData.class).each { it ->
+         steps.println "DEBUG getLastBuiltRevision.getBranch for each : " + it.getLastBuiltRevision().getBranches()
+           steps.println it.getLastBuiltRevision().containsBranchName('refs/remotes/origin/' + last_success.environment['BRANCH_NAME'])   //oh, for g-d sake...
+           	steps.println "DEBUG getLastBuiltRevision..getSha1String() " + it.getLastBuiltRevision().getSha1String()
+            
+      }
+// !!!
 
                 // adds to map 'Developers/ipm-build: branch' entries of last succesfull jobs  if any    
                     branches[multibrjob.fullName]?.add (last_success.environment['BRANCH_NAME'])
