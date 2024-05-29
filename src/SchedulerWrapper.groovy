@@ -57,7 +57,6 @@ class SchedulerWrapper implements Serializable {
            if( it.getLastBuiltRevision().containsBranchName('refs/remotes/origin/' + last_success.environment['BRANCH_NAME']))   //oh, for g-d sake...
            	steps.println "DEBUG getLastBuiltRevision..getSha1String() " + it.getLastBuiltRevision().getSha1String()
 
-            isLastCommit(it.getLastBuiltRevision().getSha1String())
              isLastCommit(it.getLastBuiltRevision().getSha1String(),last_success.getActions(hudson.plugins.git.util.BuildData.class)[1].getRemoteUrls()[0])
             
       }
