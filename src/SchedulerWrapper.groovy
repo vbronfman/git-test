@@ -48,14 +48,17 @@ class SchedulerWrapper implements Serializable {
                     steps.println "INFO environment BRANCH_NAME " + last_success.environment['BRANCH_NAME']
                     steps.println "INFO environment JOB_NAME" + last_success.environment['JOB_NAME']
                     steps.println "INFO environment JOB_BASE_NAME" + last_success.environment['JOB_BASE_NAME']
-                    steps.println "INFO environment BUILD_TAG " + last_success.environment['BUILD_TAG']
+                   // steps.println "INFO environment BUILD_TAG " + last_success.environment['BUILD_TAG']
                     // !!!
-                    steps.println "DEBUG getActions methods " + last_success.getActions(hudson.plugins.git.util.BuildData.class)[1].class?.methods?.collect { it.name }
+                   // steps.println "DEBUG getActions methods " + last_success.getActions(hudson.plugins.git.util.BuildData.class)[1].class?.methods?.collect { it.name }
                     steps.println "DEBUG getActions: " + last_success.getActions(hudson.plugins.git.util.BuildData.class)[1].getLastBuiltRevision() //.getUserRemoteConfigs() //getBuildData(last_success)
-         last_success.getActions(hudson.plugins.git.util.BuildData.class).each { it ->
+         last_success.getActions(hudson.plugins.git.util.BuildData.class).each { it -> 
          steps.println "DEBUG getLastBuiltRevision.getBranch for each : " + it.getLastBuiltRevision().getBranches()
-           steps.println it.getLastBuiltRevision().containsBranchName('refs/remotes/origin/' + last_success.environment['BRANCH_NAME'])   //oh, for g-d sake...
+           if( it.getLastBuiltRevision().containsBranchName('refs/remotes/origin/' + last_success.environment['BRANCH_NAME']))   //oh, for g-d sake...
            	steps.println "DEBUG getLastBuiltRevision..getSha1String() " + it.getLastBuiltRevision().getSha1String()
+
+            isLastCommit(it.getLastBuiltRevision().getSha1String())
+             isLastCommit(it.getLastBuiltRevision().getSha1String(),last_success.getActions(hudson.plugins.git.util.BuildData.class)[1].getRemoteUrls()[0])
             
       }
 // !!!
@@ -75,8 +78,12 @@ class SchedulerWrapper implements Serializable {
             }
     }
 
-    def isLastBuild(){
-        steps.echo "DEBUG isLastBuild  : "
+      def isLastCommit(String sha, String url){
+       println "DEBUG isLastBuild  : "  + url
+    
+    git_commit =  step.sh "git ls-remote --heads ${url}"
+    step.println "git_commit "+ git_commit
+    return true
     }
 
 
