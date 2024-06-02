@@ -80,9 +80,8 @@ class SchedulerWrapper implements Serializable {
     steps.println "code=${it.exitValue()}"
 }
 */
-           //def git_commit =
-            steps.sh(script: "git ls-remote --heads ${remote_url} ${branch}" , returnStdout: true )
-           // steps.println "INFO git_commit : "+ git_commit
+           def git_commit = steps.sh(script: "git ls-remote --heads ${remote_url} ${branch}" , returnStdout: true ).split('')[0]
+           steps.println "INFO git_commit : "+ git_commit
            // } 
             //return sha == git_commit? true : false
             // adds to map 'Developers/ipm-build: branch' entries of last succesfull jobs  if any    
