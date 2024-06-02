@@ -54,16 +54,35 @@ class SchedulerWrapper implements Serializable {
                     steps.println "DEBUG getActions: " + last_success.getActions(hudson.plugins.git.util.BuildData.class)[1].getLastBuiltRevision() //.getUserRemoteConfigs() //getBuildData(last_success)
          last_success.getActions(hudson.plugins.git.util.BuildData.class).each { it -> 
          steps.println "DEBUG getLastBuiltRevision.getBranch for each : " + it.getLastBuiltRevision().getBranches()
-           if( it.getLastBuiltRevision().containsBranchName('refs/remotes/origin/' + last_success.environment['BRANCH_NAME']))   //oh, for g-d sake...
-           	steps.println "DEBUG getLastBuiltRevision..getSha1String() " + it.getLastBuiltRevision().getSha1String()
+           if( it.getLastBuiltRevision().containsBranchName('refs/remotes/origin/' + last_success.environment['BRANCH_NAME'])) {  //oh, for g-d sake...
+             def sha = it.getLastBuiltRevision().getSha1String()
+             def branch = last_success.environment['BRANCH_NAME']
+             def remote_url = last_success.getActions(hudson.plugins.git.util.BuildData.class)[1].getRemoteUrls()[0]
+             steps.println "DEBUG remote_url class: " + remote_url.getClass()
+                steps.println "DEBUG getLastBuiltRevision..getSha1String() " + sha  +  " URL : " + remote_url + " barch: " + branch
 
-             isLastCommit(it.getLastBuiltRevision().getSha1String(),last_success.getActions(hudson.plugins.git.util.BuildData.class)[1].getRemoteUrls()[0])
+
+           //  if (isLastCommit(sha, remote_url , branch ))
+
+           println "DEBUG isLastBuild  : " + remote_url + " branch: " +  branch
+        
+            steps.sshagent(["azure-worker-ssh-msharay"]) {
+             git_commit = steps.sh(
+            returnStdout:  true,
+            script: """
+                git ls-remote --heads ${remote_url} ${branch}
+            """).strip()
+            steps.println "INFO git_commit : "+ git_commit
+            } 
+            steps.println "INFO git_commit : "+ git_commit
+            //return sha == git_commit? true : false
+            // adds to map 'Developers/ipm-build: branch' entries of last succesfull jobs  if any    
+            branches[multibrjob.fullName]?.add (last_success.environment['BRANCH_NAME']) // REVIEW!!! is it 
+           }
             
-      }
+            }
 // !!!
-
-                // adds to map 'Developers/ipm-build: branch' entries of last succesfull jobs  if any    
-                    branches[multibrjob.fullName]?.add (last_success.environment['BRANCH_NAME'])
+ 
 
                     }
 
@@ -72,17 +91,32 @@ class SchedulerWrapper implements Serializable {
                 steps.println "DEBUG list of values to build " + branches
                 return branches.findAll{ it.value!=null } // grabbed here https://stackoverflow.com/questions/55696504/groovy-remove-null-elements-from-a-map 
         } catch(Exception err){
-                steps.echo "error caught: " + err.getMessage()
+                steps.println "ERROR error caught: " + err.getMessage()
                 return null
             }
     }
 
-      def isLastCommit(String sha, String url){
-       println "DEBUG isLastBuild  : "  + url
-    
-    git_commit =  step.sh "git ls-remote --heads ${url}"
-    step.println "git_commit "+ git_commit
-    return true
+    def isLastCommit(String sha, String url, String branch){
+        println "DEBUG isLastBuild  : " + url + " branch: " +  branch
+        try {
+            steps.sshagent(["azure-worker-ssh-msharay"]) {
+             git_commit = steps.sh(
+            returnStdout:  true,
+            script: """
+                git ls-remote --heads ${url} ${branch}
+            """).strip()
+            } 
+            steps.println "INFO git_commit : "+ git_commit
+            //return sha == git_commit? true : false
+            return true
+        } catch (Exception err){
+            steps.println "ERROR isLastCommit error caught: " + err.getMessage()
+            steps.println(err.toString());
+            steps.println(err.getStackTrace());
+
+            return null
+        }
+  
     }
 
 
