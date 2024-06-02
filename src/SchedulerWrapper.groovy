@@ -57,7 +57,7 @@ class SchedulerWrapper implements Serializable {
            if( it.getLastBuiltRevision().containsBranchName('refs/remotes/origin/' + last_success.environment['BRANCH_NAME']))   //oh, for g-d sake...
            	steps.println "DEBUG getLastBuiltRevision..getSha1String() " + it.getLastBuiltRevision().getSha1String()
 
-             isLastCommit(it.getLastBuiltRevision().getSha1String(),last_success.getActions(hudson.plugins.git.util.BuildData.class)[1].getRemoteUrls()[0])
+            isLastCommit(it.getLastBuiltRevision().getSha1String(),last_success.getActions(hudson.plugins.git.util.BuildData.class)[1].getRemoteUrls()[0], last_success.environment['BRANCH_NAME'] )
             
       }
 // !!!
@@ -72,17 +72,22 @@ class SchedulerWrapper implements Serializable {
                 steps.println "DEBUG list of values to build " + branches
                 return branches.findAll{ it.value!=null } // grabbed here https://stackoverflow.com/questions/55696504/groovy-remove-null-elements-from-a-map 
         } catch(Exception err){
-                steps.echo "error caught: " + err.getMessage()
+                steps.echo "ERROR error caught: " + err.getMessage()
                 return null
             }
     }
 
-      def isLastCommit(String sha, String url){
-       println "DEBUG isLastBuild  : "  + url
-    
-    git_commit =  step.sh "git ls-remote --heads ${url}"
-    step.println "git_commit "+ git_commit
-    return true
+    def isLastCommit(String sha, String url, String branch){
+        println "DEBUG isLastBuild  : " + url
+        try {
+
+        } catch (Exception err){
+                steps.echo "ERROR isLastCommit error caught: " + err.getMessage()
+                return null
+        }
+        git_commit =  step.sh "git ls-remote --heads ${url} ${branch} " //or use step.git? 
+        step.println "INFO git_commit : "+ git_commit
+        return sha == git commit? true : false
     }
 
 
