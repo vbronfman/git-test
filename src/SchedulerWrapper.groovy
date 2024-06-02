@@ -58,7 +58,7 @@ class SchedulerWrapper implements Serializable {
              def sha = it.getLastBuiltRevision().getSha1String()
              def branch = last_success.environment['BRANCH_NAME']
              def remote_url = last_success.getActions(hudson.plugins.git.util.BuildData.class)[1].getRemoteUrls()[0]
-                          steps.println "DEBUG getLastBuiltRevision..getSha1String() " + sha _  " URL : " + remote_url + " barch: " + branch
+                          steps.println "DEBUG getLastBuiltRevision..getSha1String() " + sha  +  " URL : " + remote_url + " barch: " + branch
 
 
              if (isLastCommit(sha, url , branch ))
