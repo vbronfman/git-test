@@ -87,7 +87,7 @@ class SchedulerWrapper implements Serializable {
         }
         git_commit =  step.sh "git ls-remote --heads ${url} ${branch} " //or use step.git? 
         step.println "INFO git_commit : "+ git_commit
-        return sha == git commit? true : false
+        return sha == git_commit? true : false
     }
 
 
