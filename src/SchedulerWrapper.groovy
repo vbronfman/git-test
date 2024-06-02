@@ -83,11 +83,11 @@ class SchedulerWrapper implements Serializable {
     }
 
     def isLastCommit(String sha, String url, String branch){
-        println "DEBUG isLastBuild  : " + url
+        println "DEBUG isLastBuild  : " + url + " branch: " +  branch
         try {
             steps.sshagent(["47aa787b-0e1b-44bb-9fd7-04857bbc58f4"]) {
             git_commit =  steps.sh "git ls-remote --heads ${url} ${branch} " //or use steps.git? 
-            } sshagen
+            } 
             steps.println "INFO git_commit : "+ git_commit
             return sha == git_commit? true : false
         } catch (Exception err){
