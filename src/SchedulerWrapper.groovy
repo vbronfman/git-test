@@ -85,8 +85,8 @@ class SchedulerWrapper implements Serializable {
                 steps.echo "ERROR isLastCommit error caught: " + err.getMessage()
                 return null
         }
-        git_commit =  step.sh "git ls-remote --heads ${url} ${branch} " //or use step.git? 
-        step.println "INFO git_commit : "+ git_commit
+        git_commit =  steps.sh "git ls-remote --heads ${url} ${branch} " //or use steps.git? 
+        steps.println "INFO git_commit : "+ git_commit
         return sha == git_commit? true : false
     }
 
