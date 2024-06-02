@@ -81,7 +81,7 @@ class SchedulerWrapper implements Serializable {
 }
 */
            //def git_commit =
-            steps.sh(script: 'git ls-remote git@ssh.dev.azure.com:v3/GilatDevOps/SE4/mcr', returnStdout: true )
+            steps.sh(script: "git ls-remote --heads ${remote_url} ${branch}" , returnStdout: true )
            // steps.println "INFO git_commit : "+ git_commit
            // } 
             //return sha == git_commit? true : false
