@@ -67,7 +67,7 @@ class SchedulerWrapper implements Serializable {
            steps.println "DEBUG isLastBuild  : " + remote_url + " branch: " +  branch
         // git ls-remote --heads ${remote_url} ${branch}
             steps.sshagent(["azure-worker-ssh-msharay"]) 
-          //  {
+            {
               def  git_commit = ["git", "ls-remote", "git@ssh.dev.azure.com:v3/GilatDevOps/SE4/mcr"].execute().with{
     def output = new StringWriter()
     def error = new StringWriter()
