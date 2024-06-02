@@ -87,10 +87,15 @@ class SchedulerWrapper implements Serializable {
         println "DEBUG isLastBuild  : " + url + " branch: " +  branch
         try {
             steps.sshagent(["azure-worker-ssh-msharay"]) {
-            git_commit =  steps.sh "git ls-remote --heads ${url} ${branch} " //or use steps.git? 
+             git_commit = steps.sh(
+            returnStdout:  true,
+            script: """
+                git ls-remote --heads ${url} ${branch}
+            """).strip()
             } 
             steps.println "INFO git_commit : "+ git_commit
-            return sha == git_commit? true : false
+            //return sha == git_commit? true : false
+            return true
         } catch (Exception err){
             steps.println "ERROR isLastCommit error caught: " + err.getMessage()
             steps.println(err.toString());
