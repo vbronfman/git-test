@@ -92,8 +92,8 @@ class SchedulerWrapper implements Serializable {
             return sha == git_commit? true : false
         } catch (Exception err){
             steps.println "ERROR isLastCommit error caught: " + err.getMessage()
-            steps.println(ex.toString());
-            steps.println(ex.getStackTrace());
+            steps.println(err.toString());
+            steps.println(err.getStackTrace());
 
             return null
         }
