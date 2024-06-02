@@ -106,7 +106,7 @@ def git_commit =  isLastCommit(sha,remote_url, branch)
             }
     }
 
-@NonCPS
+//@NonCPS
     def isLastCommit(String sha, String url, String branch){
         println "DEBUG isLastBuild  : " + url + " branch: " +  branch
         try {
