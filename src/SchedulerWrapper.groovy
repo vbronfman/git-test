@@ -80,7 +80,7 @@ class SchedulerWrapper implements Serializable {
                     branches[multibrjob.fullName]?.add (last_success.environment['BRANCH_NAME']) // REVIEW!!! is it 
           // }
             
-            }
+           // }
 // !!!
  
 
