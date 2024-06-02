@@ -11,7 +11,7 @@ class SchedulerWrapper implements Serializable {
         this.components = config.components
     }
 
-@NonCPS
+
     def getJobNames() {
         steps.echo "DEBUG getJobNames components: " + components
         def branches = [:]
@@ -80,7 +80,7 @@ class SchedulerWrapper implements Serializable {
     steps.println "code=${it.exitValue()}"
 }
 */
-           def git_commit = steps.sh(script: "git ls-remote --heads ${remote_url} ${branch}" , returnStdout: true )
+def git_commit =  isLastCommit(sha,remote_url, branch)
            steps.println "INFO git_commit : "+ git_commit.split('\\s+')[0]
            // } 
             //return sha == git_commit? true : false
@@ -106,16 +106,17 @@ class SchedulerWrapper implements Serializable {
             }
     }
 
+@NonCPS
     def isLastCommit(String sha, String url, String branch){
         println "DEBUG isLastBuild  : " + url + " branch: " +  branch
         try {
-            steps.sshagent(["azure-worker-ssh-msharay"]) {
+            
              git_commit = steps.sh(
             returnStdout:  true,
             script: """
                 git ls-remote --heads ${url} ${branch}
             """).strip()
-            } 
+            
             steps.println "INFO git_commit : "+ git_commit
             //return sha == git_commit? true : false
             return true
