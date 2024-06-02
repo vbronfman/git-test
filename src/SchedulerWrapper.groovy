@@ -11,6 +11,7 @@ class SchedulerWrapper implements Serializable {
         this.components = config.components
     }
 
+@NonCPS
     def getJobNames() {
         steps.echo "DEBUG getJobNames components: " + components
         def branches = [:]
