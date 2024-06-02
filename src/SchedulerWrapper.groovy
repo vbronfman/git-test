@@ -80,7 +80,7 @@ class SchedulerWrapper implements Serializable {
     steps.println "code=${it.exitValue()}"
 }
 */
-def git_commit =  isLastCommit(sha,remote_url, branch)
+def git_commit =  steps.isLastCommit(sha,remote_url, branch)
            steps.println "INFO git_commit : "+ git_commit.split('\\s+')[0]
            // } 
             //return sha == git_commit? true : false
@@ -107,6 +107,7 @@ def git_commit =  isLastCommit(sha,remote_url, branch)
     }
 
 //@NonCPS
+/*
     def isLastCommit(String sha, String url, String branch){
         println "DEBUG isLastBuild  : " + url + " branch: " +  branch
         try {
@@ -129,6 +130,7 @@ def git_commit =  isLastCommit(sha,remote_url, branch)
         }
   
     }
+    */
 
 
 }
