@@ -70,7 +70,7 @@ class SchedulerWrapper implements Serializable {
                 git_commit = steps.sh(
                 returnStdout:  true,
                 script: """
-                    git ls-remote --heads git@ssh.dev.azure.com:v3/GilatDevOps/SE4/mcr releases/r300.3
+                    ls
                 """).strip()
             steps.println "INFO git_commit : "+ git_commit
             } 
@@ -92,6 +92,8 @@ class SchedulerWrapper implements Serializable {
                 return branches.findAll{ it.value!=null } // grabbed here https://stackoverflow.com/questions/55696504/groovy-remove-null-elements-from-a-map 
         } catch(Exception err){
                 steps.println "ERROR error caught: " + err.getMessage()
+                 steps.println(err.toString());
+            steps.println(err.getStackTrace());
                 return null
             }
     }
