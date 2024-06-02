@@ -68,8 +68,7 @@ class SchedulerWrapper implements Serializable {
             
             }
 // !!!
-
-                
+ 
 
                     }
 
@@ -78,7 +77,7 @@ class SchedulerWrapper implements Serializable {
                 steps.println "DEBUG list of values to build " + branches
                 return branches.findAll{ it.value!=null } // grabbed here https://stackoverflow.com/questions/55696504/groovy-remove-null-elements-from-a-map 
         } catch(Exception err){
-                steps.echo "ERROR error caught: " + err.getMessage()
+                steps.println "ERROR error caught: " + err.getMessage()
                 return null
             }
     }
@@ -92,7 +91,10 @@ class SchedulerWrapper implements Serializable {
             steps.println "INFO git_commit : "+ git_commit
             return sha == git_commit? true : false
         } catch (Exception err){
-            steps.echo "ERROR isLastCommit error caught: " + err.getMessage()
+            steps.println "ERROR isLastCommit error caught: " + err.getMessage()
+            steps.println(ex.toString());
+            steps.println(ex.getStackTrace());
+
             return null
         }
   
