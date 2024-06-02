@@ -56,11 +56,12 @@ class SchedulerWrapper implements Serializable {
          steps.println "DEBUG getLastBuiltRevision.getBranch for each : " + it.getLastBuiltRevision().getBranches()
            if( it.getLastBuiltRevision().containsBranchName('refs/remotes/origin/' + last_success.environment['BRANCH_NAME'])) {  //oh, for g-d sake...
              def sha = it.getLastBuiltRevision().getSha1String()
-             steps.println "DEBUG getLastBuiltRevision..getSha1String() " + sha
+             def branch = last_success.environment['BRANCH_NAME']
+             def remote_url = last_success.getActions(hudson.plugins.git.util.BuildData.class)[1].getRemoteUrls()[0]
+                          steps.println "DEBUG getLastBuiltRevision..getSha1String() " + sha _  " URL : " + remote_url + " barch: " + branch
 
-             if (isLastCommit(sha,
-                               last_success.getActions(hudson.plugins.git.util.BuildData.class)[1].getRemoteUrls()[0], 
-                               last_success.environment['BRANCH_NAME'] ))
+
+             if (isLastCommit(sha, url , branch ))
                // adds to map 'Developers/ipm-build: branch' entries of last succesfull jobs  if any    
                     branches[multibrjob.fullName]?.add (last_success.environment['BRANCH_NAME']) // REVIEW!!! is it 
            }
