@@ -64,7 +64,7 @@ class SchedulerWrapper implements Serializable {
 
            //  if (isLastCommit(sha, remote_url , branch ))
 
-           println "DEBUG isLastBuild  : " + remote_url + " branch: " +  branch
+           steps.println "DEBUG isLastBuild  : " + remote_url + " branch: " +  branch
         // git ls-remote --heads ${remote_url} ${branch}
            // steps.sshagent(["azure-worker-ssh-msharay"]) 
           //  {
@@ -74,9 +74,9 @@ class SchedulerWrapper implements Serializable {
     //wait for process ended and catch stderr and stdout.
     it.waitForProcessOutput(output, error)
     //check there is no error
-    println "error=$error"
-    println "output=$output"
-    println "code=${it.exitValue()}"
+    steps.println "error=$error"
+    steps.println "output=$output"
+    steps.println "code=${it.exitValue()}"
 }
             steps.println "INFO git_commit : "+ git_commit
            // } 
