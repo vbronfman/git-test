@@ -68,11 +68,7 @@ class SchedulerWrapper implements Serializable {
         // git ls-remote --heads ${remote_url} ${branch}
            // steps.sshagent(["azure-worker-ssh-msharay"]) 
           //  {
-                git_commit = steps.sh(
-                returnStdout:  true,
-                script: """
-                    ls
-                """).strip()
+                git_commit = [" ls"].execute().text
             steps.println "INFO git_commit : "+ git_commit
            // } 
             //return sha == git_commit? true : false
