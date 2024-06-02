@@ -54,16 +54,17 @@ class SchedulerWrapper implements Serializable {
                     steps.println "DEBUG getActions: " + last_success.getActions(hudson.plugins.git.util.BuildData.class)[1].getLastBuiltRevision() //.getUserRemoteConfigs() //getBuildData(last_success)
          last_success.getActions(hudson.plugins.git.util.BuildData.class).each { it -> 
          steps.println "DEBUG getLastBuiltRevision.getBranch for each : " + it.getLastBuiltRevision().getBranches()
-           if( it.getLastBuiltRevision().containsBranchName('refs/remotes/origin/' + last_success.environment['BRANCH_NAME']))   //oh, for g-d sake...
-           	steps.println "DEBUG getLastBuiltRevision..getSha1String() " + it.getLastBuiltRevision().getSha1String()
-
-            isLastCommit(it.getLastBuiltRevision().getSha1String(),last_success.getActions(hudson.plugins.git.util.BuildData.class)[1].getRemoteUrls()[0], last_success.environment['BRANCH_NAME'] )
+           if( it.getLastBuiltRevision().containsBranchName('refs/remotes/origin/' + last_success.environment['BRANCH_NAME'])) {  //oh, for g-d sake...
+           	 steps.println "DEBUG getLastBuiltRevision..getSha1String() " + it.getLastBuiltRevision().getSha1String()
+             if (isLastCommit(it.getLastBuiltRevision().getSha1String(),last_success.getActions(hudson.plugins.git.util.BuildData.class)[1].getRemoteUrls()[0], last_success.environment['BRANCH_NAME'] ))
+               // adds to map 'Developers/ipm-build: branch' entries of last succesfull jobs  if any    
+                    branches[multibrjob.fullName]?.add (last_success.environment['BRANCH_NAME']) // REVIEW!!! is it 
+           }
             
-      }
+            }
 // !!!
 
-                // adds to map 'Developers/ipm-build: branch' entries of last succesfull jobs  if any    
-                    branches[multibrjob.fullName]?.add (last_success.environment['BRANCH_NAME'])
+                
 
                     }
 
