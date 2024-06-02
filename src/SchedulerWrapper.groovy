@@ -66,8 +66,7 @@ class SchedulerWrapper implements Serializable {
 
            steps.println "DEBUG isLastBuild  : " + remote_url + " branch: " +  branch
         // git ls-remote --heads ${remote_url} ${branch}
-            sshagent(["azure-worker-ssh-msharay"]) 
-            {
+            // steps.sshagent(["azure-worker-ssh-msharay"])             {
               def  git_commit = ["git", "ls-remote", "git@ssh.dev.azure.com:v3/GilatDevOps/SE4/mcr"].execute().with{
     def output = new StringWriter()
     def error = new StringWriter()
@@ -79,7 +78,7 @@ class SchedulerWrapper implements Serializable {
     steps.println "code=${it.exitValue()}"
 }
             steps.println "INFO git_commit : "+ git_commit
-            } 
+           // } 
             //return sha == git_commit? true : false
             // adds to map 'Developers/ipm-build: branch' entries of last succesfull jobs  if any    
             branches[multibrjob.fullName]?.add (last_success.environment['BRANCH_NAME']) // REVIEW!!! is it 
