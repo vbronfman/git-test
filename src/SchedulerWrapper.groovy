@@ -76,11 +76,11 @@ class SchedulerWrapper implements Serializable {
             } 
             steps.println "INFO git_commit : "+ git_commit
             //return sha == git_commit? true : false
-               // adds to map 'Developers/ipm-build: branch' entries of last succesfull jobs  if any    
-                    branches[multibrjob.fullName]?.add (last_success.environment['BRANCH_NAME']) // REVIEW!!! is it 
-          // }
+            // adds to map 'Developers/ipm-build: branch' entries of last succesfull jobs  if any    
+            branches[multibrjob.fullName]?.add (last_success.environment['BRANCH_NAME']) // REVIEW!!! is it 
+           }
             
-           // }
+            }
 // !!!
  
 
