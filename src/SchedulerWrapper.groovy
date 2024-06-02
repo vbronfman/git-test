@@ -55,8 +55,12 @@ class SchedulerWrapper implements Serializable {
          last_success.getActions(hudson.plugins.git.util.BuildData.class).each { it -> 
          steps.println "DEBUG getLastBuiltRevision.getBranch for each : " + it.getLastBuiltRevision().getBranches()
            if( it.getLastBuiltRevision().containsBranchName('refs/remotes/origin/' + last_success.environment['BRANCH_NAME'])) {  //oh, for g-d sake...
-           	 steps.println "DEBUG getLastBuiltRevision..getSha1String() " + it.getLastBuiltRevision().getSha1String()
-             if (isLastCommit(it.getLastBuiltRevision().getSha1String(),last_success.getActions(hudson.plugins.git.util.BuildData.class)[1].getRemoteUrls()[0], last_success.environment['BRANCH_NAME'] ))
+             def sha = it.getLastBuiltRevision().getSha1String()
+             steps.println "DEBUG getLastBuiltRevision..getSha1String() " + sha
+
+             if (isLastCommit(sha,
+                               last_success.getActions(hudson.plugins.git.util.BuildData.class)[1].getRemoteUrls()[0], 
+                               last_success.environment['BRANCH_NAME'] ))
                // adds to map 'Developers/ipm-build: branch' entries of last succesfull jobs  if any    
                     branches[multibrjob.fullName]?.add (last_success.environment['BRANCH_NAME']) // REVIEW!!! is it 
            }
@@ -81,14 +85,14 @@ class SchedulerWrapper implements Serializable {
     def isLastCommit(String sha, String url, String branch){
         println "DEBUG isLastBuild  : " + url
         try {
-
+            git_commit =  steps.sh "git ls-remote --heads ${url} ${branch} " //or use steps.git? 
+            steps.println "INFO git_commit : "+ git_commit
+            return sha == git_commit? true : false
         } catch (Exception err){
-                steps.echo "ERROR isLastCommit error caught: " + err.getMessage()
-                return null
+            steps.echo "ERROR isLastCommit error caught: " + err.getMessage()
+            return null
         }
-        git_commit =  steps.sh "git ls-remote --heads ${url} ${branch} " //or use steps.git? 
-        steps.println "INFO git_commit : "+ git_commit
-        return sha == git_commit? true : false
+  
     }
 
 
