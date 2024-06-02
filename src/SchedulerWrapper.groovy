@@ -65,13 +65,13 @@ class SchedulerWrapper implements Serializable {
            //  if (isLastCommit(sha, remote_url , branch ))
 
            println "DEBUG isLastBuild  : " + remote_url + " branch: " +  branch
-        
+        // git ls-remote --heads ${remote_url} ${branch}
             steps.sshagent(["azure-worker-ssh-msharay"]) {
-             git_commit = steps.sh(
-            returnStdout:  true,
-            script: """
-                git ls-remote --heads ${remote_url} ${branch}
-            """).strip()
+                git_commit = steps.sh(
+                returnStdout:  true,
+                script: """
+                    git ls-remote --heads git@ssh.dev.azure.com:v3/GilatDevOps/SE4/mcr releases/r300.3
+                """).strip()
             steps.println "INFO git_commit : "+ git_commit
             } 
             steps.println "INFO git_commit : "+ git_commit
